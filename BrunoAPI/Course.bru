@@ -1,0 +1,20 @@
+meta {
+  name: Course
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}ws/1.4/course.php?id=IDATA2503&sem=23h
+  body: none
+  auth: none
+}
+
+query {
+  id: IDATA2503
+  sem: 23h
+}
+
+headers {
+  X-Gravitee-Api-Key: {{ApiKey}}
+}
