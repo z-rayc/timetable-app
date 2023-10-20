@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
 
-class TimetableApp extends ConsumerWidget {
-  const TimetableApp({super.key});
-  
+class TimeTableApp extends ConsumerWidget {
+  const TimeTableApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: implement build
-    throw UnimplementedError();
+    final navState = ref.watch(navProvider);
+
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Consumer(
+        builder: (context, ref, child) {
+          return navState.currentScreen;
+        },
+      ),
+    );
   }
-
-
-
 }

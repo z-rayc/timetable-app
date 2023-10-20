@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timetable_app/screens/login_screen.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 
-enum NavProviderState {
-  splashScreen(SplashScreen());
+enum NavState {
+  splashScreen(SplashScreen()),
   // timetable,
-  // login,
+  login(LoginScreen());
   // loginEmail,
   // selectCourses,
   // dayPlan,
@@ -18,19 +19,20 @@ enum NavProviderState {
   // settings,
   // myCourses;
 
-  const NavProviderState(this.screen);
+  const NavState(this.screen);
   final Widget screen;
 }
 
-class NavProviderNotifier extends StateNotifier<NavProviderState> {
-  NavProviderNotifier() : super(NavProviderState.splashScreen);
+class NavProviderNotifier extends ChangeNotifier {
+  late Widget _currentScreen = const SplashScreen();
+  Widget get currentScreen => _currentScreen;
 
-  void setNavState(NavProviderState state) {
-    state = state;
+  setCurrentScreen(NavState newScreen) {
+    _currentScreen = newScreen.screen;
+    notifyListeners();
   }
 }
 
-final navProvider =
-    StateNotifierProvider<NavProviderNotifier, NavProviderState>(
+final navProvider = ChangeNotifierProvider<NavProviderNotifier>(
   (ref) => NavProviderNotifier(),
 );
