@@ -12,6 +12,9 @@ class NavDrawer extends ConsumerWidget {
       child: Column(
         children: [
           DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
             child: Row(
               children: [
                 Icon(Icons.calendar_month),
@@ -21,9 +24,14 @@ class NavDrawer extends ConsumerWidget {
           ),
           NavDrawerItem(
             icon: Icons.house,
-            title: 'Home',
-            screen: NavState.login,
+            title: 'Splash',
+            screen: NavState.splash,
           ),
+          NavDrawerItem(
+            icon: Icons.key,
+            title: 'Login',
+            screen: NavState.login,
+          )
         ],
       ),
     );
