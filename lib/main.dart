@@ -16,4 +16,4 @@ Future<void> main() async {
   );
 }
 
-final supabase = Supabase.instance.client;
+final kSupabase = Supabase.instance.client;
