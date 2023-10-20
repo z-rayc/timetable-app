@@ -4,7 +4,7 @@ import 'package:timetable_app/screens/login_screen.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 
 enum NavState {
-  splashScreen(SplashScreen()),
+  splash(SplashScreen()),
   // timetable,
   login(LoginScreen());
   // loginEmail,
