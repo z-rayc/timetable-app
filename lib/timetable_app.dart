@@ -10,14 +10,14 @@ class TimeTableApp extends ConsumerWidget {
     final navState = ref.watch(navProvider);
 
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Consumer(
-          builder: (context, ref, child) {
-            return navState.currentScreen;
-          },
-        ));
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Consumer(
+        builder: (context, ref, child) {
+          return navState.currentScreen;
+        },
+      ),
+    );
   }
 }
