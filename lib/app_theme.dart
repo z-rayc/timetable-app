@@ -13,3 +13,7 @@ class AppThemes {
       textTheme: GoogleFonts.alataTextTheme(),
     );
   }
+
+  static Color get accentColour {
+    return const Color.fromRGBO(206, 148, 251, 1);
+  }
