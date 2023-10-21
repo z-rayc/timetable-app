@@ -17,3 +17,21 @@ class AppThemes {
   static Color get accentColour {
     return const Color.fromRGBO(206, 148, 251, 1);
   }
+
+  static ButtonStyle get entryButtonTheme {
+    return ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(
+        accentColour,
+      ),
+      foregroundColor: MaterialStateProperty.all<Color>(
+        const Color.fromRGBO(255, 255, 255, 1),
+      ),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+}
+
