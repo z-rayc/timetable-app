@@ -35,3 +35,13 @@ class AppThemes {
   }
 }
 
+/// Specific themes for the app bar.
+class AppBarThemes {
+  static TextStyle get titleTextStyle {
+    return const TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
+    );
+  }
+}
