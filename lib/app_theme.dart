@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+/**
+ * Examples of how to use these themes you can see in splash_screen.dart right now.
+ */
+
+/// This enum contains the gradients you can use for the calendar items.
+enum CalendarItemColour {
+  green(Color.fromRGBO(140, 255, 130, 1)),
+  lightBlue(Color.fromRGBO(130, 233, 255, 1)),
+  lightRed(Color.fromRGBO(255, 130, 160, 1)),
+  yellow(Color.fromRGBO(251, 255, 74, 1)),
+  purple(Color.fromRGBO(215, 130, 255, 1)),
+  turquoise(Color.fromRGBO(61, 255, 185, 1)),
+  orange(Color.fromRGBO(255, 166, 61, 1)),
+  ;
+
+  const CalendarItemColour(this.colour);
+  final Color colour;
+}
+
+/// This class contains the universal themes for the app used in multiple components.
 class AppThemes {
   static ThemeData get theme {
     return ThemeData(
