@@ -45,3 +45,23 @@ class AppBarThemes {
     );
   }
 }
+
+/// Specific themes for the calendar.
+/// To use the gradient, choose a colour from the enum [CalendarItemColour].
+class CalendarItemTheme {
+  static BoxDecoration calendarDecoration(CalendarItemColour startColour) {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          startColour.colour,
+          const Color.fromRGBO(255, 255, 255, 0.9),
+        ],
+      ),
+      borderRadius: const BorderRadius.all(
+        Radius.circular(10),
+      ),
+    );
+  }
+}
