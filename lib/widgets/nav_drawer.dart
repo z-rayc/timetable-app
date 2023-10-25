@@ -8,10 +8,12 @@ class NavDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Drawer(
+    final navState = ref.watch(navProvider);
+
+    return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
@@ -24,13 +26,17 @@ class NavDrawer extends ConsumerWidget {
           ),
           NavDrawerItem(
             icon: Icons.house,
-            title: 'Splash',
-            screen: NavState.splash,
+            title: 'Splash', // TODO splash not in drawer
+            onTap: () {
+              navState.setCurrentScreen(NavState.splash);
+            },
           ),
           NavDrawerItem(
             icon: Icons.key,
-            title: 'Login',
-            screen: NavState.login,
+            title: 'Login', // TODO login not in drawer
+            onTap: () {
+              pushNewScreen(context, NavState.login);
+            },
           )
         ],
       ),
