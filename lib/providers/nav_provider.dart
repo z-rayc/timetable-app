@@ -36,3 +36,11 @@ class NavProviderNotifier extends ChangeNotifier {
 final navProvider = ChangeNotifierProvider<NavProviderNotifier>(
   (ref) => NavProviderNotifier(),
 );
+
+/// Pushes a new screen onto the navigation stack using the [NavState] enum.
+pushNewScreen(BuildContext context, NavState newScreen) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => newScreen.screen),
+  );
+}
