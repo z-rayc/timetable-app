@@ -38,6 +38,7 @@ dependencies:
   flutter_riverpod: ^2.4.4
   supabase_flutter: ^1.10.22
   google_fonts: ^6.1.0
+  dropdown_search: ^5.0.6
 
 dev_dependencies:
   flutter_test:
