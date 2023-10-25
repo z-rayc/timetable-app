@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timetable_app/screens/dev_screen_choice.dart';
 import 'package:timetable_app/screens/login_screen.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
   // timetable,
-  login(LoginScreen());
+  login(LoginScreen()),
   // loginEmail,
   // selectCourses,
   // dayPlan,
@@ -17,14 +18,16 @@ enum NavState {
   // chatList,
   // accountPage,
   // settings,
-  // myCourses;
+  // myCourses,
+  devScreenChoice(DevScreenChoice());
 
   const NavState(this.screen);
   final Widget screen;
 }
 
 class NavProviderNotifier extends ChangeNotifier {
-  late Widget _currentScreen = const SplashScreen();
+  late Widget _currentScreen =
+      const DevScreenChoice(); // TODO change to splash when stuff is ready
   Widget get currentScreen => _currentScreen;
 
   setCurrentScreen(NavState newScreen) {
