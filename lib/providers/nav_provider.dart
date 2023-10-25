@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/login_screen.dart';
+import 'package:timetable_app/screens/select_courses_screen.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
   // timetable,
-  login(LoginScreen());
+  login(LoginScreen()),
   // loginEmail,
-  // selectCourses,
+  selectCourses(SelectCoursesScreen());
   // dayPlan,
   // eventDetails,
   // courseDetails,
