@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -7,11 +11,45 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login Screen"),
-      ),
       drawer: const NavDrawer(),
-      body: const Text('Hello World!'),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: kSplashBackgroundGradient,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 32),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                SingleSignOnButton(
+                  providerLogoAsset: 'assets/images/Horisontal_Feide.svg',
+                  logoSemanticLabel: 'Feide logo',
+                  onPressed: () {
+                    print('Feide sign in');
+                  },
+                ),
+                SingleSignOnButton(
+                  providerLogoAsset: 'assets/images/google-logo.svg',
+                  logoSemanticLabel: 'Google logo',
+                  onPressed: () {
+                    print('Google sign in');
+                  },
+                ),
+                const Spacer(),
+                ElevatedButton(
+                  style: AppThemes.entrySecondaryButtonTheme,
+                  onPressed: () {
+                    print('Email sign in');
+                  },
+                  child: const Text('Email sign in'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
