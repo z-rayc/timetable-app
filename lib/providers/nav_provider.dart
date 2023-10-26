@@ -9,7 +9,7 @@ enum NavState {
   splash(SplashScreen()),
   // timetable,
   login(LoginScreen()),
-  loginEmail(LoginEmailScreen()),
+  // loginEmail(LoginEmailScreen()),
   // selectCourses,
   // dayPlan,
   // eventDetails,
