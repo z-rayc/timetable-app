@@ -12,9 +12,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       drawer: const NavDrawer(),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: kSplashBackgroundGradient,
-        ),
+        decoration: splashBackgroundDecoration,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 32),
           child: Center(
