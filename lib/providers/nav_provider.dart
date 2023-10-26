@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
-import 'package:timetable_app/screens/login_email_screen.dart';
 import 'package:timetable_app/screens/login_screen.dart';
+import 'package:timetable_app/screens/select_courses_screen.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 
 enum NavState {
@@ -11,6 +11,9 @@ enum NavState {
   login(LoginScreen()),
   // loginEmail(LoginEmailScreen()),
   // selectCourses,
+  // loginEmail(LoginEmailScreen()),
+  selectCourses(SelectCoursesScreen()),
+
   // dayPlan,
   // eventDetails,
   // courseDetails,
