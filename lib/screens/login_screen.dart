@@ -7,10 +7,26 @@ import 'package:timetable_app/widgets/nav_drawer.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
+  _showAlertDialog(BuildContext context, String title) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(title),
+              content:
+                  const Text('Not implemented yet. Please use another option.'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK')),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavDrawer(),
       body: Container(
         decoration: splashBackgroundDecoration,
         child: Padding(
@@ -24,14 +40,14 @@ class LoginScreen extends StatelessWidget {
                   providerLogoAsset: 'assets/images/Horisontal_Feide.svg',
                   logoSemanticLabel: 'Feide logo',
                   onPressed: () {
-                    print('Feide sign in');
+                    _showAlertDialog(context, 'Feide sign in');
                   },
                 ),
                 SingleSignOnButton(
                   providerLogoAsset: 'assets/images/google-logo.svg',
                   logoSemanticLabel: 'Google logo',
                   onPressed: () {
-                    print('Google sign in');
+                    _showAlertDialog(context, 'Google sign in');
                   },
                 ),
                 const Spacer(),
