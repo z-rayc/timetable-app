@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_theme.dart';
 import 'package:timetable_app/screens/login_email_screen.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
@@ -12,9 +13,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       drawer: const NavDrawer(),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: kSplashBackgroundGradient,
-        ),
+        decoration: splashBackgroundDecoration,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 32),
           child: Center(
