@@ -20,6 +20,11 @@ enum CalendarItemColour {
   final Color colour;
 }
 
+const kSplashBackgroundGradient = LinearGradient(
+    colors: [Colors.orange, Colors.pink, Colors.purple, Colors.blue],
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft);
+
 /// This class contains the universal themes for the app used in multiple components.
 class AppThemes {
   static ThemeData get theme {
@@ -49,7 +54,23 @@ class AppThemes {
       ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+      ),
+    );
+  }
+
+  static ButtonStyle get entrySecondaryButtonTheme {
+    return ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(
+        const Color.fromRGBO(255, 255, 255, 1),
+      ),
+      foregroundColor: MaterialStateProperty.all<Color>(
+        const Color.fromRGBO(0, 0, 0, 1),
+      ),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
         ),
       ),
     );
