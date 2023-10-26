@@ -39,14 +39,22 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
       colour: Colors.yellow,
     ),
   ];
-  final List<String> _results = [];
+  final List<Course> _suggestedCourses = [];
+  final List<String> _searchResults = [];
+  final List<Course> selectedCourses = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _suggestedCourses.addAll(courses);
+  }
 
   void _handleSearch(String input) {
-    _results.clear();
+    _searchResults.clear();
     for (var course in courses) {
       if (course.name.toLowerCase().contains(input.toLowerCase())) {
         setState(() {
-          _results.add(course.name);
+          _searchResults.add(course.name);
         });
       }
     }
@@ -67,69 +75,61 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
     // Next (+ cancel)
     return Scaffold(
       body: ListView(
-        padding: const EdgeInsets.all(10),
-        children: [
-          Row(
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+        children: <Widget>[
+          const Row(
             children: [
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text('Program: '),
-                  DropdownSearch<Course>(
-                    items: courses,
-                  ),
+                  Text("Program"),
+                  Text("Search box"),
                 ],
               ),
+              SizedBox(width: 10),
               Column(
                 children: [
-                  const Text('Semester: '),
-                  // TODO: Replace with years and fall/spring
-                  DropdownSearch<int>(
-                    items: const [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                  ),
+                  Text("Semester"),
+                  Text("Search box"),
                 ],
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          const Text("Suggestions"),
           const SizedBox(height: 10),
-          const Text("These might be relevant for you"),
-          ListView(
-            children: [
-              for (var course in courses)
-                ListTile(
-                  title: Text(course.name),
-                  subtitle: Text(course.id),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {},
-                  ),
-                )
-            ],
-          ),
-          const SizedBox(height: 10),
-          const Text("Find a course"),
-          TextField(
-            onChanged: _handleSearch,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.blue,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+          Container(
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount: _suggestedCourses.length,
+              itemBuilder: (ctx, index) => ListTile(
+                title: Text(_suggestedCourses[index].name),
+                trailing: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    setState(() {
+                      selectedCourses.add(_suggestedCourses[index]);
+                      _suggestedCourses.remove(_suggestedCourses[index]);
+                    });
+                  },
+                ),
               ),
-              hintText: "Search for a course",
-              prefixIcon: const Icon(Icons.search),
-              prefixIconColor: Colors.black,
             ),
           ),
-          const SizedBox(height: 10),
-          const Text("Selected courses"),
-          ListView(
-            children: [
-              for (var course in _results)
-                ListTile(
-                  title: Text(course),
-                )
-            ],
+          const SizedBox(height: 20),
+          const Text("Find a course"),
+          const SizedBox(height: 20),
+          const Text("Your selected courses"),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text("Next"),
           )
         ],
       ),
