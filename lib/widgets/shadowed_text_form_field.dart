@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/app_themes.dart';
 
+/// Wrapper for [TextFormField] that adds a drop shadow.
 class ShadowedTextFormField extends StatelessWidget {
   const ShadowedTextFormField({
     super.key,
-    required this.textFormField,
+    required this.child,
   });
-  final TextFormField textFormField;
+  final TextFormField child;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(boxShadow: [kBoxShadow]),
-      child: textFormField,
+      decoration: AppThemes.textFormFieldBoxDecoration,
+      child: child,
     );
   }
 }
