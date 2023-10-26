@@ -102,7 +102,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Sign in with Email"),
+        title: const Text("Sign in with email"),
       ),
       body: !isWideScreen
           ? Padding(

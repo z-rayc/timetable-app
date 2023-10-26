@@ -62,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                           builder: (context) => LoginEmailScreen()),
                     );
                   },
-                  child: const Text('E-mail sign in'),
+                  child: const Text('Email sign in'),
                 ),
               ],
             ),
