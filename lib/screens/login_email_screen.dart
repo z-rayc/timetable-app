@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
 class LoginEmailScreen extends StatefulWidget {
@@ -31,24 +32,26 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login With E-Mail"),
+        title: const Text("Login With Email"),
       ),
-      body: Center(
-        child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 20),
+      body: Padding(
+        padding:
+            const EdgeInsets.only(left: 70, right: 70, top: 20, bottom: 40),
+        child: Column(
+          children: [
+            Form(
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  const Text('E-mail'),
+                  const Text('Email'),
                   ShadowedTextFormField(
                     child: TextFormField(
                       decoration: AppThemes.entryFieldTheme,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your e-mail';
+                          return 'Please enter your email';
                         } else {
                           return null;
                         }
@@ -87,10 +90,21 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
-            )),
+            ),
+            const Spacer(),
+            const Text('No account?'),
+            ElevatedButton(
+              onPressed: () {
+                pushNewScreen(context, NavState.register);
+              },
+              style: AppThemes.entryButtonTheme,
+              child: const Text('Register'),
+            )
+          ],
+        ),
       ),
     );
   }
