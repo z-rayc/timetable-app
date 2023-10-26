@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
@@ -41,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                 ElevatedButton(
                   style: AppThemes.entrySecondaryButtonTheme,
                   onPressed: () {
-                    print('Email sign in');
+                    pushNewScreen(context, NavState.loginEmail);
                   },
                   child: const Text('Email sign in'),
                 ),
