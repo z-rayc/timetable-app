@@ -75,6 +75,17 @@ class AppThemes {
       ),
     );
   }
+
+  static InputDecoration get entryFieldTheme {
+    return InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20.0),
+        borderSide: BorderSide.none,
+      ),
+      fillColor: const Color.fromRGBO(255, 255, 255, 1),
+      filled: true,
+    );
+  }
 }
 
 /// Specific themes for the app bar.
