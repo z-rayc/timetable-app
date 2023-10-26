@@ -11,7 +11,7 @@ enum NavState {
   // timetable,
   login(LoginScreen()),
   loginEmail(LoginEmailScreen()),
-  selectCourses(SelectCoursesScreen());
+  selectCourses(SelectCoursesScreen()),
 
   // dayPlan,
   // eventDetails,
