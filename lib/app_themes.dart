@@ -13,8 +13,7 @@ enum CalendarItemColour {
   yellow(Color.fromRGBO(251, 255, 74, 1)),
   purple(Color.fromRGBO(215, 130, 255, 1)),
   turquoise(Color.fromRGBO(61, 255, 185, 1)),
-  orange(Color.fromRGBO(255, 166, 61, 1)),
-  ;
+  orange(Color.fromRGBO(255, 166, 61, 1));
 
   const CalendarItemColour(this.colour);
   final Color colour;
@@ -29,6 +28,13 @@ const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   ], begin: Alignment.topRight, end: Alignment.bottomLeft),
 );
 
+final kBoxShadow = BoxShadow(
+  color: Colors.black.withOpacity(0.1),
+  spreadRadius: 2,
+  blurRadius: 3,
+  offset: const Offset(2, 2),
+);
+
 /// This class contains the universal themes for the app used in multiple components.
 class AppThemes {
   static ThemeData get theme {
@@ -41,6 +47,13 @@ class AppThemes {
         secondary: const Color.fromRGBO(239, 239, 239, 1),
       ),
       textTheme: GoogleFonts.alataTextTheme(),
+      listTileTheme: ListTileThemeData(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        tileColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
     );
   }
 
