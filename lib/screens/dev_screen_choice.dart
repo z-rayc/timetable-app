@@ -19,7 +19,6 @@ class DevScreenChoice extends StatelessWidget {
               const Text('This screen is only for development purposes.'),
               const Text('Chosen screen will be pushed on top of nav s tack.'),
               ...NavState.values
-                  .where((identifier) => identifier != NavState.devScreenChoice)
                   .map(
                     (screenIdentifier) => ElevatedButton(
                       style: AppThemes.entrySecondaryButtonTheme,
