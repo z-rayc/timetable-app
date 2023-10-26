@@ -20,10 +20,14 @@ enum CalendarItemColour {
   final Color colour;
 }
 
-const kSplashBackgroundGradient = LinearGradient(
-    colors: [Colors.orange, Colors.pink, Colors.purple, Colors.blue],
-    begin: Alignment.topRight,
-    end: Alignment.bottomLeft);
+const BoxDecoration splashBackgroundDecoration = BoxDecoration(
+  gradient: LinearGradient(colors: [
+    Colors.orange,
+    Colors.pink,
+    Colors.purple,
+    Colors.blue,
+  ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+);
 
 /// This class contains the universal themes for the app used in multiple components.
 class AppThemes {
