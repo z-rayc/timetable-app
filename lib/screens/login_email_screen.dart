@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
 class LoginEmailScreen extends StatelessWidget {
   LoginEmailScreen({super.key});
@@ -27,8 +28,10 @@ class LoginEmailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   const Text('Password'),
-                  TextFormField(
-                      decoration: AppThemes.entryFieldTheme.copyWith()),
+                  ShadowedTextFormField(
+                    textFormField: TextFormField(
+                        decoration: AppThemes.entryFieldTheme.copyWith()),
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
