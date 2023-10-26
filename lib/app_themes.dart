@@ -28,12 +28,14 @@ const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   ], begin: Alignment.topRight, end: Alignment.bottomLeft),
 );
 
-final kBoxShadow = BoxShadow(
-  color: Colors.black.withOpacity(0.1),
-  spreadRadius: 2,
-  blurRadius: 3,
-  offset: const Offset(2, 2),
-);
+BoxShadow get boxShadow {
+  return BoxShadow(
+    color: Colors.black.withOpacity(0.1),
+    spreadRadius: 2,
+    blurRadius: 3,
+    offset: const Offset(2, 2),
+  );
+}
 
 /// This class contains the universal themes for the app used in multiple components.
 class AppThemes {
