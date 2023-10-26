@@ -28,15 +28,6 @@ const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   ], begin: Alignment.topRight, end: Alignment.bottomLeft),
 );
 
-BoxShadow get boxShadow {
-  return BoxShadow(
-    color: Colors.black.withOpacity(0.1),
-    spreadRadius: 2,
-    blurRadius: 3,
-    offset: const Offset(2, 2),
-  );
-}
-
 /// This class contains the universal themes for the app used in multiple components.
 class AppThemes {
   static ThemeData get theme {
@@ -105,6 +96,42 @@ class AppThemes {
       filled: true,
     );
   }
+
+  static BoxShadow boxShadow(double radius) {
+    return BoxShadow(
+      color: Colors.black.withOpacity(0.1),
+      spreadRadius: 2,
+      blurRadius: radius,
+      offset: const Offset(2, 2),
+    );
+  }
+
+  static BoxDecoration get listViewContainerDecoration {
+    return BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: const Offset(2, 2),
+        )
+      ],
+    );
+  }
+
+  static BoxDecoration get textFormFieldBoxDecoration {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 2,
+          offset: const Offset(2, 2),
+        )
+      ],
+    );
+  }
 }
 
 /// Specific themes for the app bar.
@@ -136,10 +163,4 @@ class CalendarItemTheme {
       ),
     );
   }
-}
-
-BoxDecoration get listViewContainerDecoration {
-  return BoxDecoration(
-    boxShadow: [boxShadow],
-  );
 }
