@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:timetable_app/app_theme.dart';
 import 'package:timetable_app/models/course.dart';
+import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
 
 class SelectCoursesScreen extends StatefulWidget {
   const SelectCoursesScreen({super.key});
@@ -12,6 +13,29 @@ class SelectCoursesScreen extends StatefulWidget {
 }
 
 class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
+  final TextEditingController programController = TextEditingController();
+  final TextEditingController semesterController = TextEditingController();
+  String? selectedProgram;
+  String? selectedSemester;
+
+  // Dropdown variables
+  final List<DropdownMenuEntry<String>> _programs = [
+    const DropdownMenuEntry(
+      label: "Computer Science (BIDATA)",
+      value: "BIDATA",
+    ),
+    const DropdownMenuEntry(
+      label: "Automation and Intelligent Systems",
+      value: "BIAIS",
+    ),
+  ];
+
+  final List<DropdownMenuEntry<String>> _semesters = [
+    const DropdownMenuEntry(label: "Autumn 2021", value: "H2021"),
+    const DropdownMenuEntry(label: "Autumn 2022", value: "H2022"),
+    const DropdownMenuEntry(label: "Autumn 2023", value: "H2023"),
+  ];
+
   // These are placeholder courses
   final List<Course> courses = [
     const Course(
@@ -62,46 +86,49 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Info button
-
-    // Program and Semester
-
-    // Suggested courses
-
-    // Find cours manually
-
-    // Your selected courses
-
-    // Next (+ cancel)
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         children: <Widget>[
-          const Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("Program"),
-                  Text("Search box"),
-                ],
-              ),
-              SizedBox(width: 10),
-              Column(
-                children: [
-                  Text("Semester"),
-                  Text("Search box"),
-                ],
-              ),
-            ],
-          ),
+          SafeArea(child: LayoutBuilder(builder: (ctx, constraints) {
+            return Row(
+              children: [
+                FormDropdownMenu(
+                  name: "Program",
+                  width: constraints.maxWidth * 0.5 - 5,
+                  controller: programController,
+                  items: _programs,
+                  onSelected: (String? program) {
+                    setState(() {
+                      selectedProgram = program;
+                    });
+                  },
+                ),
+                const Spacer(),
+                FormDropdownMenu(
+                  name: "Semester",
+                  width: constraints.maxWidth * 0.5 - 5,
+                  controller: semesterController,
+                  items: _semesters,
+                  onSelected: (String? semester) {
+                    setState(() {
+                      selectedSemester = semester;
+                    });
+                  },
+                )
+              ],
+            );
+          })),
           const SizedBox(height: 20),
           const Text("Suggestions"),
           const SizedBox(height: 10),
           Container(
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
+              color: Colors.white,
+              boxShadow: [
+                kBoxShadow,
+              ],
               borderRadius: BorderRadius.circular(10),
             ),
             child: ListView.builder(
