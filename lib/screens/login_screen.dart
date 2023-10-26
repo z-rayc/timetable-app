@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';

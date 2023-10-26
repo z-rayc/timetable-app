@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/app_themes.dart';
 
 /// Button used for single sign on.
 /// Logo is displayed to the left of the 'Sign In' text.
