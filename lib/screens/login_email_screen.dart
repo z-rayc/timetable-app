@@ -24,12 +24,17 @@ class LoginEmailScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   const Text('Sign in'),
                   ShadowedTextFormField(
-                    child: TextFormField(decoration: AppThemes.entryFieldTheme),
+                    child: TextFormField(
+                      decoration: AppThemes.entryFieldTheme,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   const Text('Password'),
                   ShadowedTextFormField(
-                    child: TextFormField(decoration: AppThemes.entryFieldTheme),
+                    child: TextFormField(
+                      decoration: AppThemes.entryFieldTheme,
+                      obscureText: true,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Row(
