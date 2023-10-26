@@ -65,7 +65,8 @@ flutter:
   assets:
     - assets/images/google-logo.svg
     - assets/images/Horisontal_Feide.svg
-    - assets/images/logo.svg
+    - assets/images/Logoipsum.svg
+    - assets/images/WhiteboardLogo.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
