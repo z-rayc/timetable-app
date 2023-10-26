@@ -125,7 +125,7 @@ class AppThemes {
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.1),
-          spreadRadius: 2,
+          spreadRadius: 1,
           blurRadius: 2,
           offset: const Offset(2, 2),
         )
