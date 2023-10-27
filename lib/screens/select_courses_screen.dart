@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
 
@@ -129,7 +129,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
-                kBoxShadow,
+                AppThemes.boxShadow(3),
               ],
               borderRadius: BorderRadius.circular(10),
             ),
@@ -192,7 +192,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
-                kBoxShadow,
+                AppThemes.boxShadow(3),
               ],
               borderRadius: BorderRadius.circular(10),
             ),
