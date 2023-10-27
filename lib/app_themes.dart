@@ -19,22 +19,13 @@ enum CalendarItemColour {
   final Color colour;
 }
 
-const kSplashBackgroundGradient = LinearGradient(
-  colors: [
+const BoxDecoration splashBackgroundDecoration = BoxDecoration(
+  gradient: LinearGradient(colors: [
     Colors.orange,
     Colors.pink,
     Colors.purple,
     Colors.blue,
-  ],
-  begin: Alignment.topRight,
-  end: Alignment.bottomLeft,
-);
-
-final kBoxShadow = BoxShadow(
-  color: Colors.black.withOpacity(0.1),
-  spreadRadius: 2,
-  blurRadius: 3,
-  offset: const Offset(2, 2),
+  ], begin: Alignment.topRight, end: Alignment.bottomLeft),
 );
 
 /// This class contains the universal themes for the app used in multiple components.
@@ -93,6 +84,53 @@ class AppThemes {
           borderRadius: BorderRadius.circular(20.0),
         ),
       ),
+    );
+  }
+
+  static InputDecoration get entryFieldTheme {
+    return InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20.0),
+        borderSide: BorderSide.none,
+      ),
+      fillColor: const Color.fromRGBO(255, 255, 255, 1),
+      filled: true,
+    );
+  }
+
+  static BoxShadow boxShadow(double radius) {
+    return BoxShadow(
+      color: Colors.black.withOpacity(0.1),
+      spreadRadius: 2,
+      blurRadius: radius,
+      offset: const Offset(2, 2),
+    );
+  }
+
+  static BoxDecoration get listViewContainerDecoration {
+    return BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: const Offset(2, 2),
+        )
+      ],
+    );
+  }
+
+  static BoxDecoration get textFormFieldBoxDecoration {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 1,
+          blurRadius: 2,
+          offset: const Offset(2, 2),
+        )
+      ],
     );
   }
 }

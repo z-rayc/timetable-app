@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_app/app_theme.dart';
-import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:timetable_app/screens/login_email_screen.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
-import 'package:timetable_app/widgets/nav_drawer.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
+  _showAlertDialog(BuildContext context, String title) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(title),
+              content:
+                  const Text('Not implemented yet. Please use another option.'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK')),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavDrawer(),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: kSplashBackgroundGradient,
-        ),
+        decoration: splashBackgroundDecoration,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 32),
           child: Center(
@@ -26,21 +39,26 @@ class LoginScreen extends StatelessWidget {
                   providerLogoAsset: 'assets/images/Horisontal_Feide.svg',
                   logoSemanticLabel: 'Feide logo',
                   onPressed: () {
-                    print('Feide sign in');
+                    _showAlertDialog(context, 'Feide sign in');
                   },
                 ),
                 SingleSignOnButton(
                   providerLogoAsset: 'assets/images/google-logo.svg',
                   logoSemanticLabel: 'Google logo',
                   onPressed: () {
-                    print('Google sign in');
+                    _showAlertDialog(context, 'Google sign in');
                   },
                 ),
                 const Spacer(),
                 ElevatedButton(
                   style: AppThemes.entrySecondaryButtonTheme,
                   onPressed: () {
-                    pushNewScreen(context, NavState.loginEmail);
+                    // pushNewScreen(context, NavState.loginEmail);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginEmailScreen()),
+                    );
                   },
                   child: const Text('Email sign in'),
                 ),

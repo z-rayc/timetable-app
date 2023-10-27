@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:timetable_app/app_theme.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 
 class TimeTableApp extends ConsumerWidget {
