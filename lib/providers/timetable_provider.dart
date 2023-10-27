@@ -22,20 +22,37 @@ class DailyTimetableNotifier extends StateNotifier<DailyTimetable> {
   DailyTimetableNotifier()
       : super(DailyTimetable(courseEvents: [
           CourseEvent(
-              course: const Course(
-                  id: "11",
-                  name: "Dance Dance Revolution",
-                  nameAlias: "DanceRev",
-                  colour: Colors.blue),
-              staff: ["Bob"],
-              location: Location(
-                  roomName: "DanceFloor",
-                  buildingName: "DiscoHouse",
-                  link: Uri(path: "https://ntnu.no")),
-              teachingSummary: "Dance, duh",
-              id: "11",
-              startTime: DateTime(2002),
-              endTime: DateTime(2042))
+            course: const Course(
+                id: "11",
+                name: "Dance Dance Revolution",
+                nameAlias: "DanceRev",
+                colour: Colors.blue),
+            staff: ["Bob"],
+            location: Location(
+                roomName: "DanceFloor",
+                buildingName: "DiscoHouse",
+                link: Uri(path: "https://ntnu.no")),
+            teachingSummary: "Dance, duh",
+            id: "11",
+            startTime: DateTime(2023, 10, 26, 13),
+            endTime: DateTime(2023, 10, 26, 15),
+          ),
+          CourseEvent(
+            course: const Course(
+                id: "11",
+                name: "Music class",
+                nameAlias: "musicality",
+                colour: Colors.blue),
+            staff: ["Alice"],
+            location: Location(
+                roomName: "DiscoFloor",
+                buildingName: "DanceHouse",
+                link: Uri(path: "https://example.com")),
+            teachingSummary: "Dance, yeah!",
+            id: "22",
+            startTime: DateTime(2023, 10, 26, 8),
+            endTime: DateTime(2023, 10, 26, 14),
+          ),
         ]));
 
   //Setter for courseEvents

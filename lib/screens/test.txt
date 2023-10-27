@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timetable_app/providers/timetable_provider.dart';
+
+class SingleDayTimetable extends ConsumerWidget {
+  const SingleDayTimetable({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var timetable = ref.watch(dailyTimetableProvider);
+
+    //screensize
+    double height = MediaQuery.of(context).size.height;
+    // Define the timetable start and end times
+    const startTime = 8; // 8:00 AM
+    const endTime = 18; // 6:00 PM
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Single day timetable'),
+      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          // Create the timetable grid
+          Expanded(
+            child: Table(
+              columnWidths: const {
+                0: FixedColumnWidth(80.0), // Time column width
+                1: FlexColumnWidth(1.0), // Course block column width
+              },
+              children: [
+                // Table header with time slots
+                const TableRow(
+                  children: [
+                    TableCell(child: Center(child: Text('Time'))),
+                    TableCell(child: Center(child: Text('Courses'))),
+                  ],
+                ),
+
+                // Generate time slots and course blocks
+                for (int hour = startTime; hour <= endTime; hour++) ...[
+                  TableRow(
+                    children: [
+                      // Time slot
+                      TableCell(
+                        child: Center(child: Text('$hour:00')),
+                      ),
+                      // Course blocks for the current hour
+                      TableCell(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            // Generate course blocks for the current hour
+                            for (var course in timetable.courseEvents)
+                              if (course.startTime.hour <= hour &&
+                                  course.endTime.hour >= hour)
+                                Container(
+                                  margin: const EdgeInsets.all(4.0),
+                                  color: Colors.blue,
+                                  child: Text(
+                                    course.course.name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
