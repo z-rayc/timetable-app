@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/account_settings.dart';
 import 'package:timetable_app/screens/course_details_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
+import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/screens/login_email_screen.dart';
 import 'package:timetable_app/screens/login_screen.dart';
 import 'package:timetable_app/screens/register_screen.dart';
@@ -19,7 +20,7 @@ enum NavState {
   selectCourses(SelectCoursesScreen()),
 
   // dayPlan,
-  // eventDetails,
+  eventDetails(EventDetailsScreen()),
   courseDetails(CourseDetailsScreen()),
   // chat,
   // chatList,
