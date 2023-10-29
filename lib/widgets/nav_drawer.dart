@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/nav_drawer_item.dart';
 
-class NavDrawer extends ConsumerWidget {
-  const NavDrawer({super.key});
+enum NavDrawerChoice {
+  timetable,
+  chat,
+  myCourses,
+  settings,
+}
+
+class NavDrawer extends StatelessWidget {
+  const NavDrawer({super.key, required this.onSelectedNavItem});
+  final void Function(NavDrawerChoice) onSelectedNavItem;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final navState = ref.watch(navProvider);
-
+  Widget build(BuildContext context) {
     return Drawer(
       child: Column(
         children: [
@@ -25,19 +29,33 @@ class NavDrawer extends ConsumerWidget {
             ),
           ),
           NavDrawerItem(
-            icon: Icons.house,
-            title: 'Splash', // TODO splash not in drawer
+            icon: Icons.calendar_today,
+            title: 'Timetable',
             onTap: () {
-              navState.setCurrentScreen(NavState.splash);
+              onSelectedNavItem(NavDrawerChoice.timetable);
             },
           ),
           NavDrawerItem(
-            icon: Icons.key,
-            title: 'Login', // TODO login not in drawer
+            icon: Icons.chat,
+            title: 'Chats',
             onTap: () {
-              pushNewScreen(context, NavState.login);
+              onSelectedNavItem(NavDrawerChoice.chat);
             },
-          )
+          ),
+          NavDrawerItem(
+            icon: Icons.edit_document,
+            title: 'My Courses',
+            onTap: () {
+              onSelectedNavItem(NavDrawerChoice.myCourses);
+            },
+          ),
+          NavDrawerItem(
+            icon: Icons.settings,
+            title: 'Settings',
+            onTap: () {
+              onSelectedNavItem(NavDrawerChoice.settings);
+            },
+          ),
         ],
       ),
     );
