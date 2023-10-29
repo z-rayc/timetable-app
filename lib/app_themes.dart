@@ -19,6 +19,8 @@ enum CalendarItemColour {
   final Color colour;
 }
 
+const double kDefaultBorderRadius = 20.0;
+
 const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   gradient: LinearGradient(colors: [
     Colors.orange,
@@ -46,7 +48,7 @@ class AppThemes {
         titleAlignment: ListTileTitleAlignment.center,
         tileColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         ),
       ),
     );
@@ -66,7 +68,7 @@ class AppThemes {
       ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         ),
       ),
     );
@@ -82,7 +84,7 @@ class AppThemes {
       ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         ),
       ),
     );
@@ -91,7 +93,7 @@ class AppThemes {
   static InputDecoration get entryFieldTheme {
     return InputDecoration(
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         borderSide: BorderSide.none,
       ),
       fillColor: const Color.fromRGBO(255, 255, 255, 1),
@@ -123,7 +125,7 @@ class AppThemes {
 
   static BoxDecoration get textFormFieldBoxDecoration {
     return BoxDecoration(
-      borderRadius: BorderRadius.circular(20.0),
+      borderRadius: BorderRadius.circular(kDefaultBorderRadius),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.1),

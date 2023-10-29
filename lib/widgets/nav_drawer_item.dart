@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 
 class NavDrawerItem extends StatelessWidget {
   const NavDrawerItem({
@@ -18,8 +19,9 @@ class NavDrawerItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
       child: Material(
         elevation: 2,
-        shadowColor: Colors.black87,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shadowColor: Colors.black,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kDefaultBorderRadius)),
         child: ListTile(
           // leading: Icon(icon),
           title: Row(
