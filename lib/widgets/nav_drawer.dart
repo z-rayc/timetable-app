@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/nav_drawer_item.dart';
 
 enum NavDrawerChoice {
@@ -17,15 +18,25 @@ class NavDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.calendar_month),
-                Text("Menu"),
-              ],
+          SizedBox(
+            height: 180,
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                color: AppThemes.theme.colorScheme.primary,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.calendar_month,
+                      color: AppThemes.theme.colorScheme.onPrimary, size: 32),
+                  const SizedBox(width: 10),
+                  Text("Chronos!",
+                      style: TextStyle(
+                          color: AppThemes.theme.colorScheme.onPrimary,
+                          fontSize: 24)),
+                ],
+              ),
             ),
           ),
           NavDrawerItem(

@@ -14,10 +14,25 @@ class NavDrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      onTap: onTap,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+      child: Material(
+        elevation: 2,
+        shadowColor: Colors.black87,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: ListTile(
+          // leading: Icon(icon),
+          title: Row(
+            children: [
+              Icon(icon),
+              const Spacer(),
+              Text(title),
+              const Spacer(),
+            ],
+          ),
+          onTap: onTap,
+        ),
+      ),
     );
   }
 }

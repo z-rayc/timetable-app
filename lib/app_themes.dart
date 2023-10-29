@@ -42,10 +42,11 @@ class AppThemes {
       ),
       textTheme: GoogleFonts.alataTextTheme(),
       listTileTheme: ListTileThemeData(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+        titleAlignment: ListTileTitleAlignment.center,
         tileColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
       ),
     );
