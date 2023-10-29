@@ -20,6 +20,9 @@ enum CalendarItemColour {
 }
 
 const double kDefaultBorderRadius = 20.0;
+const Color kThemeSeedColour = Color.fromRGBO(140, 20, 197, 1);
+const Color kOffWhite = Color.fromRGBO(240, 240, 240, 1);
+const double kDrawerBorderRadius = 30.0;
 
 const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   gradient: LinearGradient(colors: [
@@ -36,9 +39,9 @@ class AppThemes {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color.fromRGBO(140, 20, 197, 1),
+        seedColor: kThemeSeedColour,
       ).copyWith(
-        background: const Color.fromRGBO(240, 240, 240, 1),
+        background: kOffWhite,
         secondary: const Color.fromRGBO(239, 239, 239, 1),
         tertiary: Colors.white,
       ),
@@ -49,6 +52,19 @@ class AppThemes {
         tileColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kDefaultBorderRadius),
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: kThemeSeedColour,
+        titleTextStyle: AppBarThemes.titleTextStyle,
+        foregroundColor: Colors.white,
+      ),
+      drawerTheme: const DrawerThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(kDrawerBorderRadius),
+            bottomRight: Radius.circular(kDrawerBorderRadius),
+          ),
         ),
       ),
     );
