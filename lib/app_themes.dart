@@ -23,6 +23,7 @@ const double kDefaultBorderRadius = 20.0;
 const Color kThemeSeedColour = Color.fromRGBO(140, 20, 197, 1);
 const Color kOffWhite = Color.fromRGBO(240, 240, 240, 1);
 const double kDrawerBorderRadius = 30.0;
+const double kBottomNavBarRounding = 25;
 
 const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   gradient: LinearGradient(colors: [
@@ -66,6 +67,11 @@ class AppThemes {
             bottomRight: Radius.circular(kDrawerBorderRadius),
           ),
         ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: kThemeSeedColour,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
       ),
     );
   }
@@ -149,6 +155,20 @@ class AppThemes {
           blurRadius: 2,
           offset: const Offset(2, 2),
         )
+      ],
+    );
+  }
+
+  static BoxDecoration get bottomNavBarBoxDecoration {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(kBottomNavBarRounding),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: const Offset(2, 2),
+        ),
       ],
     );
   }
