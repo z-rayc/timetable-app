@@ -1,29 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/account_settings.dart';
+import 'package:timetable_app/screens/chats_screen.dart';
+import 'package:timetable_app/screens/course_details_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
+import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/screens/login_email_screen.dart';
 import 'package:timetable_app/screens/login_screen.dart';
+import 'package:timetable_app/screens/register_screen.dart';
 import 'package:timetable_app/screens/select_courses_screen.dart';
 import 'package:timetable_app/screens/single_day_timetable.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
+import 'package:timetable_app/screens/tabs_screen.dart';
+import 'package:timetable_app/screens/temp_timetable_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
   timetable(SingleDayTimetable()),
+  temptimetable(TempTimetableScreen()),
   login(LoginScreen()),
   loginEmail(LoginEmailScreen()),
+  register(RegisterScreen()),
   selectCourses(SelectCoursesScreen()),
 
   // dayPlan,
-  // eventDetails,
-  // courseDetails,
-  // register,
+  eventDetails(EventDetailsScreen()),
+  courseDetails(CourseDetailsScreen()),
   // chat,
-  // chatList,
+  chatsScreen(ChatsScreen()),
   // accountPage,
   settings(AccountSettings()),
   // myCourses,
+  tabsScreen(TabsScreen()),
   devScreenChoice(DevScreenChoice());
 
   const NavState(this.screen);

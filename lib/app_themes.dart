@@ -19,6 +19,12 @@ enum CalendarItemColour {
   final Color colour;
 }
 
+const double kDefaultBorderRadius = 20.0;
+const Color kThemeSeedColour = Color.fromRGBO(140, 20, 197, 1);
+const Color kOffWhite = Color.fromRGBO(240, 240, 240, 1);
+const double kDrawerBorderRadius = 30.0;
+const double kBottomNavBarRounding = 25;
+
 const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   gradient: LinearGradient(colors: [
     Colors.orange,
@@ -28,33 +34,44 @@ const BoxDecoration splashBackgroundDecoration = BoxDecoration(
   ], begin: Alignment.topRight, end: Alignment.bottomLeft),
 );
 
-BoxShadow get boxShadow {
-  return BoxShadow(
-    color: Colors.black.withOpacity(0.1),
-    spreadRadius: 2,
-    blurRadius: 3,
-    offset: const Offset(2, 2),
-  );
-}
-
 /// This class contains the universal themes for the app used in multiple components.
 class AppThemes {
   static ThemeData get theme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color.fromRGBO(140, 20, 197, 1),
+        seedColor: kThemeSeedColour,
       ).copyWith(
-        background: const Color.fromRGBO(240, 240, 240, 1),
+        background: kOffWhite,
         secondary: const Color.fromRGBO(239, 239, 239, 1),
+        tertiary: Colors.white,
       ),
-      textTheme: GoogleFonts.alataTextTheme(),
+      textTheme: GoogleFonts.alataTextTheme().copyWith(),
       listTileTheme: ListTileThemeData(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+        titleAlignment: ListTileTitleAlignment.center,
         tileColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: kThemeSeedColour,
+        titleTextStyle: AppBarThemes.titleTextStyle,
+        foregroundColor: Colors.white,
+      ),
+      drawerTheme: const DrawerThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(kDrawerBorderRadius),
+            bottomRight: Radius.circular(kDrawerBorderRadius),
+          ),
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: kThemeSeedColour,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
       ),
     );
   }
@@ -66,14 +83,14 @@ class AppThemes {
   static ButtonStyle get entryButtonTheme {
     return ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
-        accentColour,
+        kThemeSeedColour,
       ),
       foregroundColor: MaterialStateProperty.all<Color>(
         const Color.fromRGBO(255, 255, 255, 1),
       ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         ),
       ),
     );
@@ -89,9 +106,71 @@ class AppThemes {
       ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         ),
       ),
+    );
+  }
+
+  static InputDecoration get entryFieldTheme {
+    return InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(kDefaultBorderRadius),
+        borderSide: BorderSide.none,
+      ),
+      fillColor: const Color.fromRGBO(255, 255, 255, 1),
+      filled: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+    );
+  }
+
+  static BoxShadow boxShadow(double radius) {
+    return BoxShadow(
+      color: Colors.black.withOpacity(0.1),
+      spreadRadius: 2,
+      blurRadius: radius,
+      offset: const Offset(2, 2),
+    );
+  }
+
+  static BoxDecoration get listViewContainerDecoration {
+    return BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: const Offset(2, 2),
+        )
+      ],
+    );
+  }
+
+  static BoxDecoration get textFormFieldBoxDecoration {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(kDefaultBorderRadius),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 1,
+          blurRadius: 2,
+          offset: const Offset(2, 2),
+        )
+      ],
+    );
+  }
+
+  static BoxDecoration get bottomNavBarBoxDecoration {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(kBottomNavBarRounding),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: const Offset(2, 2),
+        ),
+      ],
     );
   }
 }
@@ -125,10 +204,4 @@ class CalendarItemTheme {
       ),
     );
   }
-}
-
-BoxDecoration get listViewContainerDecoration {
-  return BoxDecoration(
-    boxShadow: [boxShadow],
-  );
 }

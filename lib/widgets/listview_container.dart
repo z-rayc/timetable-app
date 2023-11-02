@@ -12,7 +12,7 @@ class ListviewContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: listViewContainerDecoration,
+      decoration: AppThemes.listViewContainerDecoration,
       child: ListView(
         children: children,
       ),

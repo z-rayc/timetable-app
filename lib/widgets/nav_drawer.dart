@@ -1,43 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/nav_drawer_item.dart';
 
-class NavDrawer extends ConsumerWidget {
-  const NavDrawer({super.key});
+enum NavDrawerChoice {
+  timetable,
+  chat,
+  myCourses,
+  settings,
+}
+
+class NavDrawer extends StatelessWidget {
+  const NavDrawer({super.key, required this.onSelectedNavItem});
+  final void Function(NavDrawerChoice) onSelectedNavItem;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final navState = ref.watch(navProvider);
-
+  Widget build(BuildContext context) {
     return Drawer(
+      
       child: Column(
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.calendar_month),
-                Text("Menu"),
-              ],
+          SizedBox(
+            height: 180,
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                color: AppThemes.theme.colorScheme.primary,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.calendar_month,
+                      color: AppThemes.theme.colorScheme.onPrimary, size: 32),
+                  const SizedBox(width: 10),
+                  Text("Chronos!",
+                      style: TextStyle(
+                          color: AppThemes.theme.colorScheme.onPrimary,
+                          fontSize: 24)),
+                ],
+              ),
             ),
           ),
           NavDrawerItem(
-            icon: Icons.house,
-            title: 'Splash', // TODO splash not in drawer
+            icon: Icons.calendar_today,
+            title: 'Timetable',
             onTap: () {
-              navState.setCurrentScreen(NavState.splash);
+              onSelectedNavItem(NavDrawerChoice.timetable);
             },
           ),
           NavDrawerItem(
-            icon: Icons.key,
-            title: 'Login', // TODO login not in drawer
+            icon: Icons.chat,
+            title: 'Chats',
             onTap: () {
-              pushNewScreen(context, NavState.login);
+              onSelectedNavItem(NavDrawerChoice.chat);
             },
-          )
+          ),
+          NavDrawerItem(
+            icon: Icons.edit_document,
+            title: 'My Courses',
+            onTap: () {
+              onSelectedNavItem(NavDrawerChoice.myCourses);
+            },
+          ),
+          NavDrawerItem(
+            icon: Icons.settings,
+            title: 'Settings',
+            onTap: () {
+              onSelectedNavItem(NavDrawerChoice.settings);
+            },
+          ),
         ],
       ),
     );

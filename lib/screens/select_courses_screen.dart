@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
+import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
 
 class SelectCoursesScreen extends StatefulWidget {
   const SelectCoursesScreen({super.key});
@@ -12,6 +13,29 @@ class SelectCoursesScreen extends StatefulWidget {
 }
 
 class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
+  final TextEditingController programController = TextEditingController();
+  final TextEditingController semesterController = TextEditingController();
+  String? selectedProgram;
+  String? selectedSemester;
+
+  // Dropdown variables
+  final List<DropdownMenuEntry<String>> _programs = [
+    const DropdownMenuEntry(
+      label: "Computer Science (BIDATA)",
+      value: "BIDATA",
+    ),
+    const DropdownMenuEntry(
+      label: "Automation and Intelligent Systems",
+      value: "BIAIS",
+    ),
+  ];
+
+  final List<DropdownMenuEntry<String>> _semesters = [
+    const DropdownMenuEntry(label: "Autumn 2021", value: "H2021"),
+    const DropdownMenuEntry(label: "Autumn 2022", value: "H2022"),
+    const DropdownMenuEntry(label: "Autumn 2023", value: "H2023"),
+  ];
+
   // These are placeholder courses
   final List<Course> courses = [
     const Course(
@@ -41,7 +65,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   ];
   final List<Course> _suggestedCourses = [];
   final List<String> _searchResults = [];
-  final List<Course> selectedCourses = [];
+  final List<Course> _selectedCourses = [];
 
   @override
   void initState() {
@@ -60,52 +84,59 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
     }
   }
 
+  late TextEditingController textEditingController;
+
   @override
   Widget build(BuildContext context) {
-    // Info button
-
-    // Program and Semester
-
-    // Suggested courses
-
-    // Find cours manually
-
-    // Your selected courses
-
-    // Next (+ cancel)
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         children: <Widget>[
-          const Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("Program"),
-                  Text("Search box"),
-                ],
-              ),
-              SizedBox(width: 10),
-              Column(
-                children: [
-                  Text("Semester"),
-                  Text("Search box"),
-                ],
-              ),
-            ],
-          ),
+          SafeArea(child: LayoutBuilder(builder: (ctx, constraints) {
+            return Row(
+              children: [
+                FormDropdownMenu(
+                  name: "Program",
+                  width: constraints.maxWidth * 0.5 - 5,
+                  controller: programController,
+                  items: _programs,
+                  onSelected: (String? program) {
+                    setState(() {
+                      selectedProgram = program;
+                    });
+                  },
+                ),
+                const Spacer(),
+                FormDropdownMenu(
+                  name: "Semester",
+                  width: constraints.maxWidth * 0.5 - 5,
+                  controller: semesterController,
+                  items: _semesters,
+                  onSelected: (String? semester) {
+                    setState(() {
+                      selectedSemester = semester;
+                    });
+                  },
+                )
+              ],
+            );
+          })),
           const SizedBox(height: 20),
           const Text("Suggestions"),
           const SizedBox(height: 10),
           Container(
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
+              color: Colors.white,
+              boxShadow: [
+                AppThemes.boxShadow(3),
+              ],
               borderRadius: BorderRadius.circular(10),
             ),
             child: ListView.builder(
-              padding: EdgeInsets.zero,
+              padding: _suggestedCourses.isEmpty
+                  ? const EdgeInsets.only(top: 50)
+                  : EdgeInsets.zero,
               shrinkWrap: true,
               itemCount: _suggestedCourses.length,
               itemBuilder: (ctx, index) => ListTile(
@@ -114,7 +145,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
                   icon: const Icon(Icons.add),
                   onPressed: () {
                     setState(() {
-                      selectedCourses.add(_suggestedCourses[index]);
+                      _selectedCourses.add(_suggestedCourses[index]);
                       _suggestedCourses.remove(_suggestedCourses[index]);
                     });
                   },
@@ -124,12 +155,79 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
           ),
           const SizedBox(height: 20),
           const Text("Find a course"),
+          Autocomplete<Course>(
+            displayStringForOption: (Course option) => option.name,
+            optionsBuilder: (TextEditingValue textEditingValue) {
+              if (textEditingValue.text == "") {
+                return const Iterable<Course>.empty();
+              }
+              return courses.where(
+                (Course option) {
+                  return option.name
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase());
+                },
+              );
+            },
+            fieldViewBuilder: (context, fieldTextEditingController, focusNode,
+                onFieldSubmitted) {
+              textEditingController = fieldTextEditingController;
+              return TextField(
+                controller: fieldTextEditingController,
+                focusNode: focusNode,
+              );
+            },
+            onSelected: (Course selection) {
+              setState(() {
+                _selectedCourses.add(selection);
+                textEditingController.clear();
+              });
+            },
+          ),
           const SizedBox(height: 20),
           const Text("Your selected courses"),
+          const SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                AppThemes.boxShadow(3),
+              ],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ListView.builder(
+              padding: _selectedCourses.isEmpty
+                  ? const EdgeInsets.only(top: 50)
+                  : EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount: _selectedCourses.length,
+              itemBuilder: (ctx, index) => ListTile(
+                title: Text(_selectedCourses[index].name),
+                trailing: IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: () {
+                    setState(() {
+                      _selectedCourses.remove(_selectedCourses[index]);
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            "Note: You can change these later",
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {},
-            child: const Text("Next"),
+            style: AppThemes.entryButtonTheme,
+            child: const Text(
+              "Next",
+              style: TextStyle(color: Colors.white),
+            ),
           )
         ],
       ),

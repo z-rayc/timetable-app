@@ -17,7 +17,7 @@ class SplashScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  "assets/images/logo.svg",
+                  "assets/images/LogoIpsum.svg",
                   height: 150,
                 ),
               ],
