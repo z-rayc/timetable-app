@@ -223,16 +223,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {},
-            style: ButtonStyle(
-              padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-                (Set<MaterialState> states) {
-                  return const EdgeInsets.all(5);
-                },
-              ),
-              backgroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).primaryColor,
-              ),
-            ),
+            style: AppThemes.entryButtonTheme,
             child: const Text(
               "Next",
               style: TextStyle(color: Colors.white),

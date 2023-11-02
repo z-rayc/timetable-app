@@ -46,7 +46,7 @@ class AppThemes {
         secondary: const Color.fromRGBO(239, 239, 239, 1),
         tertiary: Colors.white,
       ),
-      textTheme: GoogleFonts.alataTextTheme(),
+      textTheme: GoogleFonts.alataTextTheme().copyWith(),
       listTileTheme: ListTileThemeData(
         contentPadding: const EdgeInsets.symmetric(horizontal: 15),
         titleAlignment: ListTileTitleAlignment.center,
@@ -83,7 +83,7 @@ class AppThemes {
   static ButtonStyle get entryButtonTheme {
     return ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
-        accentColour,
+        kThemeSeedColour,
       ),
       foregroundColor: MaterialStateProperty.all<Color>(
         const Color.fromRGBO(255, 255, 255, 1),
