@@ -20,7 +20,7 @@ class ShadowedTextFormField extends StatelessWidget {
       children: [
         SizedBox(
           width: double.infinity,
-          height: height ?? 65,
+          height: height ?? 55,
           child: Container(
             decoration: AppThemes.textFormFieldBoxDecoration,
           ),

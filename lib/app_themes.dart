@@ -120,6 +120,7 @@ class AppThemes {
       ),
       fillColor: const Color.fromRGBO(255, 255, 255, 1),
       filled: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
     );
   }
 
