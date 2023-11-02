@@ -9,15 +9,15 @@ import 'package:timetable_app/screens/login_email_screen.dart';
 import 'package:timetable_app/screens/login_screen.dart';
 import 'package:timetable_app/screens/register_screen.dart';
 import 'package:timetable_app/screens/select_courses_screen.dart';
+import 'package:timetable_app/screens/single_day_timetable.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 import 'package:timetable_app/screens/tabs_screen.dart';
 import 'package:timetable_app/screens/temp_timetable_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
-  // timetable(),
+  timetable(SingleDayTimetable()),
   temptimetable(TempTimetableScreen()),
-
   login(LoginScreen()),
   loginEmail(LoginEmailScreen()),
   register(RegisterScreen()),
