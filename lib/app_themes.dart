@@ -46,7 +46,7 @@ class AppThemes {
         secondary: const Color.fromRGBO(239, 239, 239, 1),
         tertiary: Colors.white,
       ),
-      textTheme: GoogleFonts.alataTextTheme().copyWith(),
+      textTheme: GoogleFonts.alataTextTheme(),
       listTileTheme: ListTileThemeData(
         contentPadding: const EdgeInsets.symmetric(horizontal: 15),
         titleAlignment: ListTileTitleAlignment.center,
