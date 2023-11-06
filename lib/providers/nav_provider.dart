@@ -54,9 +54,17 @@ final navProvider = ChangeNotifierProvider<NavProviderNotifier>(
   (ref) => NavProviderNotifier(),
 );
 
-/// Pushes a new screen onto the navigation stack using the [NavState] enum.
+/// Pushes a new screen onto the navigation stack, where the new screen matches the [NavState] enum.
 pushNewScreen(BuildContext context, NavState newScreen) {
   Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => newScreen.screen),
+  );
+}
+
+/// Replaces the current screen with a new screen in the navigation stack, where the new screen matches the [NavState] enum.
+replaceNewScreen(BuildContext context, NavState newScreen) {
+  Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: (context) => newScreen.screen),
   );
