@@ -93,37 +93,35 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
           children: <Widget>[
-            LayoutBuilder(
-              builder: (ctx, constraints) {
-                return Row(
-                  children: [
-                    FormDropdownMenu(
-                      name: "Program",
-                      width: constraints.maxWidth * 0.5 - 5,
-                      controller: programController,
-                      items: _programs,
-                      onSelected: (String? program) {
-                        setState(() {
-                          selectedProgram = program;
-                        });
-                      },
-                    ),
-                    const Spacer(),
-                    FormDropdownMenu(
-                      name: "Semester",
-                      width: constraints.maxWidth * 0.5 - 5,
-                      controller: semesterController,
-                      items: _semesters,
-                      onSelected: (String? semester) {
-                        setState(() {
-                          selectedSemester = semester;
-                        });
-                      },
-                    )
-                  ],
-                );
-              },
-            ),
+            LayoutBuilder(builder: (context, constraints) {
+              return Column(
+                children: [
+                  FormDropdownMenu(
+                    name: "Program",
+                    width: constraints.maxWidth,
+                    controller: programController,
+                    items: _programs,
+                    onSelected: (String? program) {
+                      setState(() {
+                        selectedProgram = program;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  FormDropdownMenu(
+                    name: "Semester",
+                    width: constraints.maxWidth,
+                    controller: semesterController,
+                    items: _semesters,
+                    onSelected: (String? semester) {
+                      setState(() {
+                        selectedSemester = semester;
+                      });
+                    },
+                  ),
+                ],
+              );
+            }),
             const SizedBox(height: 20),
             const Text("Suggestions"),
             const SizedBox(height: 10),
