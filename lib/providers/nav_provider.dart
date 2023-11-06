@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/account_settings_screen.dart';
 import 'package:timetable_app/screens/chats_screen.dart';
 import 'package:timetable_app/screens/course_details_screen.dart';
+import 'package:timetable_app/screens/create_event_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/screens/login_email_screen.dart';
@@ -27,12 +28,13 @@ enum NavState {
   // dayPlan,
   eventDetails(EventDetailsScreen()),
   courseDetails(CourseDetailsScreen()),
+  createEvent(CreateEventScreen()),
   // chat,
-  chatsScreen(ChatsScreen()),
+  chats(ChatsScreen()),
   // accountPage,
-  accountSettingsScreen(AccountSettingsScreen()),
-  myCoursesScreen(MyCoursesScreen()),
-  tabsScreen(TabsScreen()),
+  accountSettings(AccountSettingsScreen()),
+  myCourses(MyCoursesScreen()),
+  tabs(TabsScreen()),
   devScreenChoice(DevScreenChoice());
 
   const NavState(this.screen);
