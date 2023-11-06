@@ -65,24 +65,12 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
     ),
   ];
   final List<Course> _suggestedCourses = [];
-  final List<String> _searchResults = [];
   final List<Course> _selectedCourses = [];
 
   @override
   void initState() {
     super.initState();
     _suggestedCourses.addAll(courses);
-  }
-
-  void _handleSearch(String input) {
-    _searchResults.clear();
-    for (var course in courses) {
-      if (course.name.toLowerCase().contains(input.toLowerCase())) {
-        setState(() {
-          _searchResults.add(course.name);
-        });
-      }
-    }
   }
 
   late TextEditingController textEditingController;
@@ -164,7 +152,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
                 if (textEditingValue.text == "") {
                   return const Iterable<Course>.empty();
                 }
-                return (courses).where(
+                return courses.where(
                   (Course option) {
                     return !_selectedCourses.contains(option) &&
                         option.name
