@@ -35,36 +35,48 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: selectedCourses.length,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                child: ListTile(
-                  leading: Container(
-                    height: 20,
-                    width: 20,
-                    color: selectedCourses[index].colour,
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+          children: [
+            Text(
+              'My courses',
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Colors.black,
                   ),
-                  title: Text(selectedCourses[index].nameAlias),
-                  subtitle: Text(selectedCourses[index].name),
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              pushNewScreen(context, NavState.selectCourses);
-            },
-            style: AppThemes.entryButtonTheme,
-            child: const Text('Edit'),
-          ),
-        ],
+            ),
+            const SizedBox(height: 20),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: selectedCourses.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: ListTile(
+                    leading: Container(
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                        color: selectedCourses[index].colour,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    title: Text(selectedCourses[index].nameAlias),
+                    subtitle: Text(selectedCourses[index].name),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                pushNewScreen(context, NavState.selectCourses);
+              },
+              style: AppThemes.entryButtonTheme,
+              child: const Text('Edit'),
+            ),
+          ],
+        ),
       ),
     );
   }
