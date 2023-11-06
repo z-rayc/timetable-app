@@ -89,11 +89,11 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        children: <Widget>[
-          SafeArea(
-            child: LayoutBuilder(
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+          children: <Widget>[
+            LayoutBuilder(
               builder: (ctx, constraints) {
                 return Row(
                   children: [
@@ -124,114 +124,114 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
                 );
               },
             ),
-          ),
-          const SizedBox(height: 20),
-          const Text("Suggestions"),
-          const SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                AppThemes.boxShadow(3),
-              ],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ListView.builder(
-              padding: _suggestedCourses.isEmpty
-                  ? const EdgeInsets.only(top: 50)
-                  : EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: _suggestedCourses.length,
-              itemBuilder: (ctx, index) => ListTile(
-                title: Text(_suggestedCourses[index].name),
-                trailing: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    setState(() {
-                      _selectedCourses.add(_suggestedCourses[index]);
-                      _suggestedCourses.remove(_suggestedCourses[index]);
-                    });
-                  },
+            const SizedBox(height: 20),
+            const Text("Suggestions"),
+            const SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  AppThemes.boxShadow(3),
+                ],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListView.builder(
+                padding: _suggestedCourses.isEmpty
+                    ? const EdgeInsets.only(top: 50)
+                    : EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: _suggestedCourses.length,
+                itemBuilder: (ctx, index) => ListTile(
+                  title: Text(_suggestedCourses[index].name),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        _selectedCourses.add(_suggestedCourses[index]);
+                        _suggestedCourses.remove(_suggestedCourses[index]);
+                      });
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          const Text("Find a course"),
-          Autocomplete<Course>(
-            displayStringForOption: (Course option) => option.name,
-            optionsBuilder: (TextEditingValue textEditingValue) {
-              if (textEditingValue.text == "") {
-                return const Iterable<Course>.empty();
-              }
-              return (courses).where(
-                (Course option) {
-                  return !_selectedCourses.contains(option) &&
-                      option.name
-                          .toLowerCase()
-                          .contains(textEditingValue.text.toLowerCase());
-                },
-              );
-            },
-            fieldViewBuilder: (context, fieldTextEditingController, focusNode,
-                onFieldSubmitted) {
-              textEditingController = fieldTextEditingController;
-              return TextField(
-                controller: fieldTextEditingController,
-                focusNode: focusNode,
-              );
-            },
-            onSelected: (Course selection) {
-              setState(() {
-                _selectedCourses.add(selection);
-                textEditingController.clear();
-              });
-            },
-          ),
-          const SizedBox(height: 20),
-          const Text("Your selected courses"),
-          const SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                AppThemes.boxShadow(3),
-              ],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ListView.builder(
-              padding: _selectedCourses.isEmpty
-                  ? const EdgeInsets.only(top: 50)
-                  : EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: _selectedCourses.length,
-              itemBuilder: (ctx, index) => ListTile(
-                title: Text(_selectedCourses[index].name),
-                trailing: IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: () {
-                    setState(() {
-                      _selectedCourses.remove(_selectedCourses[index]);
-                    });
+            const SizedBox(height: 20),
+            const Text("Find a course"),
+            Autocomplete<Course>(
+              displayStringForOption: (Course option) => option.name,
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text == "") {
+                  return const Iterable<Course>.empty();
+                }
+                return (courses).where(
+                  (Course option) {
+                    return !_selectedCourses.contains(option) &&
+                        option.name
+                            .toLowerCase()
+                            .contains(textEditingValue.text.toLowerCase());
                   },
+                );
+              },
+              fieldViewBuilder: (context, fieldTextEditingController, focusNode,
+                  onFieldSubmitted) {
+                textEditingController = fieldTextEditingController;
+                return TextField(
+                  controller: fieldTextEditingController,
+                  focusNode: focusNode,
+                );
+              },
+              onSelected: (Course selection) {
+                setState(() {
+                  _selectedCourses.add(selection);
+                  textEditingController.clear();
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            const Text("Your selected courses"),
+            const SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  AppThemes.boxShadow(3),
+                ],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListView.builder(
+                padding: _selectedCourses.isEmpty
+                    ? const EdgeInsets.only(top: 50)
+                    : EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: _selectedCourses.length,
+                itemBuilder: (ctx, index) => ListTile(
+                  title: Text(_selectedCourses[index].name),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () {
+                      setState(() {
+                        _selectedCourses.remove(_selectedCourses[index]);
+                      });
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 5),
-          const Text(
-            "Note: You can change these later",
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {},
-            style: AppThemes.entryButtonTheme,
-            child: const Text("Confirm"),
-          )
-        ],
+            const SizedBox(height: 5),
+            const Text(
+              "Note: You can change these later",
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {},
+              style: AppThemes.entryButtonTheme,
+              child: const Text("Confirm"),
+            )
+          ],
+        ),
       ),
     );
   }
