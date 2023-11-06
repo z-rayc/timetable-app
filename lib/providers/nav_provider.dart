@@ -7,6 +7,7 @@ import 'package:timetable_app/screens/dev_screen_choice.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/screens/login_email_screen.dart';
 import 'package:timetable_app/screens/login_screen.dart';
+import 'package:timetable_app/screens/my_courses_screen.dart';
 import 'package:timetable_app/screens/register_screen.dart';
 import 'package:timetable_app/screens/select_courses_screen.dart';
 import 'package:timetable_app/screens/single_day_timetable.dart';
@@ -29,8 +30,8 @@ enum NavState {
   // chat,
   chatsScreen(ChatsScreen()),
   // accountPage,
-  // myCourses,
   accountSettingsScreen(AccountSettingsScreen()),
+  myCoursesScreen(MyCoursesScreen()),
   tabsScreen(TabsScreen()),
   devScreenChoice(DevScreenChoice());
 
