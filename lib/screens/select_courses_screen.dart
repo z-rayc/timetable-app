@@ -92,7 +92,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+          padding: const EdgeInsets.all(20),
           children: <Widget>[
             LayoutBuilder(builder: (context, constraints) {
               return Column(
