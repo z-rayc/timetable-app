@@ -19,7 +19,6 @@ import 'package:timetable_app/screens/temp_timetable_screen.dart';
 enum NavState {
   splash(SplashScreen()),
   timetable(SingleDayTimetable()),
-  temptimetable(TempTimetableScreen()),
   login(LoginScreen()),
   loginEmail(LoginEmailScreen()),
   register(RegisterScreen()),
