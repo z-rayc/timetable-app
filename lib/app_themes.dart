@@ -82,6 +82,13 @@ class AppThemes {
 
   static ButtonStyle get entryButtonTheme {
     return ButtonStyle(
+      textStyle: MaterialStateProperty.all<TextStyle>(
+        TextStyle(
+          fontFamily: AppThemes.theme.textTheme.bodyMedium!.fontFamily,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       backgroundColor: MaterialStateProperty.all<Color>(
         kThemeSeedColour,
       ),

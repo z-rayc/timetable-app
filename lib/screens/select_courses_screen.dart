@@ -92,35 +92,39 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         children: <Widget>[
-          SafeArea(child: LayoutBuilder(builder: (ctx, constraints) {
-            return Row(
-              children: [
-                FormDropdownMenu(
-                  name: "Program",
-                  width: constraints.maxWidth * 0.5 - 5,
-                  controller: programController,
-                  items: _programs,
-                  onSelected: (String? program) {
-                    setState(() {
-                      selectedProgram = program;
-                    });
-                  },
-                ),
-                const Spacer(),
-                FormDropdownMenu(
-                  name: "Semester",
-                  width: constraints.maxWidth * 0.5 - 5,
-                  controller: semesterController,
-                  items: _semesters,
-                  onSelected: (String? semester) {
-                    setState(() {
-                      selectedSemester = semester;
-                    });
-                  },
-                )
-              ],
-            );
-          })),
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (ctx, constraints) {
+                return Row(
+                  children: [
+                    FormDropdownMenu(
+                      name: "Program",
+                      width: constraints.maxWidth * 0.5 - 5,
+                      controller: programController,
+                      items: _programs,
+                      onSelected: (String? program) {
+                        setState(() {
+                          selectedProgram = program;
+                        });
+                      },
+                    ),
+                    const Spacer(),
+                    FormDropdownMenu(
+                      name: "Semester",
+                      width: constraints.maxWidth * 0.5 - 5,
+                      controller: semesterController,
+                      items: _semesters,
+                      onSelected: (String? semester) {
+                        setState(() {
+                          selectedSemester = semester;
+                        });
+                      },
+                    )
+                  ],
+                );
+              },
+            ),
+          ),
           const SizedBox(height: 20),
           const Text("Suggestions"),
           const SizedBox(height: 10),
@@ -161,11 +165,12 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
               if (textEditingValue.text == "") {
                 return const Iterable<Course>.empty();
               }
-              return courses.where(
+              return (courses).where(
                 (Course option) {
-                  return option.name
-                      .toLowerCase()
-                      .contains(textEditingValue.text.toLowerCase());
+                  return !_selectedCourses.contains(option) &&
+                      option.name
+                          .toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase());
                 },
               );
             },
@@ -224,10 +229,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
           ElevatedButton(
             onPressed: () {},
             style: AppThemes.entryButtonTheme,
-            child: const Text(
-              "Next",
-              style: TextStyle(color: Colors.white),
-            ),
+            child: const Text("Confirm"),
           )
         ],
       ),
