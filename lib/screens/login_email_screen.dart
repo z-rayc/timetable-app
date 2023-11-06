@@ -17,7 +17,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
 
   String _enteredPassword = '';
 
-  void _sublitForm() {
+  void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       // print('Email: $_enteredEmail');
@@ -77,7 +77,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: _sublitForm,
+                  onPressed: _submitForm,
                   style: AppThemes.entryButtonTheme,
                   child: const Text('Sign in'),
                 ),

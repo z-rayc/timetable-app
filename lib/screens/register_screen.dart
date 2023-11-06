@@ -20,7 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final TextEditingController _passwordController = TextEditingController();
 
-  void _sublitForm() {
+  void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       // print('Email: $_enteredEmail');
@@ -111,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: _sublitForm,
+                        onPressed: _submitForm,
                         style: AppThemes.entryButtonTheme,
                         child: const Text('Register'),
                       ),
