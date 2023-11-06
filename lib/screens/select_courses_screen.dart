@@ -136,7 +136,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
               ),
               child: ListView.builder(
                 padding: _suggestedCourses.isEmpty
-                    ? const EdgeInsets.only(top: 50)
+                    ? const EdgeInsets.only(top: 40)
                     : EdgeInsets.zero,
                 shrinkWrap: true,
                 itemCount: _suggestedCourses.length,
@@ -156,6 +156,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             ),
             const SizedBox(height: 20),
             const Text("Find a course"),
+            const SizedBox(height: 10),
             Autocomplete<Course>(
               displayStringForOption: (Course option) => option.name,
               optionsBuilder: (TextEditingValue textEditingValue) {
@@ -174,9 +175,29 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
               fieldViewBuilder: (context, fieldTextEditingController, focusNode,
                   onFieldSubmitted) {
                 textEditingController = fieldTextEditingController;
-                return TextField(
-                  controller: fieldTextEditingController,
-                  focusNode: focusNode,
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      AppThemes.boxShadow(3),
+                    ],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 13,
+                      ),
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                    controller: fieldTextEditingController,
+                    focusNode: focusNode,
+                  ),
                 );
               },
               onSelected: (Course selection) {
@@ -200,7 +221,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
               ),
               child: ListView.builder(
                 padding: _selectedCourses.isEmpty
-                    ? const EdgeInsets.only(top: 50)
+                    ? const EdgeInsets.only(top: 40)
                     : EdgeInsets.zero,
                 shrinkWrap: true,
                 itemCount: _selectedCourses.length,
