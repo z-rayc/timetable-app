@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
 
 class SelectCoursesScreen extends StatefulWidget {
@@ -245,7 +246,9 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                replaceNewScreen(context, NavState.timetable);
+              },
               style: AppThemes.entryButtonTheme,
               child: const Text("Confirm"),
             )
