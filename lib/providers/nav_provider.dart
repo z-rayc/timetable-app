@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:timetable_app/screens/account_settings.dart';
+import 'package:timetable_app/screens/account_settings_screen.dart';
 import 'package:timetable_app/screens/chats_screen.dart';
 import 'package:timetable_app/screens/course_details_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
@@ -29,8 +29,8 @@ enum NavState {
   // chat,
   chatsScreen(ChatsScreen()),
   // accountPage,
-  settings(AccountSettings()),
   // myCourses,
+  accountSettingsScreen(AccountSettingsScreen()),
   tabsScreen(TabsScreen()),
   devScreenChoice(DevScreenChoice());
 

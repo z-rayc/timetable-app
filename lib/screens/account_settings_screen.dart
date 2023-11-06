@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/providers/setting_provider.dart';
 
-class AccountSettings extends ConsumerWidget {
-  const AccountSettings({super.key});
+class AccountSettingsScreen extends ConsumerWidget {
+  const AccountSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
