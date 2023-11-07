@@ -34,6 +34,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       case NavDrawerChoice.settings:
         pushNewScreen(context, NavState.accountSettings);
         break;
+      case NavDrawerChoice.devscreen:
+        pushNewScreen(context, NavState.devScreenChoice);
     }
   }
 

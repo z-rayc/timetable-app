@@ -7,6 +7,7 @@ enum NavDrawerChoice {
   chat,
   myCourses,
   settings,
+  devscreen, // remove this later
 }
 
 class NavDrawer extends StatelessWidget {
@@ -16,7 +17,6 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      
       child: Column(
         children: [
           SizedBox(
@@ -66,6 +66,14 @@ class NavDrawer extends StatelessWidget {
             title: 'Settings',
             onTap: () {
               onSelectedNavItem(NavDrawerChoice.settings);
+            },
+          ),
+          NavDrawerItem(
+            // remove me later
+            icon: Icons.error,
+            title: 'Dev screen',
+            onTap: () {
+              onSelectedNavItem(NavDrawerChoice.devscreen);
             },
           ),
         ],
