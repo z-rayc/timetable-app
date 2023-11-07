@@ -4,13 +4,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
-class LoginEmailScreen extends ConsumerStatefulWidget {
+class LoginEmailScreen extends StatefulWidget {
   const LoginEmailScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
+  State<StatefulWidget> createState() {
     return _LoginEmailScreenState();
   }
 
@@ -18,24 +19,46 @@ class LoginEmailScreen extends ConsumerStatefulWidget {
   // State<LoginEmailScreen> createState() => _LoginEmailScreenState();
 }
 
-class _LoginEmailScreenState extends ConsumerState<LoginEmailScreen> {
+class _LoginEmailScreenState extends State<LoginEmailScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String _enteredEmail = '';
 
   String _enteredPassword = '';
 
-  void _submitForm() {
+  bool _loading = false;
+
+  void _setLoading(bool loading) {
+    setState(() {
+      _loading = loading;
+    });
+  }
+
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // print('Email: $_enteredEmail');
-      // print('Password: $_enteredPassword');
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text('Processing Data')),
-      // );
-      Supabase.instance.client.auth
-          .signInWithPassword(password: _enteredPassword, email: _enteredEmail);
-      popAllScreens(context);
+      try {
+        _setLoading(true);
+        // response contains the user information, can be used in a provider
+        // ignore: unused_local_variable
+        final response = await Supabase.instance.client.auth.signInWithPassword(
+            password: _enteredPassword, email: _enteredEmail);
+
+        if (context.mounted) {
+          popAllScreens(context);
+        }
+      } on AuthException catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.message),
+            ),
+          );
+        }
+      } finally {
+        _setLoading(false);
+      }
     }
   }
 
@@ -53,9 +76,14 @@ class _LoginEmailScreenState extends ConsumerState<LoginEmailScreen> {
           ShadowedTextFormField(
             child: TextFormField(
               decoration: AppThemes.entryFieldTheme,
+              keyboardType: TextInputType.emailAddress,
+              autocorrect: false,
+              textCapitalization: TextCapitalization.none,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter your email';
+                  return 'Please enter your email address';
+                } else if (!value.contains('@')) {
+                  return 'Please enter a valid email address';
                 } else {
                   return null;
                 }
@@ -88,9 +116,11 @@ class _LoginEmailScreenState extends ConsumerState<LoginEmailScreen> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: _submitForm,
+                  onPressed: _loading ? null : _submitForm,
                   style: AppThemes.entryButtonTheme,
-                  child: const Text('Sign in'),
+                  child: _loading
+                      ? const PrimaryElevatedButtonLoadingChild()
+                      : const Text('Sign in'),
                 ),
               ),
             ],
