@@ -7,7 +7,7 @@ enum NavDrawerChoice {
   chat,
   myCourses,
   settings,
-  devscreen, // remove this later
+  devscreen, // remove this later TODO
 }
 
 class NavDrawer extends StatelessWidget {
@@ -16,11 +16,14 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isWide = width > 600;
+
     return Drawer(
       child: Column(
         children: [
           SizedBox(
-            height: 180,
+            height: !isWide ? 180 : 100,
             child: DrawerHeader(
               decoration: BoxDecoration(
                 color: AppThemes.theme.colorScheme.primary,
@@ -40,41 +43,49 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
           ),
-          NavDrawerItem(
-            icon: Icons.calendar_today,
-            title: 'Timetable',
-            onTap: () {
-              onSelectedNavItem(NavDrawerChoice.timetable);
-            },
-          ),
-          NavDrawerItem(
-            icon: Icons.chat,
-            title: 'Chats',
-            onTap: () {
-              onSelectedNavItem(NavDrawerChoice.chat);
-            },
-          ),
-          NavDrawerItem(
-            icon: Icons.edit_document,
-            title: 'My Courses',
-            onTap: () {
-              onSelectedNavItem(NavDrawerChoice.myCourses);
-            },
-          ),
-          NavDrawerItem(
-            icon: Icons.settings,
-            title: 'Settings',
-            onTap: () {
-              onSelectedNavItem(NavDrawerChoice.settings);
-            },
-          ),
-          NavDrawerItem(
-            // remove me later
-            icon: Icons.error,
-            title: 'Dev screen',
-            onTap: () {
-              onSelectedNavItem(NavDrawerChoice.devscreen);
-            },
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  NavDrawerItem(
+                    icon: Icons.calendar_today,
+                    title: 'Timetable',
+                    onTap: () {
+                      onSelectedNavItem(NavDrawerChoice.timetable);
+                    },
+                  ),
+                  NavDrawerItem(
+                    icon: Icons.chat,
+                    title: 'Chats',
+                    onTap: () {
+                      onSelectedNavItem(NavDrawerChoice.chat);
+                    },
+                  ),
+                  NavDrawerItem(
+                    icon: Icons.edit_document,
+                    title: 'My Courses',
+                    onTap: () {
+                      onSelectedNavItem(NavDrawerChoice.myCourses);
+                    },
+                  ),
+                  NavDrawerItem(
+                    icon: Icons.settings,
+                    title: 'Settings',
+                    onTap: () {
+                      onSelectedNavItem(NavDrawerChoice.settings);
+                    },
+                  ),
+                  NavDrawerItem(
+                    // remove this later TODO
+                    icon: Icons.error,
+                    title: 'Dev screen',
+                    onTap: () {
+                      onSelectedNavItem(NavDrawerChoice.devscreen);
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
