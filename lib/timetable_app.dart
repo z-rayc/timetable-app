@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 
 class TimeTableApp extends ConsumerStatefulWidget {
@@ -19,8 +19,7 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
 
   @override
   void initState() {
-    _authStateSubscription =
-        Supabase.instance.client.auth.onAuthStateChange.listen((event) {
+    _authStateSubscription = kSupabase.auth.onAuthStateChange.listen((event) {
       final session = event.session;
       _setScreenFromSession(session);
     });
@@ -30,7 +29,7 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
 
   void _doInitialSetup() async {
     await Future.delayed(Duration.zero);
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = kSupabase.auth.currentSession;
     _setScreenFromSession(session);
   }
 

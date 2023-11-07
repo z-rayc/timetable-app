@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
@@ -41,7 +40,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
         _setLoading(true);
         // response contains the user information, can be used in a provider
         // ignore: unused_local_variable
-        final response = await Supabase.instance.client.auth.signInWithPassword(
+        final response = await kSupabase.auth.signInWithPassword(
             password: _enteredPassword, email: _enteredEmail);
 
         if (context.mounted) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
@@ -38,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         // response contains the user information, can be used in a provider
         // ignore: unused_local_variable
-        final response = await Supabase.instance.client.auth
+        final response = await kSupabase.auth
             .signUp(password: _enteredPassword, email: _enteredEmail);
         if (context.mounted) {
           popAllScreens(context);
