@@ -11,7 +11,7 @@ class ShadowedTextFormField extends StatelessWidget {
   final TextFormField child;
 
   /// The height of the shadowed container.
-  /// If not specified, defaults to 65.
+  /// If not specified, defaults to 55.
   final double? height;
 
   @override
@@ -19,11 +19,12 @@ class ShadowedTextFormField extends StatelessWidget {
     return Stack(
       children: [
         SizedBox(
+          height: height ?? 55,
           child: Container(
             decoration: AppThemes.textFormFieldBoxDecoration,
-            child: child,
           ),
         ),
+        child
       ],
     );
   }
