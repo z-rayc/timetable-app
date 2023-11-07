@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_app/screens/login_email_screen.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
 
@@ -53,12 +53,7 @@ class LoginScreen extends StatelessWidget {
                 ElevatedButton(
                   style: AppThemes.entrySecondaryButtonTheme,
                   onPressed: () {
-                    // pushNewScreen(context, NavState.loginEmail);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginEmailScreen()),
-                    );
+                    pushNewScreen(context, NavState.loginEmail);
                   },
                   child: const Text('Email sign in'),
                 ),

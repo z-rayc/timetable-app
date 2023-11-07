@@ -14,7 +14,6 @@ import 'package:timetable_app/screens/select_courses_screen.dart';
 import 'package:timetable_app/screens/single_day_timetable.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 import 'package:timetable_app/screens/tabs_screen.dart';
-import 'package:timetable_app/screens/temp_timetable_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
@@ -41,8 +40,7 @@ enum NavState {
 }
 
 class NavProviderNotifier extends ChangeNotifier {
-  late Widget _currentScreen =
-      const DevScreenChoice(); // TODO change to splash when stuff is ready
+  late Widget _currentScreen = const SplashScreen();
   Widget get currentScreen => _currentScreen;
 
   setCurrentScreen(NavState newScreen) {
@@ -69,4 +67,12 @@ replaceNewScreen(BuildContext context, NavState newScreen) {
     context,
     MaterialPageRoute(builder: (context) => newScreen.screen),
   );
+}
+
+/// Pops all screens from the navigation stack.
+/// Call when you need to clear the stack, e.g. when logging in or out.
+popAllScreens(BuildContext context) {
+  while (Navigator.canPop(context)) {
+    Navigator.pop(context);
+  }
 }

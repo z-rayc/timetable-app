@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -33,6 +34,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // );
       Supabase.instance.client.auth
           .signUp(password: _enteredPassword, email: _enteredEmail);
+
+      popAllScreens(context);
     }
   }
 

@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
-class LoginEmailScreen extends StatefulWidget {
+class LoginEmailScreen extends ConsumerStatefulWidget {
   const LoginEmailScreen({super.key});
 
   @override
-  State<LoginEmailScreen> createState() => _LoginEmailScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _LoginEmailScreenState();
+  }
+
+  // @override
+  // State<LoginEmailScreen> createState() => _LoginEmailScreenState();
 }
 
-class _LoginEmailScreenState extends State<LoginEmailScreen> {
+class _LoginEmailScreenState extends ConsumerState<LoginEmailScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String _enteredEmail = '';
@@ -29,6 +35,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
       // );
       Supabase.instance.client.auth
           .signInWithPassword(password: _enteredPassword, email: _enteredEmail);
+      popAllScreens(context);
     }
   }
 
