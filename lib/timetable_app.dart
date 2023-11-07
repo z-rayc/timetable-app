@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
-import 'package:timetable_app/screens/login_screen.dart';
-import 'package:timetable_app/screens/splash_screen.dart';
-import 'package:timetable_app/screens/tabs_screen.dart';
 
 class TimeTableApp extends ConsumerStatefulWidget {
   const TimeTableApp({super.key});
@@ -25,11 +21,8 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
   void initState() {
     _authStateSubscription =
         Supabase.instance.client.auth.onAuthStateChange.listen((event) {
-      if (event.session != null) {
-        ref.read(navProvider.notifier).setCurrentScreen(NavState.tabs);
-      } else {
-        ref.read(navProvider.notifier).setCurrentScreen(NavState.login);
-      }
+      final session = event.session;
+      _setScreenFromSession(session);
     });
     super.initState();
     _doInitialSetup();
@@ -38,6 +31,10 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
   void _doInitialSetup() async {
     await Future.delayed(Duration.zero);
     final session = Supabase.instance.client.auth.currentSession;
+    _setScreenFromSession(session);
+  }
+
+  void _setScreenFromSession(Session? session) {
     if (session != null) {
       ref.read(navProvider.notifier).setCurrentScreen(NavState.tabs);
     } else {
