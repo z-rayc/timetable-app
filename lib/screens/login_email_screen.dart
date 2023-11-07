@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
@@ -22,9 +24,11 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
       _formKey.currentState!.save();
       // print('Email: $_enteredEmail');
       // print('Password: $_enteredPassword');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Processing Data')),
+      // );
+      Supabase.instance.client.auth
+          .signInWithPassword(password: _enteredPassword, email: _enteredEmail);
     }
   }
 

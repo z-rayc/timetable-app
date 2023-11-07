@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/providers/setting_provider.dart';
 
 class AccountSettingsScreen extends ConsumerWidget {
@@ -60,6 +61,12 @@ class AccountSettingsScreen extends ConsumerWidget {
                           .toList(),
                     ),
                   ),
+                  TextButton.icon(
+                      onPressed: () {
+                        Supabase.instance.client.auth.signOut();
+                      },
+                      icon: const Icon(Icons.logout),
+                      label: const Text('Logout'))
                 ],
               )
             ],
