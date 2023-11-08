@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/helpers/permission_handler.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 
@@ -49,15 +50,27 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
 
   @override
   Widget build(BuildContext context) {
-    final navState = ref.watch(navProvider);
+    if (storagePermissionGranted() == false) {
+      requestStoragePermission();
+      return MaterialApp(
+        theme: AppThemes.theme,
+        home: const Scaffold(
+          body: Center(
+            child: Text("Please grant storage permission"),
+          ),
+        ),
+      );
+    } else {
+      final navState = ref.watch(navProvider);
 
-    return MaterialApp(
-      theme: AppThemes.theme,
-      home: Consumer(
-        builder: (context, ref, child) {
-          return navState.currentScreen;
-        },
-      ),
-    );
+      return MaterialApp(
+        theme: AppThemes.theme,
+        home: Consumer(
+          builder: (context, ref, child) {
+            return navState.currentScreen;
+          },
+        ),
+      );
+    }
   }
 }

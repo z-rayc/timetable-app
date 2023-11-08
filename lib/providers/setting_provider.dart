@@ -1,5 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:timetable_app/helpers/database_helper.dart';
+
 //language enum
 enum Language {
   english,
@@ -18,51 +25,76 @@ class AppSettings {
     required this.language,
   });
 
-  AppSettings copyWith({
-    bool? isDarkMode,
-    bool? isNotificationsEnabled,
-    Language? language,
-  }) {
-    return AppSettings(
-      isDarkMode: isDarkMode ?? this.isDarkMode,
-      isNotificationsEnabled:
-          isNotificationsEnabled ?? this.isNotificationsEnabled,
-      language: language ?? this.language,
-    );
+  Map<String, dynamic> toMap() {
+    return {
+      'isDarkMode': isDarkMode ? 1 : 0,
+      'isNotificationsEnabled': isNotificationsEnabled ? 1 : 0,
+      'language': language.toString(),
+    };
+  }
+
+  @override
+  String toString() {
+    return 'AppSettings{isDarkMode: $isDarkMode, isNotificationsEnabled: $isNotificationsEnabled, language: $language}';
   }
 }
 
-AppSettings getSettingsFromStore() {
+AppSettings fromMap(Map<dynamic, dynamic> map) {
+  print(map);
   return AppSettings(
-    isDarkMode: true,
-    isNotificationsEnabled: false,
-    language: Language.english,
+    isDarkMode: map['isDarkMode'] == 1,
+    isNotificationsEnabled: map['isNotificationsEnabled'] == 1,
+    language: Language.values
+        .firstWhere((element) => element.toString() == map['language']),
   );
 }
 
-class AppSettingsNotifier extends StateNotifier<AppSettings> {
-  AppSettingsNotifier() : super(getSettingsFromStore());
+class AppSettingsNotifier extends AsyncNotifier<AppSettings> {
+  DatabaseHelper db = DatabaseHelper.instance;
 
   // Setter for isDarkMode
-  void setIsDarkMode(bool value) {
-    final newState = state.copyWith(isDarkMode: value);
-    state = newState;
+  Future<void> setIsDarkMode(bool value) async {
+    AppSettings settings = await db.getSettings();
+    db.query();
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      settings.isDarkMode = value;
+      print(settings.isDarkMode);
+      await db.updateSetting(settings);
+      return settings;
+    });
   }
 
   // Setter for isNotificationsEnabled
-  void setIsNotificationsEnabled(bool value) {
-    final newState = state.copyWith(isNotificationsEnabled: value);
-    state = newState;
+  Future<void> setIsNotificationsEnabled(bool value) async {
+    AppSettings settings = await db.getSettings();
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      settings.isNotificationsEnabled = value;
+      print(settings.isNotificationsEnabled);
+      await db.updateSetting(settings);
+      return settings;
+    });
   }
 
   // Setter for language
-  void setLanguage(Language value) {
-    final newState = state.copyWith(language: value);
-    state = newState;
+  Future<void> setLanguage(Language value) async {
+    AppSettings settings = await db.getSettings();
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      settings.language = value;
+      await db.updateSetting(settings);
+      return settings;
+    });
+  }
+
+  @override
+  FutureOr<AppSettings> build() {
+    return db.getSettings();
   }
 }
 
 final appSettingsProvider =
-    StateNotifierProvider<AppSettingsNotifier, AppSettings>((ref) {
+    AsyncNotifierProvider<AppSettingsNotifier, AppSettings>(() {
   return AppSettingsNotifier();
 });

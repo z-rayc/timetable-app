@@ -9,7 +9,7 @@ class AccountSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var settings = ref.watch(appSettingsProvider);
+    final AsyncValue<AppSettings> settings = ref.watch(appSettingsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,7 +26,7 @@ class AccountSettingsScreen extends ConsumerWidget {
                 children: [
                   SwitchListTile(
                     title: const Text("Dark Mode?"),
-                    value: settings.isDarkMode,
+                    value: settings.asData?.value.isDarkMode ?? false,
                     onChanged: (newValue) {
                       ref
                           .read(appSettingsProvider.notifier)
@@ -35,7 +35,8 @@ class AccountSettingsScreen extends ConsumerWidget {
                   ),
                   SwitchListTile(
                     title: const Text("Notifications"),
-                    value: settings.isNotificationsEnabled,
+                    value:
+                        settings.asData?.value.isNotificationsEnabled ?? false,
                     onChanged: (newValue) {
                       ref
                           .read(appSettingsProvider.notifier)
@@ -47,7 +48,7 @@ class AccountSettingsScreen extends ConsumerWidget {
                   ListTile(
                     title: const Text("Language"),
                     trailing: DropdownButton<Language>(
-                      value: settings.language,
+                      value: settings.asData?.value.language,
                       onChanged: (Language? newValue) {
                         ref
                             .read(appSettingsProvider.notifier)

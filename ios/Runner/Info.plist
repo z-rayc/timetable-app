@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+
+	<key>kTCCServiceMediaLibrary</key>
+    <string>media</string>
 </dict>
 </plist>
