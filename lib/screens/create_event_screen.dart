@@ -3,7 +3,6 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
-import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
 
@@ -39,12 +38,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   String _enteredDescription = '';
   String _enteredRoomName = '';
   String _enteredBuildingName = '';
+  Uri _enteredLink = Uri.parse('');
   List<c_user.User> _enteredInvitees = [];
   DateTime _enteredStartTime = DateTime.now();
   DateTime _enteredEndTime = DateTime.now();
 
-  /// Opens the date picker dialog.
-  /// Returns the selected date if the user selects a date.
+  /// Opens the time picker dialog.
+  /// Let's the user select a date and a time.
+  /// Returns the selected date and time if the user selected them.
   Future<DateTime?> showDateTimePicker({
     required BuildContext context,
     DateTime? initialDate,
@@ -130,7 +131,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           return null;
                         }
                       },
-                      onSaved: (newValue) {},
+                      onSaved: (newValue) {
+                        _enteredTitle = newValue!;
+                      },
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -148,7 +151,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           return null;
                         }
                       },
-                      onSaved: (newValue) {},
+                      onSaved: (newValue) {
+                        _enteredDescription = newValue!;
+                      },
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -217,7 +222,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       decoration: AppThemes.entryFieldTheme.copyWith(
                         hintText: 'Room name',
                       ),
-                      onSaved: (newValue) {},
+                      onSaved: (newValue) {
+                        if (newValue != null) {
+                          _enteredRoomName = newValue;
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -228,7 +237,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       decoration: AppThemes.entryFieldTheme.copyWith(
                         hintText: 'Building',
                       ),
-                      onSaved: (newValue) {},
+                      onSaved: (newValue) {
+                        if (newValue != null) {
+                          _enteredBuildingName = newValue;
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -251,7 +264,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           return null;
                         }
                       },
-                      onSaved: (newValue) {},
+                      onSaved: (newValue) {
+                        if (newValue != null) {
+                          _enteredLink = Uri.parse(newValue);
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(height: 30),
