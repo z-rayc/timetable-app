@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
+import 'package:timetable_app/widgets/texts/label.dart';
+import 'package:timetable_app/widgets/texts/subtitle.dart';
+import 'package:timetable_app/widgets/texts/title.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -23,10 +26,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     });
   }
 
+  /// Validate and submit the form.
+  /// Create a new custom event, and add it to the database.
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _setLoading(true);
-      print("----- Form is valid!");
+      // Check that startdate is before enddate
     }
   }
 
@@ -35,6 +40,38 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   String _enteredRoomName = '';
   String _enteredBuildingName = '';
   List<c_user.User> _enteredInvitees = [];
+  DateTime _enteredStartTime = DateTime.now();
+  DateTime _enteredEndTime = DateTime.now();
+
+  /// Opens the date picker dialog.
+  /// Updates the start time with the selected date if the user selects a date.
+  Future<void> _selectStartTime(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _enteredStartTime,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != _enteredStartTime) {
+      setState(() {
+        _enteredStartTime = picked;
+      });
+    }
+  }
+
+  /// Opens the date picker dialog.
+  /// Updates the end time with the selected date if the user selects a date.
+  Future<void> _selectEndTime(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _enteredStartTime,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != _enteredEndTime) {
+      setState(() {
+        _enteredEndTime = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +80,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            Text(
-              'Create custom event',
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: Colors.black,
-                  ),
-            ),
+            const CTitle('Create custom event'),
             const SizedBox(height: 20),
             Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
-                  const Text('Title'),
+                  const CSubtitle('Title'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
@@ -74,7 +105,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('Description'),
+                  const CSubtitle('Description'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
@@ -92,12 +123,49 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('Start time'),
-
+                  const CSubtitle('Start time'),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => _selectStartTime(context),
+                        icon: const Icon(Icons.calendar_today),
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                            Colors.white,
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AppThemes.theme.primaryColor,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(Time(_enteredStartTime).dayMonthYear)
+                    ],
+                  ),
                   const SizedBox(height: 20),
-                  const Text('End time'),
+                  const CSubtitle('End time'),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => _selectEndTime(context),
+                        icon: const Icon(Icons.calendar_today),
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                            Colors.white,
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AppThemes.theme.primaryColor,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(Time(_enteredEndTime).dayMonthYear)
+                    ],
+                  ),
                   const SizedBox(height: 20),
-                  const Text('Room'),
+                  const CSubtitle('Room'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
@@ -108,7 +176,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('Building'),
+                  const CSubtitle('Building'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
@@ -119,7 +187,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('Link'),
+                  const CSubtitle('Link'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
@@ -153,7 +221,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                               )
                             : const Text('Confirm')),
                   ),
-                  // TODO: Add invitees
                 ],
               ),
             ),
