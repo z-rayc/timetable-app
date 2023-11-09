@@ -38,6 +38,7 @@ dependencies:
   supabase_flutter: ^1.10.22
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.8
+  google_sign_in: ^6.1.6
 
 dev_dependencies:
   flutter_test:
