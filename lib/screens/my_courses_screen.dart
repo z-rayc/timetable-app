@@ -35,17 +35,13 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('My courses'),
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            Text(
-              'My courses',
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: Colors.black,
-                  ),
-            ),
-            const SizedBox(height: 20),
             ListView.builder(
               shrinkWrap: true,
               itemCount: selectedCourses.length,

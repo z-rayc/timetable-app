@@ -13,7 +13,7 @@ class SingleSignOnButton extends StatelessWidget {
   });
   final String providerLogoAsset;
   final String logoSemanticLabel;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
