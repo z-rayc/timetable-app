@@ -44,33 +44,62 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   DateTime _enteredEndTime = DateTime.now();
 
   /// Opens the date picker dialog.
-  /// Updates the start time with the selected date if the user selects a date.
-  Future<void> _selectStartTime(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: _enteredStartTime,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != _enteredStartTime) {
-      setState(() {
-        _enteredStartTime = picked;
-      });
-    }
-  }
+  /// Returns the selected date if the user selects a date.
+  Future<DateTime?> showDateTimePicker({
+    required BuildContext context,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+  }) async {
+    initialDate ??= DateTime.now();
+    firstDate ??= initialDate.subtract(const Duration(days: 365 * 100));
+    lastDate ??= firstDate.add(const Duration(days: 365 * 200));
 
-  /// Opens the date picker dialog.
-  /// Updates the end time with the selected date if the user selects a date.
-  Future<void> _selectEndTime(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (selectedDate == null) return null;
+
+    if (!context.mounted) return selectedDate;
+
+    final TimeOfDay? selectedTime = await showTimePicker(
         context: context,
-        initialDate: _enteredStartTime,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != _enteredEndTime) {
-      setState(() {
-        _enteredEndTime = picked;
-      });
-    }
+        initialTime: TimeOfDay.fromDateTime(selectedDate),
+        builder: (BuildContext context, Widget? child) {
+          // We just wrap these environmental changes around the
+          // child in this builder so that we can apply the
+          // options selected above. In regular usage, this is
+          // rarely necessary, because the default values are
+          // usually used as-is.
+          return Theme(
+            data: Theme.of(context).copyWith(
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+            ),
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  alwaysUse24HourFormat: true,
+                ),
+                child: child!,
+              ),
+            ),
+          );
+        });
+
+    return selectedTime == null
+        ? null
+        : DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            selectedTime.hour,
+            selectedTime.minute,
+          );
   }
 
   @override
@@ -128,7 +157,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () => _selectStartTime(context),
+                        onPressed: () => {
+                          showDateTimePicker(context: context).then((value) {
+                            if (value != null) {
+                              setState(() {
+                                _enteredStartTime = value;
+                              });
+                            }
+                          })
+                        },
                         icon: const Icon(Icons.calendar_today),
                         style: ButtonStyle(
                           foregroundColor: MaterialStateProperty.all<Color>(
@@ -140,7 +177,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Text(Time(_enteredStartTime).dayMonthYear)
+                      Text(Time(_enteredStartTime).dayMonthYearHourMinute)
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -149,7 +186,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () => _selectEndTime(context),
+                        onPressed: () => {
+                          showDateTimePicker(context: context).then((value) {
+                            if (value != null) {
+                              setState(() {
+                                _enteredEndTime = value;
+                              });
+                            }
+                          })
+                        },
                         icon: const Icon(Icons.calendar_today),
                         style: ButtonStyle(
                           foregroundColor: MaterialStateProperty.all<Color>(
@@ -161,7 +206,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Text(Time(_enteredEndTime).dayMonthYear)
+                      Text(Time(_enteredEndTime).dayMonthYearHourMinute)
                     ],
                   ),
                   const SizedBox(height: 20),
