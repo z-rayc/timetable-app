@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/user.dart';
+import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
 class CreateEventScreen extends StatefulWidget {
@@ -14,12 +15,26 @@ class CreateEventScreen extends StatefulWidget {
 
 class _CreateEventScreenState extends State<CreateEventScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool _loading = false;
+
+  void _setLoading(bool loading) {
+    setState(() {
+      _loading = loading;
+    });
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _setLoading(true);
+      print("----- Form is valid!");
+    }
+  }
 
   String _enteredTitle = '';
   String _enteredDescription = '';
   String _enteredRoomName = '';
   String _enteredBuildingName = '';
-  List<User> _enteredInvitees = [];
+  List<c_user.User> _enteredInvitees = [];
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +60,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme,
+                      decoration: AppThemes.entryFieldTheme.copyWith(
+                        hintText: 'Title',
+                      ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Please enter a title.';
@@ -61,7 +78,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme,
+                      decoration: AppThemes.entryFieldTheme.copyWith(
+                        hintText: 'Description',
+                      ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Please enter a description.';
@@ -73,18 +92,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('Room name'),
+                  const Text('Start time'),
+
+                  const SizedBox(height: 20),
+                  const Text('End time'),
+                  const SizedBox(height: 20),
+                  const Text('Room'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a room name.';
-                        } else {
-                          return null;
-                        }
-                      },
+                      decoration: AppThemes.entryFieldTheme.copyWith(
+                        hintText: 'Room name',
+                      ),
                       onSaved: (newValue) {},
                     ),
                   ),
@@ -93,14 +112,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a building.';
-                        } else {
-                          return null;
-                        }
-                      },
+                      decoration: AppThemes.entryFieldTheme.copyWith(
+                        hintText: 'Building',
+                      ),
                       onSaved: (newValue) {},
                     ),
                   ),
@@ -109,10 +123,17 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
                     child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme,
+                      decoration: AppThemes.entryFieldTheme.copyWith(
+                        hintText: 'https://use.mazemap.com',
+                      ),
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a location link.';
+                        var urlPattern =
+                            r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
+                        var match = RegExp(urlPattern, caseSensitive: false);
+                        if (value != null &&
+                            value.trim().isNotEmpty &&
+                            !match.hasMatch(value)) {
+                          return 'Please enter a valid link.';
                         } else {
                           return null;
                         }
@@ -120,17 +141,21 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       onSaved: (newValue) {},
                     ),
                   ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: _loading ? null : _submitForm,
+                        style: AppThemes.entryButtonTheme,
+                        child: _loading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text('Confirm')),
+                  ),
                   // TODO: Add invitees
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Validate and submit form
-              },
-              style: AppThemes.entryButtonTheme,
-              child: const Text('Confirm'),
             ),
           ],
         ),
