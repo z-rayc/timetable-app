@@ -1,0 +1,25 @@
+meta {
+  name: supabase
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8000?id=IDATA2302
+  body: json
+  auth: bearer
+}
+
+query {
+  id: IDATA2302
+}
+
+auth:bearer {
+  token:  {{session}}
+}
+
+body:json {
+  {
+    "id": "IDATA2503"
+  }
+}
