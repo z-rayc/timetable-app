@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
@@ -40,7 +42,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // response contains the user information, can be used in a provider
         // ignore: unused_local_variable
         final response = await kSupabase.auth
-            .signUp(password: _enteredPassword, email: _enteredEmail);
+            .signUp(password: _enteredPassword, email: _enteredEmail)
+            .timeout(kDefaultTimeout);
+
         if (context.mounted) {
           popAllScreens(context);
         }
@@ -53,9 +57,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           );
         }
+      } on TimeoutException {
+        _showTimeoutSnackbar();
       } finally {
         _setLoading(false);
       }
+    }
+  }
+
+  void _showTimeoutSnackbar() {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Request timed out.'),
+        ),
+      );
     }
   }
 

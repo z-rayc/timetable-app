@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/timetable_app.dart';
 
+const kDefaultTimeout = Duration(seconds: 10);
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
