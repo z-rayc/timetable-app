@@ -40,9 +40,14 @@ class _LoginScreenState extends State<LoginScreen> {
       clientId: iosClientId,
       serverClientId: webClientId,
     );
+
     try {
       final googleUser = await googleSignIn.signIn();
-      final googleAuth = await googleUser!.authentication;
+      if (googleUser == null) {
+        throw const UserAbortSigninException();
+      }
+
+      final googleAuth = await googleUser.authentication;
       final accessToken = googleAuth.accessToken;
       final idToken = googleAuth.idToken;
 
@@ -53,17 +58,23 @@ class _LoginScreenState extends State<LoginScreen> {
         throw 'No ID Token found.';
       }
 
-      final response = await kSupabase.auth.signInWithIdToken(
-        provider: Provider.google,
-        idToken: idToken,
-        accessToken: accessToken,
-      );
+      final response = await kSupabase.auth
+          .signInWithIdToken(
+            provider: Provider.google,
+            idToken: idToken,
+            accessToken: accessToken,
+          )
+          .timeout(kDefaultTimeout);
     } on AuthException catch (e) {
       _showErrorSnackBar(e.message);
+    } on UserAbortSigninException {
+      // do nothing
     } catch (e) {
       _showErrorSnackBar('Something went wrong. Please try again later.');
     } finally {
       _setLoading(false);
+      //unfocus the google overlay
+      FocusManager.instance.primaryFocus?.unfocus();
     }
   }
 
@@ -147,4 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+class UserAbortSigninException implements Exception {
+  const UserAbortSigninException();
 }
