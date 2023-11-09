@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 
 class FormDropdownMenu extends StatelessWidget {
   const FormDropdownMenu({
@@ -20,12 +21,16 @@ class FormDropdownMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            AppThemes.boxShadow(3),
+          ]),
       child: DropdownMenu<String>(
+        enableSearch: true,
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
+            borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(10),
           ),
         ),

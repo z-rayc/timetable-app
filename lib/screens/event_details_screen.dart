@@ -11,9 +11,10 @@ final Event event = CustomEvent(
   title: "Test event",
   description: "This is a test event",
   location: Location(
-      roomName: "L263",
-      buildingName: "Lanternen",
-      link: Uri(path: 'https://www.ntnu.no/kart/innsida/Lanternen/2/L263')),
+    roomName: "L263",
+    buildingName: "Lanternen",
+    link: Uri.https("ntnu.no", "/kart/innsida/Lanternen/2/L263"),
+  ),
   author: const User(
       id: "1", username: "John Doe", courses: [], email: "test@gmail.com"),
   invitees: [],

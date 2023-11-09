@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -14,20 +18,44 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  bool _loading = false;
   String _enteredEmail = '';
   String _enteredPassword = '';
+  // ignore: unused_field
   String _enteredConfirmPassword = '';
-
   final TextEditingController _passwordController = TextEditingController();
 
-  void _sublitForm() {
+  void _setLoading(bool loading) {
+    setState(() {
+      _loading = loading;
+    });
+  }
+
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // print('Email: $_enteredEmail');
-      // print('Password: $_enteredPassword');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
-      );
+
+      _setLoading(true);
+      try {
+        // response contains the user information, can be used in a provider
+        // ignore: unused_local_variable
+        final response = await kSupabase.auth
+            .signUp(password: _enteredPassword, email: _enteredEmail);
+        if (context.mounted) {
+          popAllScreens(context);
+        }
+      } on AuthException catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.message),
+            ),
+          );
+        }
+      } finally {
+        _setLoading(false);
+      }
     }
   }
 
@@ -37,7 +65,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-// const EdgeInsets.only(left: 70, right: 70, top: 20),
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +82,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Please enter your email';
@@ -77,6 +107,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Please enter a password';
+                      } else if (value.trim().length < 6) {
+                        return 'Password too short';
                       } else {
                         return null;
                       }
@@ -111,9 +143,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: _sublitForm,
+                        onPressed: _loading ? null : _submitForm,
                         style: AppThemes.entryButtonTheme,
-                        child: const Text('Register'),
+                        child: _loading
+                            ? const PrimaryElevatedButtonLoadingChild()
+                            : const Text('Register'),
                       ),
                     ),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
@@ -55,20 +56,8 @@ class CourseDetailsScreen extends StatelessWidget {
           const SizedBox(height: 50),
           ElevatedButton(
             onPressed: () {},
-            style: ButtonStyle(
-              padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-                (Set<MaterialState> states) {
-                  return const EdgeInsets.all(5);
-                },
-              ),
-              backgroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).primaryColor,
-              ),
-            ),
-            child: const Text(
-              "Save changes",
-              style: TextStyle(color: Colors.white),
-            ),
+            style: AppThemes.entryButtonTheme,
+            child: const Text("Save changes"),
           )
         ],
       ),
