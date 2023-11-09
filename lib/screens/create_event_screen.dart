@@ -110,7 +110,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           padding: const EdgeInsets.all(20),
           children: [
             const CTitle('Create custom event'),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Form(
               key: _formKey,
               child: Column(
@@ -133,7 +133,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       onSaved: (newValue) {},
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const CSubtitle('Description'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
@@ -151,7 +151,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       onSaved: (newValue) {},
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const CSubtitle('Start time'),
                   const SizedBox(height: 10),
                   Row(
@@ -180,7 +180,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       Text(Time(_enteredStartTime).dayMonthYearHourMinute)
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const CSubtitle('End time'),
                   const SizedBox(height: 10),
                   Row(
@@ -209,7 +209,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       Text(Time(_enteredEndTime).dayMonthYearHourMinute)
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const CSubtitle('Room'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
@@ -220,7 +220,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       onSaved: (newValue) {},
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const CSubtitle('Building'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
@@ -231,7 +231,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       onSaved: (newValue) {},
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const CSubtitle('Link'),
                   const SizedBox(height: 10),
                   ShadowedTextFormField(
