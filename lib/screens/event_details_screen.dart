@@ -13,7 +13,7 @@ final Event event = CustomEvent(
   location: Location(
     roomName: "L263",
     buildingName: "Lanternen",
-    link: Uri.https("ntnu.no", "/kart/innsida/Lanternen/2/L263"),
+    link: Uri.parse("https://ntnu.no/kart/innsida/Lanternen/2/L263"),
   ),
   author: const User(
       id: "1", username: "John Doe", courses: [], email: "test@gmail.com"),

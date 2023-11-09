@@ -31,7 +31,7 @@ class DailyTimetableNotifier extends StateNotifier<DailyTimetable> {
             location: Location(
               roomName: "DanceFloor",
               buildingName: "DiscoHouse",
-              link: Uri.https("ntnu.no"),
+              link: Uri.parse("https://ntnu.no"),
             ),
             teachingSummary: "Dance, duh",
             id: "11",
@@ -48,7 +48,7 @@ class DailyTimetableNotifier extends StateNotifier<DailyTimetable> {
             location: Location(
               roomName: "DiscoFloor",
               buildingName: "DanceHouse",
-              link: Uri.https("example.com"),
+              link: Uri.parse("https://example.com"),
             ),
             teachingSummary: "Dance, yeah!",
             id: "22",
