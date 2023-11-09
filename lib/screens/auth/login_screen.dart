@@ -6,10 +6,25 @@ import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool _isLoading = false;
+
+  void _setLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
+  }
+
   void _googleSignIn() async {
+    _setLoading(true);
+
     /// Web Client ID that you registered with Google Cloud.
     const webClientId =
         '683060048034-qu3vcsn6pnqam9jupco7uq1bjkukjluv.apps.googleusercontent.com';
@@ -25,27 +40,43 @@ class LoginScreen extends StatelessWidget {
       clientId: iosClientId,
       serverClientId: webClientId,
     );
-
-    final googleUser = await googleSignIn.signIn();
-    final googleAuth = await googleUser!.authentication;
-    final accessToken = googleAuth.accessToken;
-    final idToken = googleAuth.idToken;
-
-    if (accessToken == null) {
-      throw 'No Access Token found.';
-    }
-    if (idToken == null) {
-      throw 'No ID Token found.';
-    }
-
     try {
+      final googleUser = await googleSignIn.signIn();
+      final googleAuth = await googleUser!.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
+
+      if (accessToken == null) {
+        throw 'No Access Token found.';
+      }
+      if (idToken == null) {
+        throw 'No ID Token found.';
+      }
+
       final response = await kSupabase.auth.signInWithIdToken(
         provider: Provider.google,
         idToken: idToken,
         accessToken: accessToken,
       );
     } on AuthException catch (e) {
-    } catch (e) {}
+      _showErrorSnackBar(e.message);
+    } catch (e) {
+      _showErrorSnackBar('Something went wrong. Please try again later.');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: AppThemes.theme.colorScheme.error,
+        ),
+      );
+    }
   }
 
   _showAlertDialog(BuildContext context, String title) {
@@ -76,25 +107,37 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
+                const Spacer(flex: 5),
                 SingleSignOnButton(
                   providerLogoAsset: 'assets/images/Horisontal_Feide.svg',
                   logoSemanticLabel: 'Feide logo',
-                  onPressed: () {
-                    _showAlertDialog(context, 'Feide sign in');
-                  },
+                  onPressed: _isLoading
+                      ? null
+                      : () {
+                          _showAlertDialog(context, 'Feide sign in');
+                        },
                 ),
                 SingleSignOnButton(
                   providerLogoAsset: 'assets/images/google-logo.svg',
                   logoSemanticLabel: 'Google logo',
-                  onPressed: _googleSignIn,
+                  onPressed: _isLoading ? null : _googleSignIn,
                 ),
-                const Spacer(),
+                const SizedBox(height: 8),
+                if (_isLoading)
+                  SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                          color: AppThemes.theme.colorScheme.secondary)),
+                if (!_isLoading) const SizedBox(height: 40),
+                const Spacer(flex: 4),
                 ElevatedButton(
                   style: AppThemes.entrySecondaryButtonTheme,
-                  onPressed: () {
-                    pushNewScreen(context, NavState.loginEmail);
-                  },
+                  onPressed: _isLoading
+                      ? null
+                      : () {
+                          pushNewScreen(context, NavState.loginEmail);
+                        },
                   child: const Text('Email sign in'),
                 ),
               ],
