@@ -6,24 +6,25 @@ import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/models/user.dart';
 
-final Event event = CustomEvent(
-  id: "IDATA2503-1",
-  title: "Test event",
-  description: "This is a test event",
-  location: Location(
-    roomName: "L263",
-    buildingName: "Lanternen",
-    link: Uri.https("ntnu.no", "/kart/innsida/Lanternen/2/L263"),
-  ),
-  author: const User(
-      id: "1", username: "John Doe", courses: [], email: "test@gmail.com"),
-  invitees: [],
-  startTime: DateTime.now(),
-  endTime: DateTime.now().add(const Duration(hours: 2)),
-);
+// final Event event = CustomEvent(
+//   id: "IDATA2503-1",
+//   title: "Test event",
+//   description: "This is a test event",
+//   location: Location(
+//     roomName: "L263",
+//     buildingName: "Lanternen",
+//     link: Uri.https("ntnu.no", "/kart/innsida/Lanternen/2/L263"),
+//   ),
+//   author: const User(
+//       id: "1", username: "John Doe", courses: [], email: "test@gmail.com"),
+//   invitees: [],
+//   startTime: DateTime.now(),
+//   endTime: DateTime.now().add(const Duration(hours: 2)),
+// );
 
 class EventDetailsScreen extends StatelessWidget {
-  const EventDetailsScreen({super.key});
+  const EventDetailsScreen({super.key, required this.event});
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
