@@ -49,15 +49,24 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     String activeTitle = 'Timetable';
     Widget activePage = const TimetableScreen();
+    List<Widget> activeActions = [];
 
     if (_selectedPageIndex == 1) {
       activeTitle = 'Chats';
       activePage = const ChatsScreen();
+      activeActions = [
+        IconButton(
+          icon: const Icon(Icons.add),
+          tooltip: 'New chat',
+          onPressed: () {},
+        ),
+      ];
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(activeTitle),
+        actions: activeActions,
       ),
       drawer: NavDrawer(onSelectedNavItem: _handleDrawerNav),
       body: activePage,
