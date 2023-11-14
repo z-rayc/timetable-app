@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/screens/chats_screen.dart';
-import 'package:timetable_app/screens/temp_timetable_screen.dart';
+import 'package:timetable_app/screens/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -48,7 +48,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     String activeTitle = 'Timetable';
-    Widget activePage = const TempTimetableScreen();
+    Widget activePage = const TimetableScreen();
 
     if (_selectedPageIndex == 1) {
       activeTitle = 'Chats';

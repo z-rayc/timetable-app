@@ -235,7 +235,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                replaceNewScreen(context, NavState.timetable);
+                replaceNewScreen(context, NavState.singleDayTimetable);
               },
               style: AppThemes.entryButtonTheme,
               child: const Text("Confirm"),

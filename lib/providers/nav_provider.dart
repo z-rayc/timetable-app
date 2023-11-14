@@ -17,7 +17,7 @@ import 'package:timetable_app/screens/tabs_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
-  timetable(SingleDayTimetable()),
+  singleDayTimetable(SingleDayTimetable()),
   login(LoginScreen()),
   loginEmail(LoginEmailScreen()),
   register(RegisterScreen()),

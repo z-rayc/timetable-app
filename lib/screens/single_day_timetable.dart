@@ -14,9 +14,6 @@ class SingleDayTimetable extends ConsumerWidget {
     timetable.courseEvents.sort((a, b) => a.startTime.compareTo(b.startTime));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Event list"),
-      ),
       body: ListView.builder(
         itemCount: timetable.courseEvents.length,
         itemBuilder: (context, index) {
