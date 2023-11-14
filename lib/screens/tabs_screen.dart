@@ -49,7 +49,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     String activeTitle = 'Timetable';
     Widget activePage = const TimetableScreen();
-    List<Widget> activeActions = [];
+    List<Widget> activeActions = [
+      IconButton(
+        icon: const Icon(Icons.edit),
+        tooltip: 'Edit my courses',
+        onPressed: () {
+          pushNewScreen(context, NavState.myCourses);
+        },
+      ),
+    ];
 
     if (_selectedPageIndex == 1) {
       activeTitle = 'Chats';
