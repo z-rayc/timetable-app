@@ -11,23 +11,25 @@ class SingleDayTimetable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var timetable = ref.watch(dailyTimetableProvider);
     // Sort events by start time
-    timetable.courseEvents.sort((a, b) => a.startTime.compareTo(b.startTime));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Event list"),
-      ),
-      body: ListView.builder(
-        itemCount: timetable.courseEvents.length,
-        itemBuilder: (context, index) {
-          var courseEvent = timetable.courseEvents[index];
-          return _buildCourseEventTile(
-              courseEvent,
-              CalendarItemColour
-                  .values[index % CalendarItemColour.values.length]);
-        },
-      ),
-    );
+    return timetable.when(data: (DailyTimetable data) {
+      return Scaffold(
+        body: ListView.builder(
+          itemCount: timetable.asData!.value.courseEvents.length,
+          itemBuilder: (context, index) {
+            var courseEvent = timetable.asData!.value.courseEvents[index];
+            return _buildCourseEventTile(
+                courseEvent,
+                CalendarItemColour
+                    .values[index % CalendarItemColour.values.length]);
+          },
+        ),
+      );
+    }, error: (Object error, StackTrace stackTrace) {
+      return SingleChildScrollView(child: Text("Error: $error, $stackTrace"));
+    }, loading: () {
+      return const CircularProgressIndicator();
+    });
   }
 }
 
