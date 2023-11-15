@@ -31,7 +31,9 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
   FutureOr<DailyTimetable> build() async {
     return DailyTimetable(
         courseEvents: await convertToCourseEvents(getCourseEventsForDay(
-            DateTime.now(), ['IDATA2502', 'IDATA2503', 'IDATA2504'])));
+            DateTime.now(),
+            // TODO: get courses from user, either local or from supabase
+            ['IDATA2502', 'IDATA2503', 'IDATA2504'])));
   }
 }
 
@@ -78,7 +80,7 @@ Future<List<CourseEvent>> convertToCourseEvents(
             link: Uri(host: "google.com", scheme: "https"),
           ),
           id: event['id'],
-          teachingSummary: 'empty for now'),
+          teachingSummary: event['teaching_summary']),
     );
   }
 
