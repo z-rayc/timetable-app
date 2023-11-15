@@ -18,7 +18,7 @@ class UserCourses {
     List<CourseUser>? courseUser,
   }) {
     return UserCourses(
-      courseUsers: courseUser ?? this.courseUsers,
+      courseUsers: courseUser ?? courseUsers,
     );
   }
 
