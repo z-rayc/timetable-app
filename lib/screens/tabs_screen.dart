@@ -48,7 +48,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var timetable = ref.watch(dailyTimetableProvider);
     String activeTitle = 'Timetable';
     Widget activePage = const TimetableScreen();
     List<Widget> activeActions = [
