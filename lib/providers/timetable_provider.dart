@@ -80,7 +80,7 @@ Future<List<CourseEvent>> convertToCourseEvents(
             link: Uri(host: "google.com", scheme: "https"),
           ),
           id: event['id'],
-          teachingSummary: event['teaching_summary']),
+          teachingSummary: event['teaching_summary'] ?? ''),
     );
   }
 
