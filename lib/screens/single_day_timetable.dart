@@ -21,7 +21,7 @@ class SingleDayTimetable extends ConsumerWidget {
               const Text("No events today or no courses added"),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                  onPressed: () => ref.refresh(dailyTimetableProvider),
+                  onPressed: () => ref.invalidate(dailyTimetableProvider),
                   icon: const Icon(Icons.refresh),
                   label: const Text("Refresh"))
             ],
