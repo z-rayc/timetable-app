@@ -8,25 +8,6 @@ import 'package:timetable_app/models/user.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 
-// Placeholder courses
-const selectedCourses = [
-  Course(
-      id: '1',
-      name: 'IDATA2504',
-      nameAlias: 'Mobile Applications',
-      colour: Colors.red),
-  Course(
-      id: '2',
-      name: 'IDATA2505',
-      nameAlias: 'Game Development',
-      colour: Colors.blue),
-  Course(
-      id: '3',
-      name: 'IDATA2506',
-      nameAlias: 'Web Development',
-      colour: Colors.green),
-];
-
 class MyCoursesScreen extends ConsumerWidget {
   const MyCoursesScreen({super.key});
 
@@ -83,7 +64,7 @@ class MyCoursesScreen extends ConsumerWidget {
       error: (Object error, StackTrace stackTrace) {
         return SingleChildScrollView(
           child: Text("Error: $error, $stackTrace",
-              style: TextStyle(color: Colors.red, fontSize: 14),
+              style: const TextStyle(color: Colors.red, fontSize: 14),
               textAlign: TextAlign.center),
         );
       },
