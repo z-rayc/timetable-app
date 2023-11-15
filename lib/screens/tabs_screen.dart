@@ -4,6 +4,7 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
+import 'package:timetable_app/screens/chat/new_chat_overlay.dart';
 import 'package:timetable_app/screens/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
@@ -46,6 +47,17 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     });
   }
 
+  void showNewChatOverlay() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return const NewChatOverlay();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String activeTitle = 'Timetable';
@@ -75,7 +87,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         IconButton(
           icon: const Icon(Icons.add),
           tooltip: 'New chat',
-          onPressed: () {},
+          onPressed: showNewChatOverlay,
         ),
       ];
     }
