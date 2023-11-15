@@ -63,7 +63,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         icon: const Icon(Icons.refresh),
         tooltip: 'Refresh',
         onPressed: () {
-          ref.refresh(dailyTimetableProvider);
+          ref.invalidate(dailyTimetableProvider);
         },
       ),
     ];
