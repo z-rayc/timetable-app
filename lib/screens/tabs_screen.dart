@@ -92,6 +92,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       ];
     }
 
+    final isNarrow = MediaQuery.of(context).size.width < 600;
+    final isTall = MediaQuery.of(context).size.height > 500;
     return Scaffold(
       appBar: AppBar(
         title: Text(activeTitle),
@@ -99,30 +101,33 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       ),
       drawer: NavDrawer(onSelectedNavItem: _handleDrawerNav),
       body: activePage,
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-        decoration: AppThemes.bottomNavBarBoxDecoration,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(kBottomNavBarRounding),
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-            currentIndex: _selectedPageIndex,
-            onTap: _selectTab,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today_outlined),
-                label: 'Timetable',
-                activeIcon: Icon(Icons.calendar_today_rounded),
+      bottomNavigationBar: isNarrow ||
+              isTall // don't show navbar on wide screen with little height
+          ? Container(
+              margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+              decoration: AppThemes.bottomNavBarBoxDecoration,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(kBottomNavBarRounding),
+                clipBehavior: Clip.antiAlias,
+                child: BottomNavigationBar(
+                  currentIndex: _selectedPageIndex,
+                  onTap: _selectTab,
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.calendar_today_outlined),
+                      label: 'Timetable',
+                      activeIcon: Icon(Icons.calendar_today_rounded),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.chat_outlined),
+                      label: 'Chats',
+                      activeIcon: Icon(Icons.chat_rounded),
+                    ),
+                  ],
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat_outlined),
-                label: 'Chats',
-                activeIcon: Icon(Icons.chat_rounded),
-              ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : null,
     );
   }
 }
