@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/course.dart';
-import 'package:timetable_app/models/course_user.dart';
-import 'package:timetable_app/models/user.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 

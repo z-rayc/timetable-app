@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/custom_event.dart';
 import 'package:timetable_app/models/event.dart';
-import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
-import 'package:timetable_app/models/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // final Event event = CustomEvent(

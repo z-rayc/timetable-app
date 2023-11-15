@@ -5,7 +5,6 @@ import 'package:timetable_app/screens/chats_screen.dart';
 import 'package:timetable_app/screens/course_details_screen.dart';
 import 'package:timetable_app/screens/create_event_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
-import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/screens/auth/login_email_screen.dart';
 import 'package:timetable_app/screens/auth/login_screen.dart';
 import 'package:timetable_app/screens/my_courses_screen.dart';

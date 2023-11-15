@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/course.dart';
-import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/course_user.dart';
-import 'package:timetable_app/models/location.dart';
 
 class UserCourses {
   List<CourseUser> courseUsers = [];
