@@ -50,7 +50,8 @@ Future<List<Map<String, dynamic>>> getCourseEventsForDay(
   final db = kSupabase.rest;
   final response = await db
       .from('Events')
-      .select<PostgrestList>('*, Course!courseId(*), Staff!staffid(*)')
+      .select<PostgrestList>(
+          '*, Course!courseId(*), Staff!staffid(*), Room!roomid(*)')
       .in_('courseId', courses)
       .gte('start', startOfDay.toIso8601String())
       .lte('end', endOfDay.toIso8601String());
@@ -75,9 +76,10 @@ Future<List<CourseEvent>> convertToCourseEvents(
           endTime: DateTime.parse(event['end']),
           staff: [event['Staff']['shortname']],
           location: Location(
-            roomName: '',
-            buildingName: '',
-            link: Uri(host: "google.com", scheme: "https"),
+            roomName: event['Room']['roomacronym'] ?? '',
+            buildingName: event['Room']['buildingname'] ?? '',
+            link: //parse a text to URI
+                Uri.parse(event['Room']['roomurl'] ?? ''),
           ),
           id: event['id'],
           teachingSummary: event['teaching_summary'] ?? ''),
