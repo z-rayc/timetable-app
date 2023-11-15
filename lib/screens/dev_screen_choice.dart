@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
@@ -10,6 +13,8 @@ class DevScreenChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = kSupabase.auth;
+    final edge = kSupabase.functions;
     return Scaffold(
       appBar: AppBar(
         title: const CTitle("Dev Screen Choice"),
@@ -34,6 +39,26 @@ class DevScreenChoice extends StatelessWidget {
                   )
                   .toList(),
               const SizedBox(height: 100),
+              ElevatedButton(
+                style: AppThemes.entrySecondaryButtonTheme,
+                onPressed: () {
+                  log('Session token: ${auth.currentSession}');
+                },
+                child: const CLabel('Print session token to console'),
+              ),
+              ElevatedButton(
+                style: AppThemes.entrySecondaryButtonTheme,
+                onPressed: () {
+                  edge
+                      .invoke('getCourseEvents', body: {
+                        'id': 'IDATA2502',
+                      })
+                      .whenComplete(() => log('Edge function called'))
+                      .catchError(
+                          (error) => log('Edge function error: $error'));
+                },
+                child: const CLabel('Call edge function to populate events'),
+              ),
             ],
           ),
         ),
