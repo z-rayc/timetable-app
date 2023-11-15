@@ -1,5 +1,16 @@
 {
   "version": "1",
   "name": "TPApi",
-  "type": "collection"
+  "type": "collection",
+  "proxy": {
+    "enabled": false,
+    "protocol": "https",
+    "hostname": "",
+    "port": "",
+    "auth": {
+      "enabled": false,
+      "username": "",
+      "password": ""
+    }
+  }
 }
