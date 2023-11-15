@@ -15,6 +15,7 @@ class DevScreenChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = kSupabase.auth;
     final edge = kSupabase.functions;
+    final db = kSupabase.rest;
     return Scaffold(
       appBar: AppBar(
         title: const CTitle("Dev Screen Choice"),
@@ -59,6 +60,12 @@ class DevScreenChoice extends StatelessWidget {
                 },
                 child: const CLabel('Call edge function to populate events'),
               ),
+              ElevatedButton(
+                  onPressed: () => db
+                      .from('UserCourses')
+                      .insert({'course_id': 'IDATA2504'}).catchError(
+                          (error) => log('Error: $error')),
+                  child: const CLabel('add course to user'))
             ],
           ),
         ),
