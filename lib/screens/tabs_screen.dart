@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/screens/chats_screen.dart';
 import 'package:timetable_app/screens/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
@@ -47,6 +48,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var timetable = ref.watch(dailyTimetableProvider);
     String activeTitle = 'Timetable';
     Widget activePage = const TimetableScreen();
     List<Widget> activeActions = [
@@ -55,6 +57,14 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         tooltip: 'Edit my courses',
         onPressed: () {
           pushNewScreen(context, NavState.myCourses);
+        },
+      ),
+      // refresh button
+      IconButton(
+        icon: const Icon(Icons.refresh),
+        tooltip: 'Refresh',
+        onPressed: () {
+          ref.refresh(dailyTimetableProvider);
         },
       ),
     ];

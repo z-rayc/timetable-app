@@ -11,22 +11,37 @@ class SingleDayTimetable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var timetable = ref.watch(dailyTimetableProvider);
-    // Sort events by start time
 
     return timetable.when(data: (DailyTimetable data) {
-      return Scaffold(
-        body: ListView.builder(
-          itemCount: timetable.asData!.value.courseEvents.length,
-          itemBuilder: (context, index) {
-            var courseEvent = timetable.asData!.value.courseEvents[index];
-            return _buildCourseEventTile(
-                context,
-                courseEvent,
-                CalendarItemColour
-                    .values[index % CalendarItemColour.values.length]);
-          },
-        ),
-      );
+      if (data.courseEvents.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("No events today or no courses added"),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                  onPressed: () => ref.refresh(dailyTimetableProvider),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text("Refresh"))
+            ],
+          ),
+        );
+      } else {
+        return Scaffold(
+          body: ListView.builder(
+            itemCount: timetable.asData!.value.courseEvents.length,
+            itemBuilder: (context, index) {
+              var courseEvent = timetable.asData!.value.courseEvents[index];
+              return _buildCourseEventTile(
+                  context,
+                  courseEvent,
+                  CalendarItemColour
+                      .values[index % CalendarItemColour.values.length]);
+            },
+          ),
+        );
+      }
     }, error: (Object error, StackTrace stackTrace) {
       return SingleChildScrollView(child: Text("Error: $error, $stackTrace"));
     }, loading: () {
