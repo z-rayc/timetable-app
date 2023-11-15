@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/screens/chats_screen.dart';
+import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
 import 'package:timetable_app/screens/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
@@ -70,7 +70,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     if (_selectedPageIndex == 1) {
       activeTitle = 'Chats';
-      activePage = const ChatsScreen();
+      activePage = const ChatsOverviewScreen();
       activeActions = [
         IconButton(
           icon: const Icon(Icons.add),

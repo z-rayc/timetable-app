@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/account_settings_screen.dart';
-import 'package:timetable_app/screens/chats_screen.dart';
+import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
 import 'package:timetable_app/screens/course_details_screen.dart';
 import 'package:timetable_app/screens/create_event_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
@@ -28,7 +28,7 @@ enum NavState {
   courseDetails(CourseDetailsScreen()),
   createEvent(CreateEventScreen()),
   // chat,
-  chats(ChatsScreen()),
+  chats(ChatsOverviewScreen()),
   // accountPage,
   accountSettings(AccountSettingsScreen()),
   myCourses(MyCoursesScreen()),
