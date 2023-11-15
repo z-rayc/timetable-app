@@ -17,14 +17,14 @@ import 'package:timetable_app/screens/tabs_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
-  timetable(SingleDayTimetable()),
+  singleDayTimetable(SingleDayTimetable()),
   login(LoginScreen()),
   loginEmail(LoginEmailScreen()),
   register(RegisterScreen()),
   selectCourses(SelectCoursesScreen()),
 
   // dayPlan,
-  eventDetails(EventDetailsScreen()),
+  // eventDetails(EventDetailsScreen()),
   courseDetails(CourseDetailsScreen()),
   createEvent(CreateEventScreen()),
   // chat,

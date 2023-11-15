@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/screens/chats_screen.dart';
-import 'package:timetable_app/screens/single_day_timetable.dart';
+import 'package:timetable_app/screens/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -48,16 +48,33 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     String activeTitle = 'Timetable';
-    Widget activePage = const SingleDayTimetable();
+    Widget activePage = const TimetableScreen();
+    List<Widget> activeActions = [
+      IconButton(
+        icon: const Icon(Icons.edit),
+        tooltip: 'Edit my courses',
+        onPressed: () {
+          pushNewScreen(context, NavState.myCourses);
+        },
+      ),
+    ];
 
     if (_selectedPageIndex == 1) {
       activeTitle = 'Chats';
       activePage = const ChatsScreen();
+      activeActions = [
+        IconButton(
+          icon: const Icon(Icons.add),
+          tooltip: 'New chat',
+          onPressed: () {},
+        ),
+      ];
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(activeTitle),
+        actions: activeActions,
       ),
       drawer: NavDrawer(onSelectedNavItem: _handleDrawerNav),
       body: activePage,
