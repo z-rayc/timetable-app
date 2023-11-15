@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/location.dart';
@@ -16,55 +20,67 @@ class DailyTimetable {
       courseEvents: courseEvents ?? this.courseEvents,
     );
   }
+
+  AsyncValue<DailyTimetable> toAsyncValue() {
+    return AsyncValue.data(this);
+  }
 }
 
-class DailyTimetableNotifier extends StateNotifier<DailyTimetable> {
-  DailyTimetableNotifier()
-      : super(DailyTimetable(courseEvents: [
-          CourseEvent(
-            course: const Course(
-                id: "11",
-                name: "Dance Dance Revolution",
-                nameAlias: "DanceRev",
-                colour: Colors.blue),
-            staff: ["Bob"],
-            location: Location(
-              roomName: "DanceFloor",
-              buildingName: "DiscoHouse",
-              link: Uri.https("ntnu.no"),
-            ),
-            teachingSummary: "Dance, duh",
-            id: "11",
-            startTime: DateTime(2023, 10, 26, 13),
-            endTime: DateTime(2023, 10, 26, 15),
-          ),
-          CourseEvent(
-            course: const Course(
-                id: "11",
-                name: "Music class",
-                nameAlias: "musicality",
-                colour: Colors.blue),
-            staff: ["Alice"],
-            location: Location(
-              roomName: "DiscoFloor",
-              buildingName: "DanceHouse",
-              link: Uri.https("example.com"),
-            ),
-            teachingSummary: "Dance, yeah!",
-            id: "22",
-            startTime: DateTime(2023, 10, 26, 8),
-            endTime: DateTime(2023, 10, 26, 14),
-          ),
-        ]));
-
-  //Setter for courseEvents
-  void setCourseEvents(List<CourseEvent> value) {
-    final newState = state.copyWith(courseEvents: value);
-    state = newState;
+class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
+  @override
+  FutureOr<DailyTimetable> build() async {
+    return DailyTimetable(
+        courseEvents: await convertToCourseEvents(getCourseEventsForDay(
+            DateTime.now(), ['IDATA2502', 'IDATA2503', 'IDATA2504'])));
   }
 }
 
 final dailyTimetableProvider =
-    StateNotifierProvider<DailyTimetableNotifier, DailyTimetable>((ref) {
+    AsyncNotifierProvider<DailyTimetableNotifier, DailyTimetable>(() {
   return DailyTimetableNotifier();
 });
+
+Future<List<Map<String, dynamic>>> getCourseEventsForDay(
+    DateTime day, List courses) async {
+  DateTime now = day;
+  DateTime startOfDay = DateTime(now.year, now.month, now.day);
+  DateTime endOfDay = startOfDay.add(const Duration(days: 1));
+  final db = kSupabase.rest;
+  final response = await db
+      .from('Events')
+      .select<PostgrestList>('*, Course!courseId(*), Staff!staffid(*)')
+      .in_('courseId', courses)
+      .gte('start', startOfDay.toIso8601String())
+      .lte('end', endOfDay.toIso8601String());
+
+  return response;
+}
+
+Future<List<CourseEvent>> convertToCourseEvents(
+    Future<List<Map<String, dynamic>>> events) async {
+  List<CourseEvent> courseEvents = [];
+
+  for (var event in await events) {
+    courseEvents.add(
+      CourseEvent(
+          // convert from map<String, dynamic> to Course
+          course: Course(
+              id: event['Course']['id'],
+              name: event['Course']['name'],
+              nameAlias: event['Course']['nameAlias'],
+              colour: Colors.blue),
+          startTime: DateTime.parse(event['start']),
+          endTime: DateTime.parse(event['end']),
+          staff: [event['Staff']['shortname']],
+          location: Location(
+            roomName: '',
+            buildingName: '',
+            link: Uri(host: "google.com", scheme: "https"),
+          ),
+          id: event['id'],
+          teachingSummary: 'empty for now'),
+    );
+  }
+
+  return courseEvents;
+}
