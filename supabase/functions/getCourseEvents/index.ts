@@ -2,13 +2,12 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
-import { load } from "https://deno.land/std@0.205.0/dotenv/mod.ts";
 
-const env = await load();
-const SUPABASE_URL = env.SUPABASE_URL || Deno.env.get('SUPABASE_URL');
-const SUPABASE_ANON_KEY = env.SUPABASE_ANON_KEY || Deno.env.get('SUPABASE_ANON_KEY');
-const API_KEY = env.API_KEY || Deno.env.get('API_KEY');
-const TP_URL = env.TP_URL || Deno.env.get('TP_URL');
+
+const SUPABASE_URL =  Deno.env.get('SUPABASE_URL');
+const SUPABASE_ANON_KEY =  Deno.env.get('SUPABASE_ANON_KEY');
+const API_KEY =  Deno.env.get('API_KEY');
+const TP_URL =  Deno.env.get('TP_URL');
 
 export const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
