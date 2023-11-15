@@ -87,7 +87,7 @@ Deno.serve(async (req: Request) => {
     })
  }
 
- try {
+
   
     const supabaseClient = createClient(
       SUPABASE_URL!,
@@ -127,12 +127,7 @@ Deno.serve(async (req: Request) => {
     const { courseid, coursename, title} = tpData
 
     // Insert the course data into the database
-    const { data, error } = await supabaseClient
-      .from('Course')
-      .insert([
-        { id:courseid, name:coursename, nameAlias:title },
-      ])
-      .single()
+
 
       // Insert the events data into the database
       const events: Event[] = tpData.events
@@ -195,45 +190,53 @@ Deno.serve(async (req: Request) => {
       // Insert the rooms data into the database
       const { data: roomResponse, error: roomError } = await supabaseClient
       .from('Room')
-      .insert(roomsToInsert)
+      .upsert(roomsToInsert, {
+        onConflict: 'id',
+        ignoreDuplicates: true,
+      })
 
       // Insert the staffs data into the database
       const { data: staffResponse, error: staffError } = await supabaseClient
       .from('Staff')
-      .insert(staffsToInsert)
+      .upsert(staffsToInsert, {
+        onConflict: 'id',
+        ignoreDuplicates: true,
+      })
 
 
 
 
   const { data: eventResponse, error: eventError } = await supabaseClient
   .from('Events')
-  .insert(eventsToInsert)
+  .upsert(eventsToInsert, {
+    onConflict: 'id',
+    ignoreDuplicates: true,
+  })
+  
   
 
 
-console.log(roomError);
-console.log(staffError);
+    //handle all errors and return the error message if there is one else return success
+    if (  roomError || staffError || eventError) {
+      const data = { error: roomError?.message || staffError?.message || eventError?.message }
+      return new Response(JSON.stringify(data), {
+        headers: {...corsHeaders, 'content-type': 'application/json'},
+        status: 400,
+      })
+    }
 
-console.log(eventError);
-console.log(error);
-
-    return new Response(JSON.stringify(await data), {
+    const responseData = { message: 'Success' }
+    return new Response(JSON.stringify(responseData), {
       headers: {...corsHeaders, 'content-type': 'application/json'},
       status: 200,
-    }
-    )
+    })
 
- } catch (error) {
-  return new Response(JSON.stringify({ error: error.message }), {
-    headers: {...corsHeaders, 'content-type': 'application/json'},
-    status: 400,
- })}
+ } 
 
-
-}) 
 
 // To invoke:
 // curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/' \
 //   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
 //   --header 'Content-Type: application/json' \
 //   --data '{"name":"Functions"}'
+)
