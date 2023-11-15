@@ -146,7 +146,8 @@ Deno.serve(async (req: Request) => {
           end: event.dtend,
           id: event.eventid,
           roomid: event.room[0].id,
-          staffid: event.staffs[0].id
+          staffid: event.staffs[0].id,
+          summary: event.summary,
         }
       })
 
