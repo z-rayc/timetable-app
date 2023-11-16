@@ -39,10 +39,10 @@ export interface Event {
   aid: string
   active: boolean
   compulsory: boolean
-  discipline: any[]
-  disciplineobj: any[]
-  resources: any[]
-  alerts: any[]
+  discipline: string[]
+  disciplineobj: string[]
+  resources: string[]
+  alerts: string[]
   coursetype: string
   staff: string[]
   staffnames: string[]
@@ -70,12 +70,12 @@ export interface Room {
   videolink: boolean
   buildingid: string
   buildingurl: string
-  campusowner: any
+  campusowner: string
   roomacronym: string
   buildingname: string
   showforstudent: boolean
   buildingacronym: string
-  equipment_function: any
+  equipment_function: string
 }
 
 

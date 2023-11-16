@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:timetable_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
@@ -19,18 +22,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   String? selectedProgram;
   String? selectedSemester;
 
-  // Dropdown variables
-  final List<DropdownMenuEntry<String>> _programs = [
-    const DropdownMenuEntry(
-      label: "Computer Science (BIDATA)",
-      value: "BIDATA",
-    ),
-    const DropdownMenuEntry(
-      label: "Automation and Intelligent Systems",
-      value: "BIAIS",
-    ),
-  ];
-
+  // Placeholder semesters
   final List<DropdownMenuEntry<String>> _semesters = [
     const DropdownMenuEntry(label: "Autumn 2021", value: "H2021"),
     const DropdownMenuEntry(label: "Autumn 2022", value: "H2022"),
@@ -40,37 +32,54 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   // These are placeholder courses
   final List<Course> courses = [
     const Course(
-      id: "IDATA2503",
-      name: "Mobile Applications",
-      nameAlias: "Mobile Applications",
+      id: "TS500813",
+      name: "Menneskelige faktorer",
+      nameAlias: "Menneskelige faktorer",
       colour: Colors.red,
     ),
     const Course(
-      id: "IDATA2504",
-      name: "Game Development",
-      nameAlias: "Game Development",
+      id: "MUSV1018",
+      name: "Hørelære og improvisasjon",
+      nameAlias: "Hørelære og improvisasjon",
       colour: Colors.blue,
     ),
     const Course(
-      id: "IDATA2505",
-      name: "Web Development",
-      nameAlias: "Web Development",
+      id: "POL3901",
+      name: "Masteroppgave i statsvitenskap",
+      nameAlias: "Masteroppgave i statsvitenskap",
       colour: Colors.green,
     ),
     const Course(
-      id: "IDATA2506",
-      name: "Data Science",
-      nameAlias: "Data Science",
+      id: "LAT1006",
+      name: "Latinske oversettelser",
+      nameAlias: "Latinske oversettelser",
       colour: Colors.yellow,
     ),
   ];
-  final List<Course> _suggestedCourses = [];
   final List<Course> _selectedCourses = [];
+
+  final db = kSupabase.rest;
+
+  void addCourses() async {
+    var coursesToAdd = _selectedCourses
+        .map((course) => {
+              'course_id': course.id,
+            })
+        .toList();
+
+    db
+        .from('UserCourses')
+        .upsert(coursesToAdd, ignoreDuplicates: true)
+        .catchError(
+      (error) {
+        log(error);
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    _suggestedCourses.addAll(courses);
   }
 
   late TextEditingController textEditingController;
@@ -83,66 +92,18 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
           padding: const EdgeInsets.all(20),
           children: <Widget>[
             LayoutBuilder(builder: (context, constraints) {
-              return Column(
-                children: [
-                  FormDropdownMenu(
-                    name: "Program",
-                    width: constraints.maxWidth,
-                    controller: programController,
-                    items: _programs,
-                    onSelected: (String? program) {
-                      setState(() {
-                        selectedProgram = program;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  FormDropdownMenu(
-                    name: "Semester",
-                    width: constraints.maxWidth,
-                    controller: semesterController,
-                    items: _semesters,
-                    onSelected: (String? semester) {
-                      setState(() {
-                        selectedSemester = semester;
-                      });
-                    },
-                  ),
-                ],
+              return FormDropdownMenu(
+                name: "Semester",
+                width: constraints.maxWidth,
+                controller: semesterController,
+                items: _semesters,
+                onSelected: (String? semester) {
+                  setState(() {
+                    selectedSemester = semester;
+                  });
+                },
               );
             }),
-            const SizedBox(height: 20),
-            const Text("Suggestions"),
-            const SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  AppThemes.boxShadow(3),
-                ],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ListView.builder(
-                padding: _suggestedCourses.isEmpty
-                    ? const EdgeInsets.only(top: 40)
-                    : EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: _suggestedCourses.length,
-                itemBuilder: (ctx, index) => ListTile(
-                  title: Text(_suggestedCourses[index].name),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      setState(() {
-                        _selectedCourses.add(_suggestedCourses[index]);
-                        _suggestedCourses.remove(_suggestedCourses[index]);
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(height: 20),
             const Text("Find a course"),
             const SizedBox(height: 10),
@@ -235,7 +196,8 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                replaceNewScreen(context, NavState.singleDayTimetable);
+                addCourses();
+                replaceNewScreen(context, NavState.tabs);
               },
               style: AppThemes.entryButtonTheme,
               child: const Text("Confirm"),

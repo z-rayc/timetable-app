@@ -42,6 +42,11 @@ class Time {
     return "${time.toLocal().day.toString().padLeft(2, '0')}. ${_month(time.toLocal().month)} ${time.toLocal().year.toString()}";
   }
 
+  String _dateToDayMonthYearHourMinute() {
+    return "${_dateToDayMonthYear()}, ${_dateToHourMinute()}";
+  }
+
   String get hourMinutes => _dateToHourMinute();
   String get dayMonthYear => _dateToDayMonthYear();
+  String get dayMonthYearHourMinute => _dateToDayMonthYearHourMinute();
 }
