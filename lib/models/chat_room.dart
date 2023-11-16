@@ -6,9 +6,11 @@ class ChatRoom {
     required this.id,
     required this.name,
   });
-}
 
-const sampleChatRoom = ChatRoom(
-  id: '1',
-  name: 'Sample Chat Room',
-);
+  static ChatRoom fromJson(dynamic data) {
+    return ChatRoom(
+      id: data['id'].toString(),
+      name: data['name'],
+    );
+  }
+}
