@@ -79,7 +79,7 @@ class _NewChatOverlayState extends State<NewChatOverlay> {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Row(
             children: [
               const Spacer(),
@@ -147,20 +147,22 @@ class _NewChatOverlayState extends State<NewChatOverlay> {
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
       child: SizedBox(
           height: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'New Chat',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              addEmailForm,
-              const SizedBox(height: 20),
-              emailListContainer,
-              const SizedBox(height: 20),
-              bottomButtons,
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'New Chat',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                addEmailForm,
+                const SizedBox(height: 20),
+                emailListContainer,
+                const SizedBox(height: 40),
+                bottomButtons,
+              ],
+            ),
           )),
     );
   }
