@@ -23,13 +23,28 @@ class SingleDayTimetable extends ConsumerWidget {
               const Text("No events today or no courses added"),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                  onPressed: () => ref.invalidate(dailyTimetableProvider),
+                  onPressed: () {
+                    ref.invalidate(dailyTimetableProvider);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Refreshed")));
+                  },
                   icon: const Icon(Icons.refresh),
                   label: const Text("Refresh"))
             ],
           ),
         );
       } else {
+        // sort events by start time and date (earliest first)
+        data.courseEvents.sort((a, b) {
+          if (a.startTime.isBefore(b.startTime)) {
+            return -1;
+          } else if (a.startTime.isAfter(b.startTime)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
         return Scaffold(
           body: ListView.builder(
             itemCount: timetable.asData!.value.courseEvents.length,
