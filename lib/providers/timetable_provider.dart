@@ -52,7 +52,8 @@ Future<List<Map<String, dynamic>>> getCourseEventsForDay(
     DateTime day, List courses) async {
   DateTime now = day;
   DateTime startOfDay = DateTime(now.year, now.month, now.day);
-  DateTime endOfDay = startOfDay.add(const Duration(days: 1));
+  // setting end of day to 54 days from now to test
+  DateTime endOfDay = startOfDay.add(const Duration(days: 54));
   final db = kSupabase.rest;
   final response = await db
       .from('Events')

@@ -50,13 +50,11 @@ class DevScreenChoice extends StatelessWidget {
               ElevatedButton(
                 style: AppThemes.entrySecondaryButtonTheme,
                 onPressed: () {
-                  edge
-                      .invoke('getCourseEvents', body: {
-                        'id': 'IDATA2502',
-                      })
-                      .whenComplete(() => log('Edge function called'))
-                      .catchError(
-                          (error) => log('Edge function error: $error'));
+                  edge.invoke('getCourseEvents', body: {
+                    'id': 'IDATA2504',
+                  }).then((v) {
+                    log('Edge function response: ${v.data}');
+                  }).catchError((error) => log('Edge function error: $error'));
                 },
                 child: const CLabel('Call edge function to populate events'),
               ),
