@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
@@ -50,6 +52,25 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
     _setLoading(false);
   }
 
+  void _createChatRoom() async {
+    _setLoading(true);
+
+    List<String> emails = ["kacper@email.com", "email@email.com"];
+    try {
+      var response = await kSupabase.functions.invoke('createChatRoom', body: {
+        'chatroomName': 'newchatroom',
+        'memberEmails': emails,
+      });
+      print(response);
+      print(response.status);
+      print(response.data);
+    } on Exception catch (e) {
+      print(e);
+    }
+
+    _fetchChatRooms();
+  }
+
   @override
   Widget build(BuildContext context) {
     const chatroom = sampleChatRoom;
@@ -62,21 +83,32 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
                 ? const Center(
                     child: Text('No chats yet! Create one!'),
                   )
-                : ListView.builder(
-                    itemCount: _chatRooms.length,
-                    itemBuilder: (context, index) {
-                      return ChatRoomTile(
-                          chatRoom: _chatRooms[index],
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const ChatScreen(chatRoom: chatroom);
-                                },
-                              ),
-                            );
-                          });
-                    },
+                : Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: _createChatRoom,
+                        child: const Text('Create test chat room'),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: _chatRooms.length,
+                          itemBuilder: (context, index) {
+                            return ChatRoomTile(
+                                chatRoom: _chatRooms[index],
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const ChatScreen(
+                                            chatRoom: chatroom);
+                                      },
+                                    ),
+                                  );
+                                });
+                          },
+                        ),
+                      ),
+                    ],
                   ));
   }
 }
