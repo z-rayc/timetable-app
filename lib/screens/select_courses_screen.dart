@@ -19,18 +19,6 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   String? selectedProgram;
   String? selectedSemester;
 
-  // Dropdown variables
-  final List<DropdownMenuEntry<String>> _programs = [
-    const DropdownMenuEntry(
-      label: "Computer Science (BIDATA)",
-      value: "BIDATA",
-    ),
-    const DropdownMenuEntry(
-      label: "Automation and Intelligent Systems",
-      value: "BIAIS",
-    ),
-  ];
-
   final List<DropdownMenuEntry<String>> _semesters = [
     const DropdownMenuEntry(label: "Autumn 2021", value: "H2021"),
     const DropdownMenuEntry(label: "Autumn 2022", value: "H2022"),
@@ -83,66 +71,18 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
           padding: const EdgeInsets.all(20),
           children: <Widget>[
             LayoutBuilder(builder: (context, constraints) {
-              return Column(
-                children: [
-                  FormDropdownMenu(
-                    name: "Program",
-                    width: constraints.maxWidth,
-                    controller: programController,
-                    items: _programs,
-                    onSelected: (String? program) {
-                      setState(() {
-                        selectedProgram = program;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  FormDropdownMenu(
-                    name: "Semester",
-                    width: constraints.maxWidth,
-                    controller: semesterController,
-                    items: _semesters,
-                    onSelected: (String? semester) {
-                      setState(() {
-                        selectedSemester = semester;
-                      });
-                    },
-                  ),
-                ],
+              return FormDropdownMenu(
+                name: "Semester",
+                width: constraints.maxWidth,
+                controller: semesterController,
+                items: _semesters,
+                onSelected: (String? semester) {
+                  setState(() {
+                    selectedSemester = semester;
+                  });
+                },
               );
             }),
-            const SizedBox(height: 20),
-            const Text("Suggestions"),
-            const SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  AppThemes.boxShadow(3),
-                ],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ListView.builder(
-                padding: _suggestedCourses.isEmpty
-                    ? const EdgeInsets.only(top: 40)
-                    : EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: _suggestedCourses.length,
-                itemBuilder: (ctx, index) => ListTile(
-                  title: Text(_suggestedCourses[index].name),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      setState(() {
-                        _selectedCourses.add(_suggestedCourses[index]);
-                        _suggestedCourses.remove(_suggestedCourses[index]);
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(height: 20),
             const Text("Find a course"),
             const SizedBox(height: 10),
