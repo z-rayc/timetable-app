@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/screens/chats_screen.dart';
@@ -17,6 +21,8 @@ class TabsScreen extends ConsumerStatefulWidget {
 }
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
+  final db = kSupabase.rest;
+  final functions = kSupabase.functions;
   int _selectedPageIndex = 0;
 
   void _handleDrawerNav(NavDrawerChoice choice) {
@@ -63,7 +69,30 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         icon: const Icon(Icons.refresh),
         tooltip: 'Refresh',
         onPressed: () {
+          // get my courses and call supabase endpoint to make it readd the events
+          var mycourses = ref
+              .read(myCoursesProvider)
+              .asData
+              ?.value
+              .courseUsers
+              .map((e) => e.course.id)
+              .toList();
+
+          for (var course in mycourses ?? []) {
+            log('Calling edge function for course $course');
+            functions.invoke('getEventsByCourse', body: {
+              'id': course,
+              'sem': "23h",
+            }).then((v) {
+              log('Edge function response: ${v.data}');
+            });
+          }
           ref.invalidate(dailyTimetableProvider);
+          //
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Refreshed'),
+            behavior: SnackBarBehavior.floating,
+          ));
         },
       ),
     ];
