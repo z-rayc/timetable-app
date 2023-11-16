@@ -5,7 +5,6 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/widgets/chat/email_list_tile.dart';
-import 'package:timetable_app/widgets/listview_container.dart';
 import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
@@ -20,7 +19,7 @@ class _NewChatOverlayState extends State<NewChatOverlay> {
   final _formKey = GlobalKey<FormState>();
   final _emailFormKey = GlobalKey<FormState>();
   String enteredChatName = '';
-  List<String> _emails = [];
+  final List<String> _emails = [];
   bool _isLoading = false;
   final TextEditingController _emailController = TextEditingController();
   String _enteredEmail = '';
