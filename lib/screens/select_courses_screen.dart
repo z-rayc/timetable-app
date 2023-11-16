@@ -1,4 +1,5 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:developer';
+
 import 'package:timetable_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
@@ -31,44 +32,49 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   // These are placeholder courses
   final List<Course> courses = [
     const Course(
-      id: "IDATA2555",
-      name: "Mobile Applications",
-      nameAlias: "Mobile Applications",
+      id: "TS500813",
+      name: "Menneskelige faktorer",
+      nameAlias: "Menneskelige faktorer",
       colour: Colors.red,
     ),
     const Course(
-      id: "IDATA2504",
-      name: "Game Development",
-      nameAlias: "Game Development",
+      id: "MUSV1018",
+      name: "Hørelære og improvisasjon",
+      nameAlias: "Hørelære og improvisasjon",
       colour: Colors.blue,
     ),
     const Course(
-      id: "IDATA2505",
-      name: "Web Development",
-      nameAlias: "Web Development",
+      id: "POL3901",
+      name: "Masteroppgave i statsvitenskap",
+      nameAlias: "Masteroppgave i statsvitenskap",
       colour: Colors.green,
     ),
     const Course(
-      id: "IDATA2506",
-      name: "Data Science",
-      nameAlias: "Data Science",
+      id: "LAT1006",
+      name: "Latinske oversettelser",
+      nameAlias: "Latinske oversettelser",
       colour: Colors.yellow,
     ),
   ];
   final List<Course> _selectedCourses = [];
 
-  final auth = kSupabase.auth;
-  final edge = kSupabase.functions;
   final db = kSupabase.rest;
 
   void addCourses() async {
-    var coursesToAdd = _selectedCourses.map((course) => {
-          'course_id': course.id,
-        });
+    var coursesToAdd = _selectedCourses
+        .map((course) => {
+              'course_id': course.id,
+            })
+        .toList();
 
-    print(coursesToAdd);
-
-    db.from('UserCourses').upsert(coursesToAdd);
+    db
+        .from('UserCourses')
+        .upsert(coursesToAdd, ignoreDuplicates: true)
+        .catchError(
+      (error) {
+        log(error);
+      },
+    );
   }
 
   @override
