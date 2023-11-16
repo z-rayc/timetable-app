@@ -1,3 +1,5 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:timetable_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
@@ -19,6 +21,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   String? selectedProgram;
   String? selectedSemester;
 
+  // Placeholder semesters
   final List<DropdownMenuEntry<String>> _semesters = [
     const DropdownMenuEntry(label: "Autumn 2021", value: "H2021"),
     const DropdownMenuEntry(label: "Autumn 2022", value: "H2022"),
@@ -28,7 +31,7 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
   // These are placeholder courses
   final List<Course> courses = [
     const Course(
-      id: "IDATA2503",
+      id: "IDATA2555",
       name: "Mobile Applications",
       nameAlias: "Mobile Applications",
       colour: Colors.red,
@@ -52,13 +55,25 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
       colour: Colors.yellow,
     ),
   ];
-  final List<Course> _suggestedCourses = [];
   final List<Course> _selectedCourses = [];
+
+  final auth = kSupabase.auth;
+  final edge = kSupabase.functions;
+  final db = kSupabase.rest;
+
+  void addCourses() async {
+    var coursesToAdd = _selectedCourses.map((course) => {
+          'course_id': course.id,
+        });
+
+    print(coursesToAdd);
+
+    db.from('UserCourses').upsert(coursesToAdd);
+  }
 
   @override
   void initState() {
     super.initState();
-    _suggestedCourses.addAll(courses);
   }
 
   late TextEditingController textEditingController;
@@ -175,7 +190,8 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                replaceNewScreen(context, NavState.singleDayTimetable);
+                addCourses();
+                replaceNewScreen(context, NavState.tabs);
               },
               style: AppThemes.entryButtonTheme,
               child: const Text("Confirm"),
