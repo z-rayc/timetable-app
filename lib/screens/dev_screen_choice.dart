@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
@@ -8,8 +7,15 @@ import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
 
-class DevScreenChoice extends StatelessWidget {
+class DevScreenChoice extends StatefulWidget {
   const DevScreenChoice({super.key});
+
+  @override
+  State<DevScreenChoice> createState() => _DevScreenChoiceState();
+}
+
+class _DevScreenChoiceState extends State<DevScreenChoice> {
+  final _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +69,22 @@ class DevScreenChoice extends StatelessWidget {
                       .from('UserCourses')
                       .insert({'course_id': 'IDATA2504'}).catchError(
                           (error) => log('Error: $error')),
-                  child: const CLabel('add course to user'))
+                  child: const CLabel('add course to user')),
+              // text field to add course to user and button to add it
+              TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Course ID',
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => db
+                    .from('UserCourses')
+                    .insert({'course_id': _controller.text}).catchError(
+                        (error) => log('Error: $error')),
+                child: const CLabel('add course to user'),
+              ),
             ],
           ),
         ),
