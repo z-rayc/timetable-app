@@ -32,8 +32,8 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
   void _fetchChatRooms() async {
     List<dynamic> chatRoomsDynamic = await kSupabase
         .from('ChatRoomMember')
-        .select('userid, chatroomid, ChatRoom(id, name)')
-        .filter('userid', 'eq', kSupabase.auth.currentUser!.id);
+        .select('user_id, chatroom_id, ChatRoom(id, name)')
+        .filter('user_id', 'eq', kSupabase.auth.currentUser!.id);
 
     List<ChatRoom> tempChatRooms = [];
 
@@ -55,7 +55,11 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
   void _createChatRoom() async {
     _setLoading(true);
 
-    List<String> emails = ["kacper@email.com", "email@email.com"];
+    List<String> emails = [
+      "kacper@email.com",
+      "email@email.com",
+      "test@email.com",
+    ];
     try {
       var response = await kSupabase.functions.invoke('createChatRoom', body: {
         'chatroomName': 'newchatroom',

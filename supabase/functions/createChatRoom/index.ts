@@ -52,21 +52,13 @@ Deno.serve(async (req: Request) => {
       },
     })
  
-     // request will contain a body with the following:
-    //  {
-    //     'chatroomname': 'test',
-    //     'memberemails': ['email1', 'email2', 'email3'],
-    //  }
+
 
     const { chatroomName, memberEmails } = await req.json();
     
-     // get userid from emails, use auth schema
-    // const { data: users, error } = await supabaseClient.from('auth.users').select('id').in('email', memberEmails);
-    // use await supabaseClient.auth.admin.listUsers
 
-    const { data: users, error } = await adminAuthCLient.auth.admin.listUsers();
     
-    // const { data: users, error } = await adminAuthCLient.from('users').select('id').in('email', memberEmails);
+    const { data: users, error } = await adminAuthCLient.from('UserProfile').select('id').in('email', memberEmails);
      
     if (error) {
       return new Response(JSON.stringify({ error: `Error getting users: ${error.message}` }), {
@@ -75,25 +67,26 @@ Deno.serve(async (req: Request) => {
       })
     }
 
-    console.log(users);
-    console.dir(users);
-    const mambers = users.filter((user: any) => memberEmails.includes(user.email));
+    
+   
+    const memberids = users.map((user: any) => user.id);
+    memberids.push(user.id) // add the current user to the chatroom
 
-    const memberids = mambers.map((user: any) => user.id);
-    memberids.push(user.id)
-
-    // adminAuthCLient.from('users').schema('auth').select()... where email in memberEmails
-
-    // const memberids = users.map((user: any) => user.id);
-    // memberids.push(user.id)
-
+    if (memberids.length < 2) {
+      return new Response(JSON.stringify({ error: 'Not enough members' }), {
+        headers: {...corsHeaders, 'content-type': 'application/json'},
+        status: 400,
+      })
+    }
     
 
 
     // create chatroom
-    const { data: chatroom, error: chatroomError } = await supabaseClient.from('chatrooms').insert([{ name: chatroomName }]).select().single();
+    const { data: chatroom, error: chatroomError } = await supabaseClient.from('ChatRoom').insert([{ name: chatroomName }]).select().single();
+    console.dir(chatroom);
+    console.dir(chatroomError);
     if (chatroomError) {
-      return new Response(JSON.stringify({ error: 'Error creating chatroom' }), {
+      return new Response(JSON.stringify({ error: `Error creating chatroom: ${chatroomError.code}` }), {
         headers: {...corsHeaders, 'content-type': 'application/json'},
         status: 500,
       })
@@ -101,15 +94,22 @@ Deno.serve(async (req: Request) => {
     const chatroomid = chatroom.id;
 
     // create chatroom members
-    const { data: chatroomMembers, error: chatroomMembersError } = await supabaseClient.from('chatroommembers').insert(memberids.map((memberid: string) => ({ chatroomid, memberid }))).select();
+    const { error: chatroomMembersError } = await supabaseClient
+    .from('ChatRoomMember')
+    .insert(
+      memberids.map((memberid: string) => ({
+        chatroom_id: chatroomid,
+        user_id: memberid,
+      }))
+    );
     if (chatroomMembersError) {
-      return new Response(JSON.stringify({ error: 'Error creating chatroom members' }), {
+      return new Response(JSON.stringify({ error: `Error creating chatroom members: ${JSON.stringify(chatroomMembersError)}` }), {
         headers: {...corsHeaders, 'content-type': 'application/json'},
         status: 500,
       })
     }
 
-    return new Response(JSON.stringify({ chatroom, chatroomMembers }), {
+    return new Response(JSON.stringify({ chatroom }), {
       headers: {...corsHeaders, 'content-type': 'application/json'},
       status: 200,
     })
