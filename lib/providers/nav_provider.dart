@@ -5,7 +5,6 @@ import 'package:timetable_app/screens/chats_screen.dart';
 import 'package:timetable_app/screens/course_details_screen.dart';
 import 'package:timetable_app/screens/create_event_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
-import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/screens/auth/login_email_screen.dart';
 import 'package:timetable_app/screens/auth/login_screen.dart';
 import 'package:timetable_app/screens/my_courses_screen.dart';
@@ -17,14 +16,14 @@ import 'package:timetable_app/screens/tabs_screen.dart';
 
 enum NavState {
   splash(SplashScreen()),
-  timetable(SingleDayTimetable()),
+  singleDayTimetable(SingleDayTimetable()),
   login(LoginScreen()),
   loginEmail(LoginEmailScreen()),
   register(RegisterScreen()),
   selectCourses(SelectCoursesScreen()),
 
   // dayPlan,
-  eventDetails(EventDetailsScreen()),
+  // eventDetails(EventDetailsScreen()),
   courseDetails(CourseDetailsScreen()),
   createEvent(CreateEventScreen()),
   // chat,

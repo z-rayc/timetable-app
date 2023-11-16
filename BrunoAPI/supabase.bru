@@ -5,21 +5,17 @@ meta {
 }
 
 post {
-  url: http://localhost:8000?id=IDATA2302
+  url: https://{{functionsURL}}/functions/v1/getCourseEvents
   body: json
   auth: bearer
 }
 
-query {
-  id: IDATA2302
-}
-
 auth:bearer {
-  token:  {{session}}
+  token: {{session}}
 }
 
 body:json {
   {
-    "id": "IDATA2503"
+    "id": "IDATA2504"
   }
 }

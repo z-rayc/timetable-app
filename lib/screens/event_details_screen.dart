@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/custom_event.dart';
 import 'package:timetable_app/models/event.dart';
-import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
-import 'package:timetable_app/models/user.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-final Event event = CustomEvent(
-  id: "IDATA2503-1",
-  title: "Test event",
-  description: "This is a test event",
-  location: Location(
-    roomName: "L263",
-    buildingName: "Lanternen",
-    link: Uri.parse("https://ntnu.no/kart/innsida/Lanternen/2/L263"),
-  ),
-  author: const User(
-      id: "1", username: "John Doe", courses: [], email: "test@gmail.com"),
-  invitees: [],
-  startTime: DateTime.now(),
-  endTime: DateTime.now().add(const Duration(hours: 2)),
-);
+// final Event event = CustomEvent(
+//   id: "IDATA2503-1",
+//   title: "Test event",
+//   description: "This is a test event",
+//   location: Location(
+//     roomName: "L263",
+//     buildingName: "Lanternen",
+//     link: Uri.https("ntnu.no", "/kart/innsida/Lanternen/2/L263"),
+//   ),
+//   author: const User(
+//       id: "1", username: "John Doe", courses: [], email: "test@gmail.com"),
+//   invitees: [],
+//   startTime: DateTime.now(),
+//   endTime: DateTime.now().add(const Duration(hours: 2)),
+// );
 
 class EventDetailsScreen extends StatelessWidget {
-  const EventDetailsScreen({super.key});
+  const EventDetailsScreen({super.key, required this.event});
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,16 @@ class EventDetailsScreen extends StatelessWidget {
       content.add(Text("Staff: ${newEvent.staff.join(", ")}"));
       content.add(Text(
           "Location: ${newEvent.location.roomName}, ${newEvent.location.buildingName}"));
+      content.add(InkWell(
+          borderRadius: BorderRadius.circular(10),
+          splashColor: Colors.blue,
+          child: Text(
+              style: const TextStyle(
+                color: Colors.blue,
+              ),
+              "Location link: ${newEvent.location.link}"),
+          onTap: () => launchUrl(newEvent.location.link)));
+      content.add(const SizedBox(height: 30));
       content.add(Text("Type: ${newEvent.teachingSummary}"));
       content.add(const SizedBox(height: 30));
       content.add(Text("Date: ${Time(newEvent.startTime).dayMonthYear}"));
