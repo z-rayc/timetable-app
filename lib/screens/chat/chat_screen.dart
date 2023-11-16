@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/chat_room.dart';
+import 'package:timetable_app/widgets/chat/chat_messages.dart';
 import 'package:timetable_app/widgets/chat/new_chat_message.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -27,11 +28,8 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          Text('messages'),
-          Spacer(),
-          NewChatMessage(
-            chatRoom: widget.chatRoom,
-          ),
+          ChatMessages(chatRoom: widget.chatRoom),
+          NewChatMessage(chatRoom: widget.chatRoom),
         ],
       ),
     );
