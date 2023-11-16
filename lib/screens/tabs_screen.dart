@@ -7,7 +7,8 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/screens/chats_screen.dart';
+import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
+import 'package:timetable_app/screens/chat/new_chat_overlay.dart';
 import 'package:timetable_app/screens/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
@@ -50,6 +51,17 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  void showNewChatOverlay() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return const NewChatOverlay();
+      },
+    );
   }
 
   @override
@@ -99,12 +111,12 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     if (_selectedPageIndex == 1) {
       activeTitle = 'Chats';
-      activePage = const ChatsScreen();
+      activePage = const ChatsOverviewScreen();
       activeActions = [
         IconButton(
           icon: const Icon(Icons.add),
           tooltip: 'New chat',
-          onPressed: () {},
+          onPressed: showNewChatOverlay,
         ),
       ];
     }
