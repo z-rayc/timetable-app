@@ -128,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _showAlertDialog(context, 'Feide sign in');
                         },
                 ),
+                const SizedBox(height: 10),
                 SingleSignOnButton(
                   providerLogoAsset: 'assets/images/google-logo.svg',
                   logoSemanticLabel: 'Google logo',
