@@ -1,22 +1,23 @@
 import 'dart:developer';
-
-import 'package:timetable_app/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:timetable_app/main.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
+import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
 
-class SelectCoursesScreen extends StatefulWidget {
+class SelectCoursesScreen extends ConsumerStatefulWidget {
   const SelectCoursesScreen({super.key});
 
   @override
-  State<SelectCoursesScreen> createState() {
+  ConsumerState<SelectCoursesScreen> createState() {
     return _SelectCoursesScreenState();
   }
 }
 
-class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
+class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   final TextEditingController programController = TextEditingController();
   final TextEditingController semesterController = TextEditingController();
   String? selectedProgram;
@@ -60,6 +61,8 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
 
   final db = kSupabase.rest;
 
+  // Adds all the selected courses to the database
+  // If the course already exists in the database, it will be ignored
   void addCourses() async {
     var coursesToAdd = _selectedCourses
         .map((course) => {
@@ -77,6 +80,13 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
     );
   }
 
+  // TODO: Remove the courses that
+  // have not been selected
+  void removeCourses() async {
+    // Check which courses are not selected
+    // and remove them from the database
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +96,14 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var myCourses = ref.watch(myCoursesProvider);
+    // Add the courses that have previously been selected
+    _selectedCourses.addAll(
+        myCourses.asData?.value.courseUsers.map((e) => e.course).toList() ??
+            []);
+
+    print(_selectedCourses);
+
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -115,10 +133,14 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
                 }
                 return courses.where(
                   (Course option) {
+                    // Search by ID or name
+                    // Where the course is not already selected
                     return !_selectedCourses.contains(option) &&
-                        option.name
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase());
+                        (option.name.toLowerCase().contains(
+                                textEditingValue.text.toLowerCase()) ||
+                            option.id
+                                .toLowerCase()
+                                .contains(textEditingValue.text.toLowerCase()));
                   },
                 );
               },
