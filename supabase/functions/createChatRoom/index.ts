@@ -73,7 +73,7 @@ Deno.serve(async (req: Request) => {
     memberids.push(user.id) // add the current user to the chatroom
 
     if (memberids.length < 2) {
-      return new Response(JSON.stringify({ error: 'Not enough members' }), {
+      return new Response(JSON.stringify({ error: 'Not enough valid members' }), {
         headers: {...corsHeaders, 'content-type': 'application/json'},
         status: 400,
       })
@@ -111,7 +111,7 @@ Deno.serve(async (req: Request) => {
 
     return new Response(JSON.stringify({ chatroom }), {
       headers: {...corsHeaders, 'content-type': 'application/json'},
-      status: 200,
+      status: 201,
     })
     }
 
