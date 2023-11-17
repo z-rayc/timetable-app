@@ -15,11 +15,19 @@ class UserCourse {
   final Color color;
 
   static UserCourse fromJson(Map<String, dynamic> json) {
+    // Try parsing the color and if it fails, use grey
+    Color color = Colors.grey;
+    try {
+      color = Color(int.parse(json['color']));
+    } catch (_) {
+      color = Colors.grey;
+    }
+
     return UserCourse(
       id: json['id'].toString(),
       createdAt: DateTime.parse(json['created_at']),
       course: Course.fromJson(json['Course']),
-      color: Color(json['color']) ?? Colors.grey,
+      color: color,
     );
   }
 }
