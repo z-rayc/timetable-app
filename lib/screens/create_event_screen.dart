@@ -4,7 +4,6 @@ import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
-import 'package:timetable_app/widgets/texts/title.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
