@@ -42,19 +42,11 @@ class _ChatMessagesState extends State<ChatMessages> {
   void initState() {
     super.initState();
     _addInitialMessages();
-    // _messagesChannel =
-    // kSupabase.channel('ChatMessage:chat_room_id=eq.${widget.chatRoom.id}');
+
     kSupabase.channel('schema-db-changes').on(
       RealtimeListenTypes.postgresChanges,
-      ChannelFilter(
-          table: 'ChatMessage',
-          schema: 'public',
-          // filter: 'chat_room_id=eq.${widget.chatRoom.id}',
-          event: '*'),
+      ChannelFilter(table: 'ChatMessage', schema: 'public', event: '*'),
       (payload, [ref]) {
-        // print('Received message');
-        // print(payload);
-        //{schema: public, table: ChatMessage, commit_timestamp: 2023-11-16T21:28:50.103Z, eventType: INSERT, new: {author_email: nokacper24@gmail.com, author_id: 98ec05ea-272f-48fb-ace6-e9ee6dbf4515, author_name: nokacper24, chat_room_id: 10, id: 20, message: test, sent_at: 2023-11-16T22:28:49.664107}, old: {}, errors: null}
         var newMessage = payload['new'];
         _addMessage(newMessage);
       },
