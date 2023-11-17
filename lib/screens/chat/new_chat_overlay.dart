@@ -1,21 +1,22 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
-import 'package:timetable_app/models/chat_room.dart';
+import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/widgets/chat/email_list_tile.dart';
 import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 
-class NewChatOverlay extends StatefulWidget {
+class NewChatOverlay extends ConsumerStatefulWidget {
   const NewChatOverlay({super.key});
 
   @override
-  State<NewChatOverlay> createState() => _NewChatOverlayState();
+  ConsumerState<NewChatOverlay> createState() => _NewChatOverlayState();
 }
 
-class _NewChatOverlayState extends State<NewChatOverlay> {
+class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
   final _formKey = GlobalKey<FormState>();
   final _emailFormKey = GlobalKey<FormState>();
   String enteredChatName = '';
@@ -73,31 +74,19 @@ class _NewChatOverlayState extends State<NewChatOverlay> {
   }
 
   void _createChatRoom() async {
-    try {
-      _setLoading(true);
-      var response = await kSupabase.functions.invoke('createChatRoom', body: {
-        'chatroomName': enteredChatName.trim(),
-        'memberEmails': _emails,
-      });
-      if (response.status != 201) {
-        throw ChatRoomCreationException(response.data['error']);
-      } else {
-        var chatRoom = ChatRoom.fromJson(response.data['chatroom']);
-        if (context.mounted) {
-          Navigator.of(context).pop(chatRoom);
-        }
-      }
-    } on ChatRoomCreationException catch (e) {
+    _setLoading(true);
+    final creationError = await ref
+        .read(chatRoomProvider.notifier)
+        .addChatRoom(enteredChatName.trim(), _emails);
+    _setLoading(false);
+    if (creationError != null) {
       if (context.mounted) {
-        showErrorDialog(context, e.message);
+        showErrorDialog(context, creationError.toString());
       }
-    } catch (e) {
+    } else {
       if (context.mounted) {
-        showErrorDialog(
-            context, 'Something went wrong. Please try again later.');
+        Navigator.of(context).pop();
       }
-    } finally {
-      _setLoading(false);
     }
   }
 
