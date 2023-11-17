@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
+import 'package:timetable_app/widgets/chat/chat_bubble.dart';
 
 class ChatMessages extends StatefulWidget {
   const ChatMessages({super.key, required this.chatRoom});
@@ -13,7 +14,6 @@ class ChatMessages extends StatefulWidget {
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-  late final RealtimeChannel _messagesChannel;
   final List<ChatMessage> _messages = [];
 
   get _reversedMessages => _messages.reversed.toList();
@@ -29,8 +29,9 @@ class _ChatMessagesState extends State<ChatMessages> {
     final List<dynamic> reponse = await kSupabase
         .from('ChatMessage')
         .select()
-        .eq('chat_room_id', widget.chatRoom.id);
-    // print(reponse);
+        .eq('chat_room_id', widget.chatRoom.id)
+        .order('sent_at', ascending: true)
+        .limit(200);
     final List<ChatMessage> messages =
         reponse.map((e) => ChatMessage.fromJson(e)).toList();
     setState(() {
@@ -38,23 +39,16 @@ class _ChatMessagesState extends State<ChatMessages> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _addInitialMessages();
-    // _messagesChannel =
-    // kSupabase.channel('ChatMessage:chat_room_id=eq.${widget.chatRoom.id}');
+  void _subscribeToMessages() {
     kSupabase.channel('schema-db-changes').on(
       RealtimeListenTypes.postgresChanges,
       ChannelFilter(
-          table: 'ChatMessage',
-          schema: 'public',
-          // filter: 'chat_room_id=eq.${widget.chatRoom.id}',
-          event: '*'),
+        table: 'ChatMessage',
+        schema: 'public',
+        event: 'INSERT',
+        filter: 'chat_room_id=eq.${widget.chatRoom.id}',
+      ),
       (payload, [ref]) {
-        // print('Received message');
-        // print(payload);
-        //{schema: public, table: ChatMessage, commit_timestamp: 2023-11-16T21:28:50.103Z, eventType: INSERT, new: {author_email: nokacper24@gmail.com, author_id: 98ec05ea-272f-48fb-ace6-e9ee6dbf4515, author_name: nokacper24, chat_room_id: 10, id: 20, message: test, sent_at: 2023-11-16T22:28:49.664107}, old: {}, errors: null}
         var newMessage = payload['new'];
         _addMessage(newMessage);
       },
@@ -62,21 +56,50 @@ class _ChatMessagesState extends State<ChatMessages> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _addInitialMessages();
+    _subscribeToMessages();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Expanded(
-          child: ListView.builder(
-        reverse: true,
-        itemCount: _reversedMessages.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(_reversedMessages[index].authorName),
-              subtitle: Text(_reversedMessages[index].message),
-            ),
-          );
-        },
-      )),
+    final currentUserId = kSupabase.auth.currentUser!.id;
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListView.builder(
+          reverse: true,
+          itemCount: _reversedMessages.length,
+          itemBuilder: (context, index) {
+            final currentMessage = _reversedMessages[index];
+            bool isMe = currentMessage.authorId == currentUserId;
+            ChatBubbleOrder order;
+            String currentAuthorId = currentMessage.authorId;
+            String? previousAuthorId = index + 1 < _reversedMessages.length
+                ? _reversedMessages[index + 1].authorId
+                : null;
+            String? nextAuthorId =
+                index - 1 >= 0 ? _reversedMessages[index - 1].authorId : null;
+            if (currentAuthorId != previousAuthorId &&
+                currentAuthorId != nextAuthorId) {
+              order = ChatBubbleOrder.firstAndLast;
+            } else if (currentAuthorId != previousAuthorId) {
+              order = ChatBubbleOrder.first;
+            } else if (currentAuthorId != nextAuthorId) {
+              order = ChatBubbleOrder.last;
+            } else {
+              order = ChatBubbleOrder.middle;
+            }
+
+            return ChatBubble(
+              message: currentMessage,
+              isMe: isMe,
+              order: order,
+            );
+          },
+        ),
+      ),
     );
   }
 }
