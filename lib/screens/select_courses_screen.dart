@@ -40,24 +40,32 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   void saveCourses() {
     addCourses();
     removeCourses();
+    // Force refresh data
+    ref.invalidate(myCoursesProvider);
   }
 
   // Adds all the selected courses to the database
   // If the course already exists in the database, it will be ignored
   void addCourses() {
-    var coursesToAdd = _selectedCourses
-        .map((course) => {
-              'course_id': course.id,
-            })
-        .toList();
-    db
-        .from('UserCourses')
-        .upsert(coursesToAdd, ignoreDuplicates: true)
-        .catchError(
-      (error) {
-        log(error.toString());
-      },
-    );
+    List<Course> coursesToAdd = [];
+    for (var course in _selectedCourses) {
+      if (!_preselectedCourses.contains(course)) {
+        coursesToAdd.add(course);
+      }
+    }
+    if (coursesToAdd.isNotEmpty) {
+      var coursesToAdd = _selectedCourses
+          .map((course) => {
+                'course_id': course.id,
+                'color': '0xff555555', // A default colour: grey
+              })
+          .toList();
+      db.from('UserCourses').upsert(coursesToAdd).catchError(
+        (error) {
+          log(error.toString());
+        },
+      );
+    }
   }
 
   // Remove the courses in the database that
@@ -139,6 +147,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
                   // Search by ID or name
                   // Where the course is not already selected
                   return !_selectedCourses.contains(option) &&
+                      !_preselectedCourses.contains(option) &&
                       (option.name
                               .toLowerCase()
                               .contains(textEditingValue.text.toLowerCase()) ||
