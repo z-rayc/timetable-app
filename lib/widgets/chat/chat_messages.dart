@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
+import 'package:timetable_app/widgets/chat/chat_bubble.dart';
 
 class ChatMessages extends StatefulWidget {
   const ChatMessages({super.key, required this.chatRoom});
@@ -63,16 +64,33 @@ class _ChatMessagesState extends State<ChatMessages> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserId = kSupabase.auth.currentUser!.id;
     return Expanded(
       child: ListView.builder(
         reverse: true,
         itemCount: _reversedMessages.length,
         itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(_reversedMessages[index].authorName),
-              subtitle: Text(_reversedMessages[index].message),
-            ),
+          final currentMessage = _reversedMessages[index];
+          bool isMe = currentMessage.authorId == currentUserId;
+          ChatBubbleOrder order;
+          String currentAuthorId = currentMessage.authorId;
+          String? previousAuthorId = index + 1 < _reversedMessages.length
+              ? _reversedMessages[index + 1].authorId
+              : null;
+          String? nextAuthorId =
+              index - 1 >= 0 ? _reversedMessages[index - 1].authorId : null;
+          if (currentAuthorId != previousAuthorId) {
+            order = ChatBubbleOrder.first;
+          } else if (currentAuthorId != nextAuthorId) {
+            order = ChatBubbleOrder.last;
+          } else {
+            order = ChatBubbleOrder.middle;
+          }
+
+          return ChatBubble(
+            message: currentMessage,
+            isMe: isMe,
+            order: order,
           );
         },
       ),
