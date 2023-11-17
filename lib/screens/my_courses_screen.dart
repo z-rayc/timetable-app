@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/course.dart';
+import 'package:timetable_app/models/user_course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 
@@ -23,24 +23,12 @@ class MyCoursesScreen extends ConsumerWidget {
             children: [
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: myCourses.asData?.value.courseUsers.length ?? 0,
+                itemCount: myCourses.asData?.value.userCourses.length ?? 0,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20),
-                    child: courseTile(
-                      Course(
-                        id: myCourses
-                                .asData?.value.courseUsers[index].course.id ??
-                            '0',
-                        name: myCourses
-                                .asData?.value.courseUsers[index].course.name ??
-                            '',
-                        nameAlias: myCourses.asData?.value.courseUsers[index]
-                                .course.nameAlias ??
-                            '',
-                        colour: Colors.red,
-                      ),
-                    ),
+                    child:
+                        courseTile(myCourses.asData!.value.userCourses[index]),
                   );
                 },
               ),
@@ -70,17 +58,17 @@ class MyCoursesScreen extends ConsumerWidget {
   }
 }
 
-ListTile courseTile(Course course) {
+ListTile courseTile(UserCourse cu) {
   return ListTile(
     leading: Container(
       height: 20,
       width: 20,
       decoration: BoxDecoration(
-        color: course.colour,
+        color: cu.color,
         borderRadius: BorderRadius.circular(5),
       ),
     ),
-    title: Text(course.nameAlias),
-    subtitle: Text(course.name),
+    title: Text(cu.course.id),
+    subtitle: Text(cu.course.nameAlias),
   );
 }
