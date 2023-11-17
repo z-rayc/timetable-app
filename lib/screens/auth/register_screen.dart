@@ -36,12 +36,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-
+      FocusScope.of(context).unfocus();
       _setLoading(true);
       try {
-        // response contains the user information, can be used in a provider
-        // ignore: unused_local_variable
-        final response = await kSupabase.auth
+        await kSupabase.auth
             .signUp(password: _enteredPassword, email: _enteredEmail)
             .timeout(kDefaultTimeout);
 
