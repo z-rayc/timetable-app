@@ -44,7 +44,9 @@ class AppThemes {
       ).copyWith(
         background: kOffWhite,
         secondary: const Color.fromRGBO(239, 239, 239, 1),
-        tertiary: Colors.white,
+        onSecondary: const Color.fromRGBO(0, 0, 0, 1),
+        tertiary: const Color.fromRGBO(215, 130, 255, 1),
+        onTertiary: const Color.fromRGBO(0, 0, 0, 1),
       ),
       textTheme: GoogleFonts.alataTextTheme(),
       listTileTheme: ListTileThemeData(

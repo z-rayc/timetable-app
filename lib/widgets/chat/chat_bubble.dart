@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/chat_message.dart';
 
 class ChatBubble extends StatelessWidget {
@@ -14,12 +15,74 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: ListTile(
-      title: Text(message.authorName),
-      subtitle: Text(message.message),
-      leading: Text(order.name),
-    ));
+    final double paddingRight = isMe ? 0.0 : 40.0;
+    final double paddingLeft = isMe ? 40.0 : 0.0;
+    double paddingTop = 0.0;
+    double paddingBottom = 0.0;
+    BorderRadius borderRadius = BorderRadius.circular(0);
+
+    if (order == ChatBubbleOrder.first) {
+      paddingTop = 10.0;
+      paddingBottom = 0.0;
+      borderRadius = const BorderRadius.only(
+        topLeft: Radius.circular(10.0),
+        topRight: Radius.circular(10.0),
+      );
+    } else if (order == ChatBubbleOrder.middle) {
+      paddingTop = 0.0;
+      paddingBottom = 0.0;
+      borderRadius = BorderRadius.circular(0);
+    } else if (order == ChatBubbleOrder.last) {
+      paddingTop = 0.0;
+      paddingBottom = 10.0;
+      borderRadius = const BorderRadius.only(
+        bottomRight: Radius.circular(10.0),
+        bottomLeft: Radius.circular(10.0),
+      );
+    } else if (order == ChatBubbleOrder.firstAndLast) {
+      paddingTop = 10.0;
+      paddingBottom = 10.0;
+      borderRadius = const BorderRadius.all(
+        Radius.circular(10.0),
+      );
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(
+        right: paddingRight,
+        left: paddingLeft,
+        top: 10,
+        bottom: 0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (order == ChatBubbleOrder.first ||
+              order == ChatBubbleOrder.firstAndLast)
+            Text(
+              message.authorName,
+              textAlign: isMe ? TextAlign.right : TextAlign.left,
+            ),
+          Container(
+            decoration: BoxDecoration(
+              color: isMe
+                  ? AppThemes.theme.colorScheme.primary
+                  : AppThemes.theme.colorScheme.tertiary,
+              borderRadius: borderRadius,
+            ),
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              message.message,
+              style: TextStyle(
+                color: isMe
+                    ? AppThemes.theme.colorScheme.onPrimary
+                    : AppThemes.theme.colorScheme.onTertiary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -27,4 +90,5 @@ enum ChatBubbleOrder {
   first,
   middle,
   last,
+  firstAndLast,
 }
