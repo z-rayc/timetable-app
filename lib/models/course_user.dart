@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course.dart';
 
 class CourseUser {
@@ -10,4 +11,12 @@ class CourseUser {
   final String id;
   final DateTime createdAt;
   final Course course;
+
+  static CourseUser fromjson(Map<String, dynamic> json) {
+    return CourseUser(
+      id: json['id'],
+      createdAt: DateTime.parse(json['created_at']),
+      course: Course.fromjson(json['Course']),
+    );
+  }
 }

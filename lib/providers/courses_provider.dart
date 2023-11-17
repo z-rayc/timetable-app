@@ -46,15 +46,7 @@ Future<List<CourseUser>> convertToCourseUserEvents(
 
   for (var event in events) {
     courseEvents.add(
-      CourseUser(
-          // convert from map<String, dynamic> to Course
-          course: Course(
-              id: event['Course']['id'],
-              name: event['Course']['name'],
-              nameAlias: event['Course']['nameAlias'],
-              colour: Colors.blue),
-          id: event['id'].toString(),
-          createdAt: DateTime.parse(event['created_at'])),
+      CourseUser.fromjson(event),
     );
   }
 
