@@ -28,7 +28,9 @@ class _ChatMessagesState extends State<ChatMessages> {
     final List<dynamic> reponse = await kSupabase
         .from('ChatMessage')
         .select()
-        .eq('chat_room_id', widget.chatRoom.id);
+        .eq('chat_room_id', widget.chatRoom.id)
+        .order('sent_at', ascending: true)
+        .limit(200);
     final List<ChatMessage> messages =
         reponse.map((e) => ChatMessage.fromJson(e)).toList();
     setState(() {
@@ -61,9 +63,8 @@ class _ChatMessagesState extends State<ChatMessages> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Expanded(
-          child: ListView.builder(
+    return Expanded(
+      child: ListView.builder(
         reverse: true,
         itemCount: _reversedMessages.length,
         itemBuilder: (context, index) {
@@ -74,7 +75,7 @@ class _ChatMessagesState extends State<ChatMessages> {
             ),
           );
         },
-      )),
+      ),
     );
   }
 }
