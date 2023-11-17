@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/course_event.dart';
-import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
 
 class SingleDayTimetable extends ConsumerWidget {
