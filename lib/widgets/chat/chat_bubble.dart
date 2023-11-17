@@ -15,62 +15,53 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double paddingRight = isMe ? 0.0 : 40.0;
-    final double paddingLeft = isMe ? 40.0 : 0.0;
-    double paddingTop = 0.0;
-    double paddingBottom = 0.0;
-    BorderRadius borderRadius = BorderRadius.circular(0);
+    double edgeTop = 0;
+    double edgeBottom = 0;
 
     if (order == ChatBubbleOrder.first) {
-      paddingTop = 10.0;
-      paddingBottom = 0.0;
-      borderRadius = const BorderRadius.only(
-        topLeft: Radius.circular(10.0),
-        topRight: Radius.circular(10.0),
-      );
+      edgeTop = 20;
     } else if (order == ChatBubbleOrder.middle) {
-      paddingTop = 0.0;
-      paddingBottom = 0.0;
-      borderRadius = BorderRadius.circular(0);
+      edgeTop = 2;
+      edgeBottom = 2;
     } else if (order == ChatBubbleOrder.last) {
-      paddingTop = 0.0;
-      paddingBottom = 10.0;
-      borderRadius = const BorderRadius.only(
-        bottomRight: Radius.circular(10.0),
-        bottomLeft: Radius.circular(10.0),
-      );
+      edgeBottom = 20;
     } else if (order == ChatBubbleOrder.firstAndLast) {
-      paddingTop = 10.0;
-      paddingBottom = 10.0;
-      borderRadius = const BorderRadius.all(
-        Radius.circular(10.0),
-      );
+      edgeTop = 20;
+      edgeBottom = 20;
     }
 
+    BorderRadius borderRadius = isMe
+        ? BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(edgeTop),
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(edgeBottom),
+          )
+        : BorderRadius.only(
+            topLeft: Radius.circular(edgeTop),
+            topRight: Radius.circular(20),
+            bottomLeft: Radius.circular(edgeBottom),
+            bottomRight: Radius.circular(20),
+          );
+
     return Padding(
-      padding: EdgeInsets.only(
-        right: paddingRight,
-        left: paddingLeft,
+      padding: const EdgeInsets.only(
         top: 2,
-        bottom: 0,
       ),
       child: Column(
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           if (order == ChatBubbleOrder.first ||
               order == ChatBubbleOrder.firstAndLast)
-            Row(
-              children: [
-                if (isMe) const Spacer(),
-                Text(
-                  message.authorName,
-                ),
-                if (!isMe) const Spacer(),
-              ],
-            ),
+            Text(message.authorName),
           Row(
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               if (isMe) const Spacer(),
               Flexible(
+                flex: 5,
                 child: Container(
                   decoration: BoxDecoration(
                     color: isMe
