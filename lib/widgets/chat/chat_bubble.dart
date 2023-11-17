@@ -50,29 +50,34 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BorderRadius borderRadius = _calculateBorder();
+    var isNewAuthor =
+        order == ChatBubbleOrder.first || order == ChatBubbleOrder.firstAndLast;
 
     return Padding(
       padding: EdgeInsets.only(
         bottom: 2,
-        top: (order == ChatBubbleOrder.first ||
-                order == ChatBubbleOrder.firstAndLast)
-            ? 14
-            : 0,
+        top: (isNewAuthor) ? 14 : 0,
       ),
       child: Column(
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          if (order == ChatBubbleOrder.first ||
-              order == ChatBubbleOrder.firstAndLast)
-            Text(message.authorName),
+          if (isNewAuthor)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 8,
+                right: 8,
+                bottom: 1,
+              ),
+              child: Text(message.authorName),
+            ),
           Row(
             mainAxisAlignment:
                 isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               if (isMe) const Spacer(),
               Flexible(
-                flex: 5,
+                flex: 4,
                 child: Container(
                   decoration: BoxDecoration(
                     color: isMe
@@ -80,7 +85,11 @@ class ChatBubble extends StatelessWidget {
                         : AppThemes.theme.colorScheme.tertiary,
                     borderRadius: borderRadius,
                   ),
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.only(
+                      left: isMe ? 16 : 8,
+                      right: isMe ? 8 : 16,
+                      top: 8,
+                      bottom: 8),
                   child: Text(
                     message.message,
                     style: TextStyle(
