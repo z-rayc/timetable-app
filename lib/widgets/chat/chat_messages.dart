@@ -55,11 +55,28 @@ class _ChatMessagesState extends State<ChatMessages> {
     ).subscribe();
   }
 
+  _updateLastRead() async {
+    await kSupabase
+        .from('ChatRoomMember')
+        .update({
+          'last_read': DateTime.now().toIso8601String(),
+        })
+        .eq('chatroom_id', widget.chatRoom.id)
+        .eq('user_id', kSupabase.auth.currentUser!.id);
+  }
+
   @override
   void initState() {
     super.initState();
     _addInitialMessages();
     _subscribeToMessages();
+    _updateLastRead();
+  }
+
+  @override
+  void dispose() {
+    _updateLastRead();
+    super.dispose();
   }
 
   @override
