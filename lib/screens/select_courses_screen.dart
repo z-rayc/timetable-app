@@ -97,7 +97,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     super.initState();
     var myCourses = ref.read(myCoursesProvider);
     var data =
-        myCourses.asData?.value.courseUsers.map((e) => e.course).toList() ?? [];
+        myCourses.asData?.value.userCourses.map((e) => e.course).toList() ?? [];
     _selectedCourses.addAll(data);
     _preselectedCourses = data;
     _addAllCourses();

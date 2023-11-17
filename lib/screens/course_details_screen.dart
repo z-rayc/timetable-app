@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
+import 'package:timetable_app/models/course_user.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
   const CourseDetailsScreen({super.key});
 
-  final course = const Course(
-    id: "IDATA2503",
-    name: "Mobile Applications",
-    nameAlias: "Mobile Applications",
-    colour: Colors.red,
-  );
-
   @override
   Widget build(BuildContext context) {
+    // TODO: Placeholder course
+    final e = UserCourse(
+      id: '1',
+      color: Colors.red,
+      createdAt: DateTime.parse('2021-10-01'),
+      course: const Course(
+          id: '1', name: 'Mobile Applications', nameAlias: 'Mobile'),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Course details"),
@@ -24,12 +27,12 @@ class CourseDetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         children: <Widget>[
           Text(
-            course.name,
+            e.course.name,
             style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   color: Colors.black,
                 ),
           ),
-          Text("Code: ${course.id}"),
+          Text("Code: ${e.id}"),
           const SizedBox(height: 50),
           Text(
             "Custom",
@@ -37,18 +40,18 @@ class CourseDetailsScreen extends StatelessWidget {
                   color: Colors.black,
                 ),
           ),
-          Text("Alias: ${course.nameAlias}"),
+          Text("Alias: ${e.course.nameAlias}"),
           Row(
             children: [
               Text(
-                "Colour: #${course.colour.value.toRadixString(16).substring(2)}",
+                "Colour: #${e.color.value.toRadixString(16).substring(2)}",
               ),
               const SizedBox(width: 5),
               Container(
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                    color: course.colour,
+                    color: e.color,
                     borderRadius: const BorderRadius.all(Radius.circular(5))),
               )
             ],

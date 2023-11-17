@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course.dart';
 
-class CourseUser {
-  const CourseUser({
+class UserCourse {
+  const UserCourse({
     required this.id,
     required this.createdAt,
     required this.course,
@@ -14,8 +14,8 @@ class CourseUser {
   final Course course;
   final Color color;
 
-  static CourseUser fromJson(Map<String, dynamic> json) {
-    return CourseUser(
+  static UserCourse fromJson(Map<String, dynamic> json) {
+    return UserCourse(
       id: json['id'].toString(),
       createdAt: DateTime.parse(json['created_at']),
       course: Course.fromJson(json['Course']),

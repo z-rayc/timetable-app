@@ -86,7 +86,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
               .read(myCoursesProvider)
               .asData
               ?.value
-              .courseUsers
+              .userCourses
               .map((e) => e.course.id)
               .toList();
 

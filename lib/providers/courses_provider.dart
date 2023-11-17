@@ -1,21 +1,18 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
-import 'package:timetable_app/models/course.dart';
-import 'package:timetable_app/models/course_user.dart';
+import 'package:timetable_app/models/user_course.dart';
 
 class UserCourses {
-  List<CourseUser> courseUsers = [];
+  List<UserCourse> userCourses = [];
 
-  UserCourses({required this.courseUsers});
+  UserCourses({required this.userCourses});
 
   UserCourses copyWith({
-    List<CourseUser>? courseUser,
+    List<UserCourse>? courses,
   }) {
     return UserCourses(
-      courseUsers: courseUser ?? courseUsers,
+      userCourses: courses ?? userCourses,
     );
   }
 
@@ -31,7 +28,7 @@ class MyCoursesNotifier extends AsyncNotifier<UserCourses> {
     List<Map<String, dynamic>> courses =
         await db.from('UserCourses').select('*, Course!course_id(*)');
 
-    return UserCourses(courseUsers: await convertToCourseUserEvents(courses));
+    return UserCourses(userCourses: await convertToUserCourseEvents(courses));
   }
 }
 
@@ -40,13 +37,13 @@ final myCoursesProvider =
   return MyCoursesNotifier();
 });
 
-Future<List<CourseUser>> convertToCourseUserEvents(
+Future<List<UserCourse>> convertToUserCourseEvents(
     List<Map<String, dynamic>> events) async {
-  List<CourseUser> courseEvents = [];
+  List<UserCourse> courseEvents = [];
 
   for (var event in events) {
     courseEvents.add(
-      CourseUser.fromJson(event),
+      UserCourse.fromJson(event),
     );
   }
 
