@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/chat_message.dart';
 
+const double kSmallRadius = 5;
+const double kBigRadius = 20;
+
 class ChatBubble extends StatelessWidget {
   const ChatBubble({
     super.key,
@@ -13,36 +16,40 @@ class ChatBubble extends StatelessWidget {
   final bool isMe;
   final ChatBubbleOrder order;
 
-  @override
-  Widget build(BuildContext context) {
-    double edgeTop = 0;
-    double edgeBottom = 0;
+  BorderRadius _calculateBorder() {
+    double edgeTop = kSmallRadius;
+    double edgeBottom = kSmallRadius;
 
     if (order == ChatBubbleOrder.first) {
-      edgeTop = 20;
-    } else if (order == ChatBubbleOrder.middle) {
-      edgeTop = 2;
-      edgeBottom = 2;
+      edgeTop = kBigRadius;
+      edgeBottom = kSmallRadius;
     } else if (order == ChatBubbleOrder.last) {
-      edgeBottom = 20;
+      edgeTop = kSmallRadius;
+      edgeBottom = kBigRadius;
     } else if (order == ChatBubbleOrder.firstAndLast) {
-      edgeTop = 20;
-      edgeBottom = 20;
+      edgeTop = kBigRadius;
+      edgeBottom = kBigRadius;
     }
+    //else if (order == ChatBubbleOrder.middle) {} // Default small radius
 
-    BorderRadius borderRadius = isMe
+    return isMe
         ? BorderRadius.only(
-            topLeft: Radius.circular(20),
+            topLeft: const Radius.circular(kBigRadius),
             topRight: Radius.circular(edgeTop),
-            bottomLeft: Radius.circular(20),
+            bottomLeft: const Radius.circular(kBigRadius),
             bottomRight: Radius.circular(edgeBottom),
           )
         : BorderRadius.only(
             topLeft: Radius.circular(edgeTop),
-            topRight: Radius.circular(20),
+            topRight: const Radius.circular(kBigRadius),
             bottomLeft: Radius.circular(edgeBottom),
-            bottomRight: Radius.circular(20),
+            bottomRight: const Radius.circular(kBigRadius),
           );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    BorderRadius borderRadius = _calculateBorder();
 
     return Padding(
       padding: const EdgeInsets.only(
