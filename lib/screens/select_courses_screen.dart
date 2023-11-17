@@ -80,6 +80,18 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     );
   }
 
+  void _addAllCourses() async {
+    // Get all courses from the DB and convert them to Course objects
+    final List<dynamic> response =
+        await db.from('Course').select('id, name, nameAlias');
+    log(response.toString().split('}')[0]);
+
+    final List<Course> courses =
+        response.map((e) => Course.fromJson(e)).toList();
+    log('All: ${courses.length}');
+    _allCourses.addAll(courses);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -88,25 +100,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
         myCourses.asData?.value.courseUsers.map((e) => e.course).toList() ?? [];
     _selectedCourses.addAll(data);
     _preselectedCourses = data;
-
-    // Get all courses from the DB and convert them to Course objects
-    db.from('Course').select().then(
-      (response) {
-        var courses = response.data as List<dynamic>;
-        return courses.map(
-          (course) {
-            _allCourses.add(
-              Course(
-                id: course['id'],
-                name: course['name'],
-                nameAlias: course['nameAlias'],
-                colour: course['color'],
-              ),
-            );
-          },
-        );
-      },
-    );
+    _addAllCourses();
   }
 
   late TextEditingController textEditingController;
@@ -221,11 +215,6 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 5),
-          const Text(
-            "Note: You can change these later",
-            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
           ElevatedButton(
