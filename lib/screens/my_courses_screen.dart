@@ -52,7 +52,7 @@ class MyCoursesScreen extends ConsumerWidget {
         );
       },
       loading: () {
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
