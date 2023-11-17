@@ -72,7 +72,7 @@ Future<List<CourseEvent>> convertToCourseEvents(
 
   for (var event in await events) {
     courseEvents.add(
-      CourseEvent.fromjson(event),
+      CourseEvent.fromJson(event),
     );
   }
 

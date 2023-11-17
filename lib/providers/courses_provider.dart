@@ -46,7 +46,7 @@ Future<List<CourseUser>> convertToCourseUserEvents(
 
   for (var event in events) {
     courseEvents.add(
-      CourseUser.fromjson(event),
+      CourseUser.fromJson(event),
     );
   }
 

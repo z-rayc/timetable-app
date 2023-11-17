@@ -13,7 +13,7 @@ class Staff {
     required this.url,
   });
 
-  static Staff fromjson(Map<String, dynamic> json) {
+  static Staff fromJson(Map<String, dynamic> json) {
     return Staff(
       id: json['id'],
       firstname: json['firstname'],

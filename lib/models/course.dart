@@ -13,7 +13,7 @@ class Course {
   final String nameAlias;
   final Color colour;
 
-  static Course fromjson(Map<String, dynamic> json) {
+  static Course fromJson(Map<String, dynamic> json) {
     return Course(
       id: json['id'],
       name: json['name'],

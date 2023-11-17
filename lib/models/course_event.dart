@@ -20,16 +20,16 @@ class CourseEvent extends Event {
   final Location location;
   final String teachingSummary;
 
-  static CourseEvent fromjson(Map<String, dynamic> json) {
+  static CourseEvent fromJson(Map<String, dynamic> json) {
     return CourseEvent(
       id: json['id'],
       startTime: DateTime.parse(json['start']),
       endTime: DateTime.parse(json['end']),
-      course: Course.fromjson(json['Course']),
+      course: Course.fromJson(json['Course']),
       staff: [
-        Staff.fromjson(json['Staff']),
+        Staff.fromJson(json['Staff']),
       ],
-      location: Location.fromjson(json['Room']),
+      location: Location.fromJson(json['Room']),
       teachingSummary: json['teaching_summary'] ?? '',
     );
   }
