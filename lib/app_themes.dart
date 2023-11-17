@@ -45,7 +45,7 @@ class AppThemes {
         background: kOffWhite,
         secondary: const Color.fromRGBO(239, 239, 239, 1),
         onSecondary: const Color.fromRGBO(0, 0, 0, 1),
-        tertiary: const Color.fromRGBO(215, 130, 255, 1),
+        tertiary: const Color.fromARGB(255, 174, 174, 174),
         onTertiary: const Color.fromRGBO(0, 0, 0, 1),
       ),
       textTheme: GoogleFonts.alataTextTheme(),

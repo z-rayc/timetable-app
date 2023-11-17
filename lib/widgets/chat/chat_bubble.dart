@@ -51,34 +51,46 @@ class ChatBubble extends StatelessWidget {
       padding: EdgeInsets.only(
         right: paddingRight,
         left: paddingLeft,
-        top: 10,
+        top: 2,
         bottom: 0,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (order == ChatBubbleOrder.first ||
               order == ChatBubbleOrder.firstAndLast)
-            Text(
-              message.authorName,
-              textAlign: isMe ? TextAlign.right : TextAlign.left,
+            Row(
+              children: [
+                if (isMe) const Spacer(),
+                Text(
+                  message.authorName,
+                ),
+                if (!isMe) const Spacer(),
+              ],
             ),
-          Container(
-            decoration: BoxDecoration(
-              color: isMe
-                  ? AppThemes.theme.colorScheme.primary
-                  : AppThemes.theme.colorScheme.tertiary,
-              borderRadius: borderRadius,
-            ),
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              message.message,
-              style: TextStyle(
-                color: isMe
-                    ? AppThemes.theme.colorScheme.onPrimary
-                    : AppThemes.theme.colorScheme.onTertiary,
+          Row(
+            children: [
+              if (isMe) const Spacer(),
+              Flexible(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isMe
+                        ? AppThemes.theme.colorScheme.primary
+                        : AppThemes.theme.colorScheme.tertiary,
+                    borderRadius: borderRadius,
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message.message,
+                    style: TextStyle(
+                      color: isMe
+                          ? AppThemes.theme.colorScheme.onPrimary
+                          : AppThemes.theme.colorScheme.onTertiary,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              if (!isMe) const Spacer(flex: 1),
+            ],
           ),
         ],
       ),
