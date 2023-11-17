@@ -81,7 +81,7 @@ class ChatBubble extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isMe
-                        ? AppThemes.theme.colorScheme.primary
+                        ? AppThemes.theme.colorScheme.secondary
                         : AppThemes.theme.colorScheme.tertiary,
                     borderRadius: borderRadius,
                   ),
@@ -91,7 +91,7 @@ class ChatBubble extends StatelessWidget {
                     message.message,
                     style: TextStyle(
                       color: isMe
-                          ? AppThemes.theme.colorScheme.onPrimary
+                          ? AppThemes.theme.colorScheme.onSecondary
                           : AppThemes.theme.colorScheme.onTertiary,
                     ),
                   ),

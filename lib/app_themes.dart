@@ -43,8 +43,8 @@ class AppThemes {
         seedColor: kThemeSeedColour,
       ).copyWith(
         background: kOffWhite,
-        secondary: const Color.fromRGBO(239, 239, 239, 1),
-        onSecondary: const Color.fromRGBO(0, 0, 0, 1),
+        secondary: Color.fromRGBO(156, 39, 176, 1),
+        onSecondary: Color.fromARGB(255, 255, 255, 255),
         tertiary: const Color.fromARGB(255, 174, 174, 174),
         onTertiary: const Color.fromRGBO(0, 0, 0, 1),
       ),
