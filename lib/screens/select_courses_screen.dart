@@ -84,11 +84,9 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     // Get all courses from the DB and convert them to Course objects
     final List<dynamic> response =
         await db.from('Course').select('id, name, nameAlias');
-    log(response.toString().split('}')[0]);
 
     final List<Course> courses =
         response.map((e) => Course.fromJson(e)).toList();
-    log('All: ${courses.length}');
     _allCourses.addAll(courses);
   }
 
