@@ -16,6 +16,8 @@ class _ChatMessagesState extends State<ChatMessages> {
   late final RealtimeChannel _messagesChannel;
   final List<ChatMessage> _messages = [];
 
+  get _reversedMessages => _messages.reversed.toList();
+
   void _addMessage(dynamic data) {
     ChatMessage message = ChatMessage.fromJson(data);
     setState(() {
@@ -23,16 +25,26 @@ class _ChatMessagesState extends State<ChatMessages> {
     });
   }
 
+  void _addInitialMessages() async {
+    final List<dynamic> reponse = await kSupabase
+        .from('ChatMessage')
+        .select()
+        .eq('chat_room_id', widget.chatRoom.id);
+    // print(reponse);
+    final List<ChatMessage> messages =
+        reponse.map((e) => ChatMessage.fromJson(e)).toList();
+    setState(() {
+      _messages.addAll(messages);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    _messagesChannel =
-        // kSupabase.channel('ChatMessage:chat_room_id=eq.${widget.chatRoom.id}');
-        kSupabase.channel('schema-db-changes');
-    print('Subscribing to messages channel');
-    print(_messagesChannel);
-    print(_messagesChannel.presenceState());
-    _messagesChannel.on(
+    _addInitialMessages();
+    // _messagesChannel =
+    // kSupabase.channel('ChatMessage:chat_room_id=eq.${widget.chatRoom.id}');
+    kSupabase.channel('schema-db-changes').on(
       RealtimeListenTypes.postgresChanges,
       ChannelFilter(
           table: 'ChatMessage',
@@ -40,8 +52,8 @@ class _ChatMessagesState extends State<ChatMessages> {
           // filter: 'chat_room_id=eq.${widget.chatRoom.id}',
           event: '*'),
       (payload, [ref]) {
-        print('Received message');
-        print(payload);
+        // print('Received message');
+        // print(payload);
         //{schema: public, table: ChatMessage, commit_timestamp: 2023-11-16T21:28:50.103Z, eventType: INSERT, new: {author_email: nokacper24@gmail.com, author_id: 98ec05ea-272f-48fb-ace6-e9ee6dbf4515, author_name: nokacper24, chat_room_id: 10, id: 20, message: test, sent_at: 2023-11-16T22:28:49.664107}, old: {}, errors: null}
         var newMessage = payload['new'];
         _addMessage(newMessage);
@@ -55,11 +67,13 @@ class _ChatMessagesState extends State<ChatMessages> {
       child: Expanded(
           child: ListView.builder(
         reverse: true,
-        itemCount: _messages.length,
+        itemCount: _reversedMessages.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_messages[index].authorName),
-            subtitle: Text(_messages[index].message),
+          return Card(
+            child: ListTile(
+              title: Text(_reversedMessages[index].authorName),
+              subtitle: Text(_reversedMessages[index].message),
+            ),
           );
         },
       )),
