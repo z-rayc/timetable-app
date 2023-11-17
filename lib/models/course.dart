@@ -16,4 +16,9 @@ class Course {
       nameAlias: json['nameAlias'],
     );
   }
+
+  @override
+  toString() {
+    return name;
+  }
 }
