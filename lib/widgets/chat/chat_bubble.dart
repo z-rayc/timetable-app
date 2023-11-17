@@ -52,8 +52,12 @@ class ChatBubble extends StatelessWidget {
     BorderRadius borderRadius = _calculateBorder();
 
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 2,
+      padding: EdgeInsets.only(
+        bottom: 2,
+        top: (order == ChatBubbleOrder.first ||
+                order == ChatBubbleOrder.firstAndLast)
+            ? 14
+            : 0,
       ),
       child: Column(
         crossAxisAlignment:
