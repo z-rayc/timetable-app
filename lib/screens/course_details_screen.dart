@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
-import 'package:timetable_app/models/course_user.dart';
+import 'package:timetable_app/models/user_course.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
   const CourseDetailsScreen({super.key});
