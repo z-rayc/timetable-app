@@ -6,6 +6,7 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
 
 class SelectCoursesScreen extends ConsumerStatefulWidget {
@@ -42,6 +43,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     removeCourses();
     // Force refresh data
     ref.invalidate(myCoursesProvider);
+    ref.invalidate(dailyTimetableProvider);
   }
 
   // Adds all the selected courses to the database
