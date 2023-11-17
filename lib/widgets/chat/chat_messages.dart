@@ -13,7 +13,6 @@ class ChatMessages extends StatefulWidget {
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-  late final RealtimeChannel _messagesChannel;
   final List<ChatMessage> _messages = [];
 
   get _reversedMessages => _messages.reversed.toList();
@@ -30,7 +29,6 @@ class _ChatMessagesState extends State<ChatMessages> {
         .from('ChatMessage')
         .select()
         .eq('chat_room_id', widget.chatRoom.id);
-    // print(reponse);
     final List<ChatMessage> messages =
         reponse.map((e) => ChatMessage.fromJson(e)).toList();
     setState(() {
@@ -38,19 +36,27 @@ class _ChatMessagesState extends State<ChatMessages> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _addInitialMessages();
-
+  void _subscribeToMessages() {
     kSupabase.channel('schema-db-changes').on(
       RealtimeListenTypes.postgresChanges,
-      ChannelFilter(table: 'ChatMessage', schema: 'public', event: '*'),
+      ChannelFilter(
+        table: 'ChatMessage',
+        schema: 'public',
+        event: 'INSERT',
+        filter: 'chat_room_id=eq.${widget.chatRoom.id}',
+      ),
       (payload, [ref]) {
         var newMessage = payload['new'];
         _addMessage(newMessage);
       },
     ).subscribe();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _addInitialMessages();
+    _subscribeToMessages();
   }
 
   @override
