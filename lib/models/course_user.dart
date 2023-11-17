@@ -14,7 +14,7 @@ class CourseUser {
 
   static CourseUser fromjson(Map<String, dynamic> json) {
     return CourseUser(
-      id: json['id'],
+      id: json['id'].toString(),
       createdAt: DateTime.parse(json['created_at']),
       course: Course.fromjson(json['Course']),
     );

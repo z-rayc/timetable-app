@@ -66,39 +66,37 @@ class _ChatMessagesState extends State<ChatMessages> {
   Widget build(BuildContext context) {
     final currentUserId = kSupabase.auth.currentUser!.id;
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView.builder(
-          reverse: true,
-          itemCount: _reversedMessages.length,
-          itemBuilder: (context, index) {
-            final currentMessage = _reversedMessages[index];
-            bool isMe = currentMessage.authorId == currentUserId;
-            ChatBubbleOrder order;
-            String currentAuthorId = currentMessage.authorId;
-            String? previousAuthorId = index + 1 < _reversedMessages.length
-                ? _reversedMessages[index + 1].authorId
-                : null;
-            String? nextAuthorId =
-                index - 1 >= 0 ? _reversedMessages[index - 1].authorId : null;
-            if (currentAuthorId != previousAuthorId &&
-                currentAuthorId != nextAuthorId) {
-              order = ChatBubbleOrder.firstAndLast;
-            } else if (currentAuthorId != previousAuthorId) {
-              order = ChatBubbleOrder.first;
-            } else if (currentAuthorId != nextAuthorId) {
-              order = ChatBubbleOrder.last;
-            } else {
-              order = ChatBubbleOrder.middle;
-            }
+      child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 20, left: 10, right: 10),
+        reverse: true,
+        itemCount: _reversedMessages.length,
+        itemBuilder: (context, index) {
+          final currentMessage = _reversedMessages[index];
+          bool isMe = currentMessage.authorId == currentUserId;
+          ChatBubbleOrder order;
+          String currentAuthorId = currentMessage.authorId;
+          String? previousAuthorId = index + 1 < _reversedMessages.length
+              ? _reversedMessages[index + 1].authorId
+              : null;
+          String? nextAuthorId =
+              index - 1 >= 0 ? _reversedMessages[index - 1].authorId : null;
+          if (currentAuthorId != previousAuthorId &&
+              currentAuthorId != nextAuthorId) {
+            order = ChatBubbleOrder.firstAndLast;
+          } else if (currentAuthorId != previousAuthorId) {
+            order = ChatBubbleOrder.first;
+          } else if (currentAuthorId != nextAuthorId) {
+            order = ChatBubbleOrder.last;
+          } else {
+            order = ChatBubbleOrder.middle;
+          }
 
-            return ChatBubble(
-              message: currentMessage,
-              isMe: isMe,
-              order: order,
-            );
-          },
-        ),
+          return ChatBubble(
+            message: currentMessage,
+            isMe: isMe,
+            order: order,
+          );
+        },
       ),
     );
   }
