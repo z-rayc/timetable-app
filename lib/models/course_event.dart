@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/staff.dart';
