@@ -25,7 +25,10 @@ class EventDetailsScreen extends StatelessWidget {
             .copyWith(color: Colors.black),
       ));
       content.add(Text("Code: ${newEvent.course.id}"));
-      content.add(Text("Staff: ${newEvent.staff.join(", ")}"));
+      content.add(const Text("Staff: "));
+      for (var staff in newEvent.staff) {
+        content.add(Text("  ${staff.shortname}"));
+      }
       content.add(Text(
           "Location: ${newEvent.location.roomName}, ${newEvent.location.buildingName}"));
       content.add(InkWell(

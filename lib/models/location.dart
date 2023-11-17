@@ -8,4 +8,12 @@ class Location {
   final String roomName;
   final String buildingName;
   final Uri link;
+
+  static Location fromjson(Map<String, dynamic> json) {
+    return Location(
+      roomName: json['roomacronym'],
+      buildingName: json['buildingname'],
+      link: Uri.parse(json['roomurl']),
+    );
+  }
 }

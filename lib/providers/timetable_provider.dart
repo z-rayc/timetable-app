@@ -72,24 +72,7 @@ Future<List<CourseEvent>> convertToCourseEvents(
 
   for (var event in await events) {
     courseEvents.add(
-      CourseEvent(
-          // convert from map<String, dynamic> to Course
-          course: Course(
-              id: event['Course']['id'],
-              name: event['Course']['name'],
-              nameAlias: event['Course']['nameAlias'],
-              colour: Colors.blue),
-          startTime: DateTime.parse(event['start']),
-          endTime: DateTime.parse(event['end']),
-          staff: [event['Staff']['shortname']],
-          location: Location(
-            roomName: event['Room']['roomacronym'] ?? '',
-            buildingName: event['Room']['buildingname'] ?? '',
-            link: //parse a text to URI
-                Uri.parse(event['Room']['roomurl'] ?? ''),
-          ),
-          id: event['id'],
-          teachingSummary: event['teaching_summary'] ?? ''),
+      CourseEvent.fromjson(event),
     );
   }
 
