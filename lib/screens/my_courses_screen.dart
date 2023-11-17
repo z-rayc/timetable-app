@@ -18,43 +18,41 @@ class MyCoursesScreen extends ConsumerWidget {
           appBar: AppBar(
             title: const Text('My courses'),
           ),
-          body: SafeArea(
-            child: ListView(
-              padding: const EdgeInsets.all(20),
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: myCourses.asData?.value.courseUsers.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: courseTile(
-                        Course(
-                          id: myCourses
-                                  .asData?.value.courseUsers[index].course.id ??
-                              '0',
-                          name: myCourses.asData?.value.courseUsers[index]
-                                  .course.name ??
-                              '',
-                          nameAlias: myCourses.asData?.value.courseUsers[index]
-                                  .course.nameAlias ??
-                              '',
-                          colour: Colors.red,
-                        ),
+          body: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: myCourses.asData?.value.courseUsers.length ?? 0,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: courseTile(
+                      Course(
+                        id: myCourses
+                                .asData?.value.courseUsers[index].course.id ??
+                            '0',
+                        name: myCourses
+                                .asData?.value.courseUsers[index].course.name ??
+                            '',
+                        nameAlias: myCourses.asData?.value.courseUsers[index]
+                                .course.nameAlias ??
+                            '',
+                        colour: Colors.red,
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    pushNewScreen(context, NavState.selectCourses);
-                  },
-                  style: AppThemes.entryButtonTheme,
-                  child: const Text('Edit'),
-                ),
-              ],
-            ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  pushNewScreen(context, NavState.selectCourses);
+                },
+                style: AppThemes.entryButtonTheme,
+                child: const Text('Edit'),
+              ),
+            ],
           ),
         );
       },

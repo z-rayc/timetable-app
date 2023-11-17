@@ -106,188 +106,188 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            const CTitle('Create custom event'),
-            const SizedBox(height: 30),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CSubtitle('Title'),
-                  const SizedBox(height: 10),
-                  ShadowedTextFormField(
-                    child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme.copyWith(
-                        hintText: 'Title',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a title.';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onSaved: (newValue) {
-                        _enteredTitle = newValue!;
-                      },
+      appBar: AppBar(
+        title: const Text('Create custom event'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CSubtitle('Title'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: 'Title',
                     ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter a title.';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (newValue) {
+                      _enteredTitle = newValue!;
+                    },
                   ),
-                  const SizedBox(height: 30),
-                  const CSubtitle('Description'),
-                  const SizedBox(height: 10),
-                  ShadowedTextFormField(
-                    child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme.copyWith(
-                        hintText: 'Description',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a description.';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onSaved: (newValue) {
-                        _enteredDescription = newValue!;
-                      },
+                ),
+                const SizedBox(height: 30),
+                const CSubtitle('Description'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: 'Description',
                     ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter a description.';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (newValue) {
+                      _enteredDescription = newValue!;
+                    },
                   ),
-                  const SizedBox(height: 30),
-                  const CSubtitle('Start time'),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () => {
-                          showDateTimePicker(context: context).then((value) {
-                            if (value != null) {
-                              setState(() {
-                                _enteredStartTime = value;
-                              });
-                            }
-                          })
-                        },
-                        icon: const Icon(Icons.calendar_today),
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white,
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            AppThemes.theme.primaryColor,
-                          ),
+                ),
+                const SizedBox(height: 30),
+                const CSubtitle('Start time'),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => {
+                        showDateTimePicker(context: context).then((value) {
+                          if (value != null) {
+                            setState(() {
+                              _enteredStartTime = value;
+                            });
+                          }
+                        })
+                      },
+                      icon: const Icon(Icons.calendar_today),
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                          Colors.white,
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          AppThemes.theme.primaryColor,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Text(Time(_enteredStartTime).dayMonthYearHourMinute)
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  const CSubtitle('End time'),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () => {
-                          showDateTimePicker(context: context).then((value) {
-                            if (value != null) {
-                              setState(() {
-                                _enteredEndTime = value;
-                              });
-                            }
-                          })
-                        },
-                        icon: const Icon(Icons.calendar_today),
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white,
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            AppThemes.theme.primaryColor,
-                          ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(Time(_enteredStartTime).dayMonthYearHourMinute)
+                  ],
+                ),
+                const SizedBox(height: 30),
+                const CSubtitle('End time'),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => {
+                        showDateTimePicker(context: context).then((value) {
+                          if (value != null) {
+                            setState(() {
+                              _enteredEndTime = value;
+                            });
+                          }
+                        })
+                      },
+                      icon: const Icon(Icons.calendar_today),
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                          Colors.white,
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          AppThemes.theme.primaryColor,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Text(Time(_enteredEndTime).dayMonthYearHourMinute)
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  const CSubtitle('Room'),
-                  const SizedBox(height: 10),
-                  ShadowedTextFormField(
-                    child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme.copyWith(
-                        hintText: 'Room name',
-                      ),
-                      onSaved: (newValue) {
-                        if (newValue != null) {
-                          _enteredRoomName = newValue;
-                        }
-                      },
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  const CSubtitle('Building'),
-                  const SizedBox(height: 10),
-                  ShadowedTextFormField(
-                    child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme.copyWith(
-                        hintText: 'Building',
-                      ),
-                      onSaved: (newValue) {
-                        if (newValue != null) {
-                          _enteredBuildingName = newValue;
-                        }
-                      },
+                    const SizedBox(width: 10),
+                    Text(Time(_enteredEndTime).dayMonthYearHourMinute)
+                  ],
+                ),
+                const SizedBox(height: 30),
+                const CSubtitle('Room'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: 'Room name',
                     ),
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        _enteredRoomName = newValue;
+                      }
+                    },
                   ),
-                  const SizedBox(height: 30),
-                  const CSubtitle('Link'),
-                  const SizedBox(height: 10),
-                  ShadowedTextFormField(
-                    child: TextFormField(
-                      decoration: AppThemes.entryFieldTheme.copyWith(
-                        hintText: 'https://use.mazemap.com',
-                      ),
-                      validator: (value) {
-                        var urlPattern =
-                            r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
-                        var match = RegExp(urlPattern, caseSensitive: false);
-                        if (value != null &&
-                            value.trim().isNotEmpty &&
-                            !match.hasMatch(value)) {
-                          return 'Please enter a valid link.';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onSaved: (newValue) {
-                        if (newValue != null) {
-                          _enteredLink = Uri.parse(newValue);
-                        }
-                      },
+                ),
+                const SizedBox(height: 30),
+                const CSubtitle('Building'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: 'Building',
                     ),
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        _enteredBuildingName = newValue;
+                      }
+                    },
                   ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                        onPressed: _loading ? null : _submitForm,
-                        style: AppThemes.entryButtonTheme,
-                        child: _loading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : const Text('Confirm')),
+                ),
+                const SizedBox(height: 30),
+                const CSubtitle('Link'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: 'https://use.mazemap.com',
+                    ),
+                    validator: (value) {
+                      var urlPattern =
+                          r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
+                      var match = RegExp(urlPattern, caseSensitive: false);
+                      if (value != null &&
+                          value.trim().isNotEmpty &&
+                          !match.hasMatch(value)) {
+                        return 'Please enter a valid link.';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        _enteredLink = Uri.parse(newValue);
+                      }
+                    },
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _loading ? null : _submitForm,
+                    style: AppThemes.entryButtonTheme,
+                    child: _loading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text('Confirm'),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
