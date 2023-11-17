@@ -54,7 +54,7 @@ class SingleDayTimetable extends ConsumerWidget {
     }, error: (Object error, StackTrace stackTrace) {
       return SingleChildScrollView(child: Text("Error: $error, $stackTrace"));
     }, loading: () {
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }
