@@ -16,6 +16,13 @@ class _ChatMessagesState extends State<ChatMessages> {
   late final RealtimeChannel _messagesChannel;
   final List<ChatMessage> _messages = [];
 
+  void _addMessage(dynamic data) {
+    ChatMessage message = ChatMessage.fromJson(data);
+    setState(() {
+      _messages.add(message);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -37,19 +44,7 @@ class _ChatMessagesState extends State<ChatMessages> {
         print(payload);
         //{schema: public, table: ChatMessage, commit_timestamp: 2023-11-16T21:28:50.103Z, eventType: INSERT, new: {author_email: nokacper24@gmail.com, author_id: 98ec05ea-272f-48fb-ace6-e9ee6dbf4515, author_name: nokacper24, chat_room_id: 10, id: 20, message: test, sent_at: 2023-11-16T22:28:49.664107}, old: {}, errors: null}
         var newMessage = payload['new'];
-        setState(() {
-          _messages.add(
-            ChatMessage(
-              id: newMessage['id'].toString(),
-              authorId: newMessage['author_id'].toString(),
-              authorName: newMessage['author_name'],
-              authorEmail: newMessage['author_email'],
-              chatRoomId: newMessage['chat_room_id'].toString(),
-              message: newMessage['message'],
-              sentAt: DateTime.parse(newMessage['sent_at']),
-            ),
-          );
-        });
+        _addMessage(newMessage);
       },
     ).subscribe();
   }
