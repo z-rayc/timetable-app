@@ -10,7 +10,8 @@ class CourseEventClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: event.course.colour,
+      color:
+          const Color.fromARGB(255, 255, 166, 196), // TODO: Get proper colour
       margin: const EdgeInsets.fromLTRB(40, 8, 40, 2),
       child: InkWell(
         onTap: () {
@@ -22,13 +23,15 @@ class CourseEventClass extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: event.course.colour,
+            color: const Color.fromARGB(
+                255, 255, 166, 196), // TODO: Get proper colour,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
-              tileColor: event.course.colour,
+              tileColor: const Color.fromARGB(
+                  255, 255, 166, 196), // TODO: Get proper colour,
               title: Text(event.course.name),
               subtitle: Text(event.course.id),
               trailing: hourMinute(event.startTime, event.endTime),
