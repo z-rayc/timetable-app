@@ -16,10 +16,13 @@ class ChatRoomTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final unread = ref.watch(unreadMessagesProvider);
+    final unreadMessage = ref.watch(unreadMessagesProvider);
     bool hasUnread = false;
-    if (unread.value != null && unread.value!.containsKey(chatRoom)) {
-      hasUnread = unread.value![chatRoom]!;
+    String lastMessage = 'No messages yet';
+    if (unreadMessage.value != null &&
+        unreadMessage.value!.containsKey(chatRoom.id)) {
+      hasUnread = unreadMessage.value![chatRoom.id]!.isUnRead;
+      lastMessage = unreadMessage.value![chatRoom.id]!.lastMessage;
     }
     return Card(
       child: ListTile(
@@ -29,7 +32,11 @@ class ChatRoomTile extends ConsumerWidget {
             child: Icon(Icons.chat),
           ),
           title: Text(chatRoom.name),
-          subtitle: const Text('Last message'),
+          subtitle: Text(
+            lastMessage,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           trailing: hasUnread
               ? const CircleAvatar(
                   backgroundColor: Colors.red,
