@@ -85,11 +85,8 @@ class ChatBubble extends StatelessWidget {
                         : AppThemes.theme.colorScheme.tertiary,
                     borderRadius: borderRadius,
                   ),
-                  padding: EdgeInsets.only(
-                      left: isMe ? 16 : 8,
-                      right: isMe ? 8 : 16,
-                      top: 8,
-                      bottom: 8),
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 8, bottom: 8),
                   child: Text(
                     message.message,
                     style: TextStyle(
