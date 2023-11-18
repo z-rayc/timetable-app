@@ -34,16 +34,19 @@ class EventDetailsScreen extends StatelessWidget {
       content.add(Row(
         children: [
           const Text("Link: "),
-          InkWell(
-            borderRadius: BorderRadius.circular(10),
-            splashColor: Colors.blue,
-            child: Text(
-              style: const TextStyle(
-                color: Colors.blue,
+          Flexible(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              splashColor: Colors.blue,
+              child: Text(
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
+                overflow: TextOverflow.ellipsis,
+                "${newEvent.location.link}",
               ),
-              "${newEvent.location.link}",
+              onTap: () => launchUrl(newEvent.location.link),
             ),
-            onTap: () => launchUrl(newEvent.location.link),
           )
         ],
       ));
