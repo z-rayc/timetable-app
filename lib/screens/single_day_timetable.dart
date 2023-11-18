@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
 
@@ -20,6 +21,7 @@ class SingleDayTimetable extends ConsumerWidget {
               const SizedBox(height: 20),
               ElevatedButton.icon(
                   onPressed: () {
+                    ref.invalidate(myCoursesProvider);
                     ref.invalidate(dailyTimetableProvider);
 
                     ScaffoldMessenger.of(context).showSnackBar(

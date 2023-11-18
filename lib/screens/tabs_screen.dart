@@ -99,6 +99,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
               log('Edge function response: ${v.data}');
             });
           }
+          ref.invalidate(myCoursesProvider);
           ref.invalidate(dailyTimetableProvider);
           //
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
