@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
+import 'package:timetable_app/widgets/texts/subtitle.dart';
 
 class CourseEventClass extends StatelessWidget {
   const CourseEventClass({Key? key, required this.event}) : super(key: key);
@@ -28,13 +29,18 @@ class CourseEventClass extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              tileColor: const Color.fromARGB(
-                  255, 255, 166, 196), // TODO: Get proper colour,
-              title: Text(event.course.name),
-              subtitle: Text(event.course.id),
-              trailing: hourMinute(event.startTime, event.endTime),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CSubtitle(event.course.nameAlias),
+                const SizedBox(height: 5),
+                Text(event.course.id),
+                hourMinute(event.startTime, event.endTime),
+              ],
             ),
           ),
         ),
