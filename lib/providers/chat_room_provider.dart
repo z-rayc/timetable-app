@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
@@ -9,6 +10,34 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
   @override
   FutureOr<List<ChatRoom>> build() async {
     return _fetchChatRooms();
+  }
+
+  void updateLastRead(String chatroomId) async {
+    final updatedRow = await kSupabase
+        .from('ChatRoomMember')
+        .update({
+          'last_read': DateTime.now().toIso8601String(),
+        })
+        .eq('chatroom_id', chatroomId)
+        .eq('user_id', kSupabase.auth.currentUser!.id)
+        .select()
+        .single();
+    final String returnedChatRoomId = updatedRow['chatroom_id'].toString();
+    final DateTime newLastRead = DateTime.parse(updatedRow['last_read']);
+
+    final currentChatRooms = state.value!;
+    ChatRoom oldChat =
+        currentChatRooms.firstWhere((r) => r.id == returnedChatRoomId);
+    ChatRoom newChat = ChatRoom(
+      id: oldChat.id,
+      name: oldChat.name,
+      lastRead: newLastRead,
+    );
+    state = AsyncValue.data(
+      currentChatRooms
+          .map((r) => r.id == returnedChatRoomId ? newChat : r)
+          .toList(),
+    );
   }
 
   Future<ChatRoomCreationError?> addChatRoom(
@@ -76,31 +105,46 @@ class LastMessage {
 }
 
 class UnreadMessagesProvider extends AsyncNotifier<Map<String, LastMessage>> {
-  // List<ChatRoom> _getChatRooms() {
-  //   var currentChats = ref.watch(chatRoomProvider);
-  //   if (currentChats.hasValue && currentChats.value != null) {
-  //     return currentChats.value!;
-  //   } else {
-  //     return [];
-  //   }
-  // }
+  void _subscribeToChatRooms() {
+    final chatRooms = ref.read(chatRoomProvider).value;
+    if (chatRooms == null) {
+      return;
+    }
 
-  // void _subscribeToChatRooms() {
-  //   final chatIds = _getChatRooms().map((r) => r.id).toList();
+    final List<String> chatIds = chatRooms.map((r) => r.id).toList();
 
-  //   kSupabase.channel('schema-db-changes').on(
-  //     RealtimeListenTypes.postgresChanges,
-  //     ChannelFilter(
-  //       table: 'ChatMessage',
-  //       schema: 'public',
-  //       event: 'INSERT',
-  //       filter: 'chat_room_id=in.(${chatIds.join(',')})',
-  //     ),
-  //     (payload, [ref]) {
-  //       var newMessage = payload['new'];
-  //     },
-  //   ).subscribe();
-  // }
+    // final resp = kSupabase
+    //     .from('ChatMessage')
+    //     .select()
+    //     .filter('chat_room_id', 'in', chatIds)
+    //     .then((value) => print(value));
+
+    final String filter = 'chat_room_id=in.(${chatIds.join(',')})';
+
+    kSupabase.channel('new-changes').on(
+      RealtimeListenTypes.postgresChanges,
+      ChannelFilter(
+        table: 'ChatMessage',
+        schema: 'public',
+        event: 'INSERT',
+        filter: filter,
+      ),
+      (payload, [reference]) {
+        List<ChatRoom> currentChatRooms = ref.read(chatRoomProvider).value!;
+        ChatMessage message = ChatMessage.fromJson(payload['new']);
+        DateTime lastRead = currentChatRooms
+            .firstWhere((r) => r.id == message.chatRoomId)
+            .lastRead;
+        final bool isUnread = lastRead.isBefore(message.sentAt) &&
+            message.authorId != kSupabase.auth.currentUser!.id;
+
+        final currentdata = state.value ?? {};
+        currentdata[message.chatRoomId] =
+            LastMessage(message.message, isUnread);
+        state = AsyncValue.data(currentdata);
+      },
+    ).subscribe();
+  }
 
   @override
   FutureOr<Map<String, LastMessage>> build() async {
@@ -130,6 +174,7 @@ class UnreadMessagesProvider extends AsyncNotifier<Map<String, LastMessage>> {
           LastMessage(message.message, isUnread);
     }
 
+    _subscribeToChatRooms();
     return lastMessagesMap;
   }
 }

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
+import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/widgets/chat/chat_bubble.dart';
 
-class ChatMessages extends StatefulWidget {
+class ChatMessages extends ConsumerStatefulWidget {
   const ChatMessages({super.key, required this.chatRoom});
   final ChatRoom chatRoom;
 
   @override
-  State<ChatMessages> createState() => _ChatMessagesState();
+  ConsumerState<ChatMessages> createState() => _ChatMessagesState();
 }
 
-class _ChatMessagesState extends State<ChatMessages> {
+class _ChatMessagesState extends ConsumerState<ChatMessages> {
   final List<ChatMessage> _messages = [];
+  final RealtimeChannel _channel = kSupabase.channel('schema-db-changes');
 
   get _reversedMessages => _messages.reversed.toList();
 
@@ -40,7 +43,7 @@ class _ChatMessagesState extends State<ChatMessages> {
   }
 
   void _subscribeToMessages() {
-    kSupabase.channel('schema-db-changes').on(
+    _channel.on(
       RealtimeListenTypes.postgresChanges,
       ChannelFilter(
         table: 'ChatMessage',
@@ -55,28 +58,19 @@ class _ChatMessagesState extends State<ChatMessages> {
     ).subscribe();
   }
 
-  _updateLastRead() async {
-    await kSupabase
-        .from('ChatRoomMember')
-        .update({
-          'last_read': DateTime.now().toIso8601String(),
-        })
-        .eq('chatroom_id', widget.chatRoom.id)
-        .eq('user_id', kSupabase.auth.currentUser!.id);
-  }
-
   @override
   void initState() {
     super.initState();
     _addInitialMessages();
     _subscribeToMessages();
-    _updateLastRead();
+    ref.read(chatRoomProvider.notifier).updateLastRead(widget.chatRoom.id);
   }
 
   @override
-  void dispose() {
-    _updateLastRead();
-    super.dispose();
+  void deactivate() {
+    ref.read(chatRoomProvider.notifier).updateLastRead(widget.chatRoom.id);
+    kSupabase.removeChannel(_channel);
+    super.deactivate();
   }
 
   @override
