@@ -13,7 +13,7 @@ class Course {
     return Course(
       id: json['id'],
       name: json['name'],
-      nameAlias: json['nameAlias'],
+      nameAlias: json['nameAlias'], // TODO: Move this to UserCourse
     );
   }
 
