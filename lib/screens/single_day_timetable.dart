@@ -45,6 +45,7 @@ class SingleDayTimetable extends ConsumerWidget {
         });
         return Scaffold(
           body: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: timetable.asData!.value.courseEvents.length,
             itemBuilder: (context, index) {
               var courseEvent = timetable.asData!.value.courseEvents[index];
