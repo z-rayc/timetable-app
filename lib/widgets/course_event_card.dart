@@ -3,7 +3,7 @@ import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
 
 class CourseEventClass extends StatelessWidget {
-  const CourseEventClass({Key? key, required this.event}) : super(key: key);
+  const CourseEventClass({super.key, required this.event});
 
   final CourseEvent event;
 
