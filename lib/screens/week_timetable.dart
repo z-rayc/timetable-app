@@ -15,9 +15,6 @@ class WeekTimeTable extends ConsumerStatefulWidget {
 }
 
 class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
-  final double hourItemLength = 100;
-  final double dayItemLength = 300;
-
   late LinkedScrollControllerGroup _horizontalControllers;
   late LinkedScrollControllerGroup _verticalControllers;
 
@@ -98,18 +95,14 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
 
     return timetable.when(data: (DailyTimetable data) {
       var events = timetable.asData!.value.courseEvents;
-      
-      //Sort events by start time and date (earliest first)
-      events.sort((a, b) {
-        if (a.startTime.isBefore(b.startTime)) {
-          return -1;
-        } else if (a.startTime.isAfter(b.startTime)) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-      
+      //Make a hashmap of events with the Datetime weekday as the key
+      var eventMap = {
+        for (int date = DateTime.monday; date < DateTime.sunday; date++)
+          date: events
+              .where((element) => element.startTime.weekday == date)
+              .toList()
+      };
+
       return Stack(
         children: [
           Positioned(
@@ -122,30 +115,23 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 controller: _horizontalTableController,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 300,
-                      height: hours.length * 100,
-                      child: Column(
-                        children: [CourseEventClass(event: event)],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: hours.length * 100,
-                      child: Column(
-                        children: [CourseEventClass(event: event)],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: hours.length * 100,
-                      child: Column(
-                        children: [CourseEventClass(event: event)],
-                      ),
-                    ),
-                  ],
+                child: SizedBox(
+                  width: days.length * 300,
+                  child: Row(
+                    children: [
+                      for (var day in eventMap.keys)
+                        SizedBox(
+                          width: 300,
+                          height: hours.length * 100,
+                          child: Column(
+                            children: [
+                              for (var event in eventMap[day]!)
+                                CourseEventClass(event: event),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
