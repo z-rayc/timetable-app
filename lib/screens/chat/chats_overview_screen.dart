@@ -30,8 +30,8 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
   void _fetchChatRooms() async {
     List<dynamic> chatRoomsDynamic = await kSupabase
         .from('ChatRoomMember')
-        .select('userid, chatroomid, ChatRoom(id, name)')
-        .filter('userid', 'eq', kSupabase.auth.currentUser!.id);
+        .select('user_id, chatroom_id, ChatRoom(id, name)')
+        .filter('user_id', 'eq', kSupabase.auth.currentUser!.id);
 
     List<ChatRoom> tempChatRooms = [];
 
@@ -52,31 +52,31 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const chatroom = sampleChatRoom;
     return Scaffold(
-        body: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : _chatRooms.isEmpty
-                ? const Center(
-                    child: Text('No chats yet! Create one!'),
-                  )
-                : ListView.builder(
-                    itemCount: _chatRooms.length,
-                    itemBuilder: (context, index) {
-                      return ChatRoomTile(
-                          chatRoom: _chatRooms[index],
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const ChatScreen(chatRoom: chatroom);
-                                },
-                              ),
-                            );
-                          });
-                    },
-                  ));
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : _chatRooms.isEmpty
+              ? const Center(
+                  child: Text('No chats yet! Create one!'),
+                )
+              : ListView.builder(
+                  itemCount: _chatRooms.length,
+                  itemBuilder: (context, index) {
+                    return ChatRoomTile(
+                        chatRoom: _chatRooms[index],
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ChatScreen(chatRoom: _chatRooms[index]);
+                              },
+                            ),
+                          );
+                        });
+                  },
+                ),
+    );
   }
 }

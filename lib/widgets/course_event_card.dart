@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
+import 'package:timetable_app/widgets/texts/subtitle.dart';
 
 class CourseEventClass extends StatelessWidget {
   const CourseEventClass({super.key, required this.event});
@@ -10,7 +11,8 @@ class CourseEventClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: event.course.colour,
+      color:
+          const Color.fromARGB(255, 255, 166, 196), // TODO: Get proper colour
       margin: const EdgeInsets.fromLTRB(40, 8, 40, 2),
       child: InkWell(
         onTap: () {
@@ -22,16 +24,23 @@ class CourseEventClass extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: event.course.colour,
+            color: const Color.fromARGB(
+                255, 255, 166, 196), // TODO: Get proper colour,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              tileColor: event.course.colour,
-              title: Text(event.course.name),
-              subtitle: Text(event.course.id),
-              trailing: hourMinute(event.startTime, event.endTime),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CSubtitle(event.course.nameAlias),
+                const SizedBox(height: 5),
+                Text(event.course.id),
+                hourMinute(event.startTime, event.endTime),
+              ],
             ),
           ),
         ),
