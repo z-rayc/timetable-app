@@ -24,7 +24,7 @@ enum NavState {
 
   // dayPlan,
   // eventDetails(EventDetailsScreen()),
-  courseDetails(CourseDetailsScreen()),
+  // courseDetails(CourseDetailsScreen()),
   createEvent(CreateEventScreen()),
   // chat,
   chats(ChatsOverviewScreen()),
