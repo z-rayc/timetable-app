@@ -69,8 +69,8 @@ ListTile courseTile(UserCourse uc, BuildContext context) {
         borderRadius: BorderRadius.circular(5),
       ),
     ),
-    title: Text(uc.course.id),
-    subtitle: Text(uc.course.nameAlias),
+    title: Text(uc.course.name),
+    subtitle: Text(uc.course.id),
     trailing: IconButton(
       icon: const Icon(Icons.edit),
       onPressed: () {
