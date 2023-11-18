@@ -79,22 +79,21 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
       'Sunday'
     ];
 
-    var hours = [
-      '8:00',
-      '9:00',
-      '10:00',
-      '11:00',
-      '12:00',
-      '13:00',
-      '14:00',
-      '15:00',
-      '16:00',
-      '17:00',
-      '18:00'
-    ];
-
     return timetable.when(data: (DailyTimetable data) {
       var events = timetable.asData!.value.courseEvents;
+      var earliestTime = events
+          .reduce((value, element) =>
+              value.startTime.isBefore(element.startTime) ? value : element)
+          .startTime;
+      var latestTime = events
+          .reduce((value, element) =>
+              value.endTime.isAfter(element.endTime) ? value : element)
+          .endTime;
+
+      var hours = [
+        for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
+          "${earliestTime.hour + i}:00"
+      ];
       //Make a hashmap of events with the Datetime weekday as the key
       var eventMap = {
         for (int date = DateTime.monday; date < DateTime.sunday; date++)
@@ -126,7 +125,20 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
                           child: Column(
                             children: [
                               for (var event in eventMap[day]!)
-                                CourseEventClass(event: event),
+                                Container(
+                                    margin: EdgeInsets.only(
+                                        top: (event.startTime.hour +
+                                                    (event.startTime.minute /
+                                                        60) -
+                                                    7) *
+                                                100 +
+                                            50),
+                                    height: (event.endTime
+                                            .difference(event.startTime)
+                                            .inMinutes) /
+                                        60 *
+                                        100,
+                                    child: CourseEventClass(event: event)),
                             ],
                           ),
                         ),
