@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
 
@@ -16,14 +17,21 @@ class ChatRoomTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final unreadMessage = ref.watch(unreadMessagesProvider);
+    final ChatMessage? message =
+        ref.watch(chatMessagesProvider).value?[chatRoom.id]?.last;
+    final DateTime? lastRead =
+        ref.watch(chatRoomLastReadProvider).value?[chatRoom.id];
+
     bool hasUnread = false;
-    String lastMessage = 'No messages yet';
-    if (unreadMessage.value != null &&
-        unreadMessage.value!.containsKey(chatRoom.id)) {
-      hasUnread = unreadMessage.value![chatRoom.id]!.isUnRead;
-      lastMessage = unreadMessage.value![chatRoom.id]!.lastMessage;
+    String lastMessage = 'No messages yet...';
+
+    if (message != null) {
+      if (lastRead != null && message.sentAt.isAfter(lastRead)) {
+        hasUnread = true;
+      }
+      lastMessage = message.message;
     }
+
     return Card(
       child: ListTile(
           onTap: onTap,
