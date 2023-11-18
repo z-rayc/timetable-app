@@ -16,59 +16,9 @@ class ChatMessages extends ConsumerStatefulWidget {
 }
 
 class _ChatMessagesState extends ConsumerState<ChatMessages> {
-  // final List<ChatMessage> _messages = [];
-  // final RealtimeChannel _channel = kSupabase.channel('schema-db-changes');
-
-  // get _reversedMessages => _messages.reversed.toList();
-
-  // void _addMessage(dynamic data) {
-  //   ChatMessage message = ChatMessage.fromJson(data);
-  //   setState(() {
-  //     _messages.add(message);
-  //   });
-  // }
-
-  // void _addInitialMessages() async {
-  // final List<dynamic> reponse = await kSupabase
-  //     .from('ChatMessage')
-  //     .select()
-  //     .eq('chat_room_id', widget.chatRoom.id)
-  //     .order('sent_at', ascending: true)
-  //     .limit(200);
-  // final List<ChatMessage> messages =
-  //     reponse.map((e) => ChatMessage.fromJson(e)).toList();
-  // setState(() {
-  //   _messages.addAll(messages);
-  // });
-  // ref.read(chatMessagesProvider).whenData((value) {
-  //   setState(() {
-  //     _messages.addAll(value[widget.chatRoom.id] ?? []);
-  //   });
-  // });
-  // }
-
-  // void _subscribeToMessages() {
-  //   _channel.on(
-  //     RealtimeListenTypes.postgresChanges,
-  //     ChannelFilter(
-  //       table: 'ChatMessage',
-  //       schema: 'public',
-  //       event: 'INSERT',
-  //       filter: 'chat_room_id=eq.${widget.chatRoom.id}',
-  //     ),
-  //     (payload, [ref]) {
-  //       var newMessage = payload['new'];
-  //       _addMessage(newMessage);
-  //     },
-  //   ).subscribe();
-  // }
-
   @override
   void initState() {
     super.initState();
-    // _addInitialMessages();
-    // _subscribeToMessages();
-    // ref.read(chatRoomProvider.notifier).updateLastRead(widget.chatRoom.id);
     ref
         .read(chatRoomLastReadProvider.notifier)
         .updateLastRead(widget.chatRoom.id);
@@ -76,11 +26,9 @@ class _ChatMessagesState extends ConsumerState<ChatMessages> {
 
   @override
   void deactivate() {
-    // ref.read(chatRoomProvider.notifier).updateLastRead(widget.chatRoom.id);
     ref
         .read(chatRoomLastReadProvider.notifier)
         .updateLastRead(widget.chatRoom.id);
-    // kSupabase.removeChannel(_channel);
     super.deactivate();
   }
 
