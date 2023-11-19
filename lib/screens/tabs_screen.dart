@@ -152,7 +152,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
                     BottomNavigationBarItem(
                       icon: ChatsTabsIcon(),
                       label: 'Chats',
-                      activeIcon: Icon(Icons.chat_rounded),
+                      activeIcon: Icon(Icons.chat),
                     ),
                   ],
                 ),
@@ -170,7 +170,7 @@ class ChatsTabsIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const icon = Icon(Icons.chat_outlined);
+    const icon = Icon(Icons.chat_bubble_outline_outlined);
     final bool anyUnread = ref.watch(anyUndreadMessagesProvider);
     Widget content = icon;
     if (anyUnread) {
@@ -179,12 +179,12 @@ class ChatsTabsIcon extends ConsumerWidget {
         children: [
           icon,
           Positioned(
-            top: -7,
-            right: -8,
+            top: -8,
+            right: -12,
             child: Icon(
+              Icons.circle_notifications,
+              size: 20,
               semanticLabel: 'Unread messages',
-              Icons.circle,
-              size: 15,
             ),
           ),
         ],

@@ -125,13 +125,13 @@ class NavDrawerItemChat extends ConsumerWidget {
         clipBehavior: Clip.none,
         children: [
           content,
-          Positioned(
-            top: 0,
-            right: 0,
+          const Positioned(
+            top: -5,
+            right: -8,
             child: Icon(
               semanticLabel: 'Unread messages',
-              Icons.circle,
-              size: 15,
+              Icons.circle_notifications,
+              color: Colors.red,
             ),
           ),
         ],

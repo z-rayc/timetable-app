@@ -47,7 +47,7 @@ class ChatRoomTile extends ConsumerWidget {
           ),
           trailing: hasUnread
               ? const Icon(
-                  Icons.notifications,
+                  Icons.circle_notifications,
                   color: Colors.red,
                 )
               : null),
