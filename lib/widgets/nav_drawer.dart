@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/widgets/nav_drawer_item.dart';
 
 enum NavDrawerChoice {
@@ -19,12 +21,15 @@ class NavDrawer extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isWide = width > 600;
 
+    final SizedBox spacing = SizedBox(height: isWide ? 10 : 20);
+
     return Drawer(
       child: Column(
         children: [
           SizedBox(
             height: !isWide ? 180 : 100,
             child: DrawerHeader(
+              margin: EdgeInsets.zero,
               decoration: BoxDecoration(
                 color: AppThemes.theme.colorScheme.primary,
               ),
@@ -45,50 +50,93 @@ class NavDrawer extends StatelessWidget {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  NavDrawerItem(
-                    icon: Icons.calendar_today,
-                    title: 'Timetable',
-                    onTap: () {
-                      onSelectedNavItem(NavDrawerChoice.timetable);
-                    },
-                  ),
-                  NavDrawerItem(
-                    icon: Icons.chat,
-                    title: 'Chats',
-                    onTap: () {
-                      onSelectedNavItem(NavDrawerChoice.chat);
-                    },
-                  ),
-                  NavDrawerItem(
-                    icon: Icons.edit_document,
-                    title: 'My Courses',
-                    onTap: () {
-                      onSelectedNavItem(NavDrawerChoice.myCourses);
-                    },
-                  ),
-                  NavDrawerItem(
-                    icon: Icons.settings,
-                    title: 'Settings',
-                    onTap: () {
-                      onSelectedNavItem(NavDrawerChoice.settings);
-                    },
-                  ),
-                  NavDrawerItem(
-                    // remove this later TODO
-                    icon: Icons.error,
-                    title: 'Dev screen',
-                    onTap: () {
-                      onSelectedNavItem(NavDrawerChoice.devscreen);
-                    },
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: Column(
+                  children: [
+                    spacing,
+                    NavDrawerItem(
+                      icon: Icons.calendar_today,
+                      title: 'Timetable',
+                      onTap: () {
+                        onSelectedNavItem(NavDrawerChoice.timetable);
+                      },
+                    ),
+                    spacing,
+                    NavDrawerItemChat(onSelectedNavItem: onSelectedNavItem),
+                    spacing,
+                    NavDrawerItem(
+                      icon: Icons.edit_document,
+                      title: 'My Courses',
+                      onTap: () {
+                        onSelectedNavItem(NavDrawerChoice.myCourses);
+                      },
+                    ),
+                    spacing,
+                    NavDrawerItem(
+                      icon: Icons.settings,
+                      title: 'Settings',
+                      onTap: () {
+                        onSelectedNavItem(NavDrawerChoice.settings);
+                      },
+                    ),
+                    spacing,
+                    // TODO remove dev screen FROM HERE
+                    NavDrawerItem(
+                      icon: Icons.error,
+                      title: 'Dev screen',
+                      onTap: () {
+                        onSelectedNavItem(NavDrawerChoice.devscreen);
+                      },
+                    ),
+                    spacing
+                    // TODO remove dev screen TO HERE
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+class NavDrawerItemChat extends ConsumerWidget {
+  const NavDrawerItemChat({
+    super.key,
+    required this.onSelectedNavItem,
+  });
+
+  final void Function(NavDrawerChoice p1) onSelectedNavItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool anyUnread = ref.watch(anyUndreadMessagesProvider);
+    Widget content = NavDrawerItem(
+      icon: Icons.chat,
+      title: 'Chats',
+      onTap: () {
+        onSelectedNavItem(NavDrawerChoice.chat);
+      },
+    );
+    if (anyUnread) {
+      content = Stack(
+        clipBehavior: Clip.none,
+        children: [
+          content,
+          const Positioned(
+            top: -5,
+            right: -8,
+            child: Icon(
+              semanticLabel: 'Unread messages',
+              Icons.circle_notifications,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      );
+    }
+    return content;
   }
 }

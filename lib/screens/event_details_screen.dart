@@ -25,18 +25,31 @@ class EventDetailsScreen extends StatelessWidget {
             .copyWith(color: Colors.black),
       ));
       content.add(Text("Code: ${newEvent.course.id}"));
-      content.add(Text("Staff: ${newEvent.staff.join(", ")}"));
+      content.add(const Text("Staff: "));
+      for (var staff in newEvent.staff) {
+        content.add(Text("• ${staff.shortname}"));
+      }
       content.add(Text(
           "Location: ${newEvent.location.roomName}, ${newEvent.location.buildingName}"));
-      content.add(InkWell(
-          borderRadius: BorderRadius.circular(10),
-          splashColor: Colors.blue,
-          child: Text(
-              style: const TextStyle(
-                color: Colors.blue,
+      content.add(Row(
+        children: [
+          const Text("Link: "),
+          Flexible(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              splashColor: Colors.blue,
+              child: Text(
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
+                overflow: TextOverflow.ellipsis,
+                "${newEvent.location.link}",
               ),
-              "Location link: ${newEvent.location.link}"),
-          onTap: () => launchUrl(newEvent.location.link)));
+              onTap: () => launchUrl(newEvent.location.link),
+            ),
+          )
+        ],
+      ));
       content.add(const SizedBox(height: 30));
       content.add(Text("Type: ${newEvent.teachingSummary}"));
       content.add(const SizedBox(height: 30));

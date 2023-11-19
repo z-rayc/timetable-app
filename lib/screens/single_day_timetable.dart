@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/course_event.dart';
-import 'package:timetable_app/models/event.dart';
+import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
 
 class SingleDayTimetable extends ConsumerWidget {
@@ -24,6 +21,7 @@ class SingleDayTimetable extends ConsumerWidget {
               const SizedBox(height: 20),
               ElevatedButton.icon(
                   onPressed: () {
+                    ref.invalidate(myCoursesProvider);
                     ref.invalidate(dailyTimetableProvider);
 
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -47,6 +45,7 @@ class SingleDayTimetable extends ConsumerWidget {
         });
         return Scaffold(
           body: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: timetable.asData!.value.courseEvents.length,
             itemBuilder: (context, index) {
               var courseEvent = timetable.asData!.value.courseEvents[index];
@@ -58,7 +57,7 @@ class SingleDayTimetable extends ConsumerWidget {
     }, error: (Object error, StackTrace stackTrace) {
       return SingleChildScrollView(child: Text("Error: $error, $stackTrace"));
     }, loading: () {
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }

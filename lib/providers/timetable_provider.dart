@@ -1,12 +1,8 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
-import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/models/course_event.dart';
-import 'package:timetable_app/models/location.dart';
 
 class DailyTimetable {
   List<CourseEvent> courseEvents = [];
@@ -72,24 +68,7 @@ Future<List<CourseEvent>> convertToCourseEvents(
 
   for (var event in await events) {
     courseEvents.add(
-      CourseEvent(
-          // convert from map<String, dynamic> to Course
-          course: Course(
-              id: event['Course']['id'],
-              name: event['Course']['name'],
-              nameAlias: event['Course']['nameAlias'],
-              colour: Colors.blue),
-          startTime: DateTime.parse(event['start']),
-          endTime: DateTime.parse(event['end']),
-          staff: [event['Staff']['shortname']],
-          location: Location(
-            roomName: event['Room']['roomacronym'] ?? '',
-            buildingName: event['Room']['buildingname'] ?? '',
-            link: //parse a text to URI
-                Uri.parse(event['Room']['roomurl'] ?? ''),
-          ),
-          id: event['id'],
-          teachingSummary: event['teaching_summary'] ?? ''),
+      CourseEvent.fromJson(event),
     );
   }
 

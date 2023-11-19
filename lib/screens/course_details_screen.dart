@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/course.dart';
+import 'package:timetable_app/models/user_course.dart';
+import 'package:timetable_app/widgets/texts/title.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
-  const CourseDetailsScreen({super.key});
+  const CourseDetailsScreen({
+    super.key,
+    required this.uc,
+  });
 
-  final course = const Course(
-    id: "IDATA2503",
-    name: "Mobile Applications",
-    nameAlias: "Mobile Applications",
-    colour: Colors.red,
-  );
+  final UserCourse uc;
 
   @override
   Widget build(BuildContext context) {
@@ -23,32 +22,24 @@ class CourseDetailsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         children: <Widget>[
-          Text(
-            course.name,
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  color: Colors.black,
-                ),
-          ),
-          Text("Code: ${course.id}"),
+          CTitle(uc.course.name),
+          const SizedBox(height: 5),
+          Text("Code: ${uc.course.id}"),
           const SizedBox(height: 50),
-          Text(
-            "Custom",
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  color: Colors.black,
-                ),
-          ),
-          Text("Alias: ${course.nameAlias}"),
+          const CTitle("Custom"),
+          const SizedBox(height: 5),
+          Text("Alias: ${uc.course.nameAlias}"),
           Row(
             children: [
               Text(
-                "Colour: #${course.colour.value.toRadixString(16).substring(2)}",
+                "Colour: #${uc.color.value.toRadixString(16).substring(2)}",
               ),
               const SizedBox(width: 5),
               Container(
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                    color: course.colour,
+                    color: uc.color,
                     borderRadius: const BorderRadius.all(Radius.circular(5))),
               )
             ],

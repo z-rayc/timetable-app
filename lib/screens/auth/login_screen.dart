@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         throw 'No ID Token found.';
       }
 
-      final response = await kSupabase.auth
+      await kSupabase.auth
           .signInWithIdToken(
             provider: Provider.google,
             idToken: idToken,

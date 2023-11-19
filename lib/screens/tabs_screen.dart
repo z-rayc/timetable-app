@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
@@ -86,7 +87,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
               .read(myCoursesProvider)
               .asData
               ?.value
-              .courseUsers
+              .userCourses
               .map((e) => e.course.id)
               .toList();
 
@@ -99,6 +100,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
               log('Edge function response: ${v.data}');
             });
           }
+          ref.invalidate(myCoursesProvider);
           ref.invalidate(dailyTimetableProvider);
           //
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -148,9 +150,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
                       activeIcon: Icon(Icons.calendar_today_rounded),
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.chat_outlined),
+                      icon: ChatsTabsIcon(),
                       label: 'Chats',
-                      activeIcon: Icon(Icons.chat_rounded),
+                      activeIcon: Icon(Icons.chat),
                     ),
                   ],
                 ),
@@ -158,5 +160,36 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
             )
           : null,
     );
+  }
+}
+
+class ChatsTabsIcon extends ConsumerWidget {
+  const ChatsTabsIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const icon = Icon(Icons.chat_bubble_outline_outlined);
+    final bool anyUnread = ref.watch(anyUndreadMessagesProvider);
+    Widget content = icon;
+    if (anyUnread) {
+      content = const Stack(
+        clipBehavior: Clip.none,
+        children: [
+          icon,
+          Positioned(
+            top: -8,
+            right: -12,
+            child: Icon(
+              Icons.circle_notifications,
+              size: 20,
+              semanticLabel: 'Unread messages',
+            ),
+          ),
+        ],
+      );
+    }
+    return content;
   }
 }
