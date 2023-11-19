@@ -12,15 +12,24 @@ class CourseEventClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (event is CourseEvent) {
-      return _buildCourseEventCard(context, event as CourseEvent);
+      return _CourseEventCard(context: context, event: event as CourseEvent);
     } else {
-      return Container(
-        child: const Text("Not implemented"),
-      );
+      return const Text("Not implemented");
     }
   }
+}
 
-  Card _buildCourseEventCard(BuildContext context, CourseEvent event) {
+class _CourseEventCard extends StatelessWidget {
+  const _CourseEventCard({
+    required this.context,
+    required this.event,
+  });
+
+  final BuildContext context;
+  final CourseEvent event;
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       color:
           const Color.fromARGB(255, 255, 166, 196), // TODO: Get proper colour
