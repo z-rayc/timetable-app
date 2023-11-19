@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_message.dart';
@@ -197,3 +198,47 @@ final chatMessagesProvider =
     return ChatMessagesProvider();
   },
 );
+
+/// Returns a map of chat room ids to a tuple of the last message and a bool
+/// indicating if the last message is unread or not.
+final unreadMessagesProvider =
+    rp.Provider<Map<String, (ChatMessage?, bool)>>((ref) {
+  final List<ChatRoom> chatRooms = ref.watch(chatRoomProvider).value ?? [];
+
+  final Map<String, List<ChatMessage>> messages =
+      ref.watch(chatMessagesProvider).value ?? {};
+
+  final Map<String, ChatMessage?> lastMessages = {};
+  for (var chatRoom in chatRooms) {
+    lastMessages[chatRoom.id] = messages[chatRoom.id]?.last;
+  }
+
+  final Map<String, DateTime> lastReads =
+      ref.watch(chatRoomLastReadProvider).value ?? {};
+
+  final Map<String, (ChatMessage?, bool)> unreadMessages = {};
+  for (var chatRoom in chatRooms) {
+    final ChatMessage? lastMessage = lastMessages[chatRoom.id];
+    final DateTime? lastRead = lastReads[chatRoom.id];
+    bool hasUnread = false;
+    if (lastMessage != null) {
+      if (lastRead != null && lastMessage.sentAt.isAfter(lastRead)) {
+        hasUnread = true;
+      }
+    }
+    unreadMessages[chatRoom.id] = (lastMessage, hasUnread);
+  }
+  return unreadMessages;
+});
+
+final anyUndreadMessagesProvider = rp.Provider<bool>((ref) {
+  final Map<String, (ChatMessage?, bool)> unreadMessages =
+      ref.watch(unreadMessagesProvider);
+  bool anyUnread = false;
+  int index = 0;
+  while (index < unreadMessages.length && !anyUnread) {
+    anyUnread = unreadMessages.values.elementAt(index).$2;
+    index++;
+  }
+  return anyUnread;
+});
