@@ -17,19 +17,19 @@ class ChatRoomTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ChatMessage? message =
-        ref.watch(chatMessagesProvider).value?[chatRoom.id]?.last;
-    final DateTime? lastRead =
-        ref.watch(chatRoomLastReadProvider).value?[chatRoom.id];
+    final Map<String, (ChatMessage?, bool)> unreadMessages =
+        ref.watch(unreadMessagesProvider);
 
     bool hasUnread = false;
-    String lastMessage = 'No messages yet...';
+    String subtitleText = 'No messages yet...';
 
-    if (message != null) {
-      if (lastRead != null && message.sentAt.isAfter(lastRead)) {
-        hasUnread = true;
+    final (ChatMessage?, bool)? lastMessageTuple = unreadMessages[chatRoom.id];
+    if (lastMessageTuple != null) {
+      final ChatMessage? message = lastMessageTuple.$1;
+      hasUnread = lastMessageTuple.$2;
+      if (message != null) {
+        subtitleText = '${message.authorName}: ${message.message}';
       }
-      lastMessage = message.message;
     }
 
     return Card(
@@ -41,14 +41,14 @@ class ChatRoomTile extends ConsumerWidget {
           ),
           title: Text(chatRoom.name),
           subtitle: Text(
-            lastMessage,
+            subtitleText,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           trailing: hasUnread
-              ? const CircleAvatar(
-                  backgroundColor: Colors.red,
-                  radius: 5,
+              ? const Icon(
+                  Icons.notifications,
+                  color: Colors.red,
                 )
               : null),
     );
