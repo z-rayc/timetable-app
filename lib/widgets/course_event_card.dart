@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
 class CourseEventClass extends StatelessWidget {
   const CourseEventClass({super.key, required this.event});
 
-  final CourseEvent event;
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
+    if (event is CourseEvent) {
+      return _buildCourseEventCard(context, event as CourseEvent);
+    } else {
+      return Container(
+        child: const Text("Not implemented"),
+      );
+    }
+  }
+
+  Card _buildCourseEventCard(BuildContext context, CourseEvent event) {
     return Card(
       color:
           const Color.fromARGB(255, 255, 166, 196), // TODO: Get proper colour
