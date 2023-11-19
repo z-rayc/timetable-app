@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
@@ -30,10 +31,11 @@ class _CourseEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color:
-          const Color.fromARGB(255, 255, 166, 196), // TODO: Get proper colour
-      margin: const EdgeInsets.fromLTRB(40, 8, 40, 2),
+    return Container(
+      decoration: CalendarItemTheme.calendarDecoration(
+        CalendarItemColour.green,
+      ), // TODO: Update with color from course
+      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -42,26 +44,19 @@ class _CourseEventCard extends StatelessWidget {
             ),
           ));
         },
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(
-                255, 255, 166, 196), // TODO: Get proper colour,
-            borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 10,
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CSubtitle(event.course.nameAlias),
-                const SizedBox(height: 5),
-                Text(event.course.id),
-                hourMinute(event.startTime, event.endTime),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CSubtitle(event.course.nameAlias),
+              const SizedBox(height: 5),
+              Text(event.course.id),
+              hourMinute(event.startTime, event.endTime),
+            ],
           ),
         ),
       ),
