@@ -16,7 +16,6 @@ class ChatMessage {
     required this.sentAt,
     required this.message,
   });
-  
 
   static ChatMessage fromJson(dynamic json) {
     return ChatMessage(
@@ -28,6 +27,11 @@ class ChatMessage {
       sentAt: DateTime.parse(json['sent_at']),
       message: json['message'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'ChatMessage(id: $id, chatRoomId: $chatRoomId, authorId: $authorId, authorEmail: $authorEmail, authorName: $authorName, sentAt: $sentAt, message: $message)';
   }
 }
 

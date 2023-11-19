@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
 class CourseEventClass extends StatelessWidget {
-  const CourseEventClass({Key? key, required this.event}) : super(key: key);
+  const CourseEventClass({super.key, required this.event});
 
+  final Event event;
+
+  @override
+  Widget build(BuildContext context) {
+    if (event is CourseEvent) {
+      return _CourseEventCard(context: context, event: event as CourseEvent);
+    } else {
+      return const Text("Not implemented");
+    }
+  }
+}
+
+class _CourseEventCard extends StatelessWidget {
+  const _CourseEventCard({
+    required this.context,
+    required this.event,
+  });
+
+  final BuildContext context;
   final CourseEvent event;
 
   @override
