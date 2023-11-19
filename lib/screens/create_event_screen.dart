@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
+import 'package:timetable_app/models/custom_event.dart';
+import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
@@ -30,6 +33,38 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     if (_formKey.currentState!.validate()) {
       _setLoading(true);
       // Check that startdate is before enddate
+      if (_enteredEndTime.isBefore(_enteredStartTime)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('End time must be after start time.'),
+          ),
+        );
+        _setLoading(false);
+      } else {
+        _formKey.currentState!.save();
+        var location = (_enteredRoomName.isNotEmpty &&
+                _enteredBuildingName.isNotEmpty &&
+                _enteredLink.toString().isNotEmpty)
+            ? Location(
+                roomName: _enteredRoomName,
+                buildingName: _enteredBuildingName,
+                link: _enteredLink,
+              )
+            : null;
+
+        // Create new event
+        PartialCustomEvent newEvent = PartialCustomEvent(
+          title: _enteredTitle,
+          description: _enteredDescription,
+          startTime: _enteredStartTime,
+          endTime: _enteredEndTime,
+          location: location,
+          inviteeEmails: [],
+          authorId: kSupabase.auth.currentUser!.id,
+        );
+
+        // TODO: Upload to database
+      }
     }
   }
 
