@@ -229,7 +229,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
           ElevatedButton(
             onPressed: () {
               saveCourses();
-              replaceNewScreen(context, NavState.tabs);
+              popAllScreens(context);
             },
             style: AppThemes.entryButtonTheme,
             child: const Text("Confirm"),

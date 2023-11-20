@@ -20,3 +20,23 @@ class CustomEvent extends Event {
   final User author;
   final List<User> invitees;
 }
+
+class PartialCustomEvent {
+  const PartialCustomEvent({
+    required this.startTime,
+    required this.endTime,
+    required this.title,
+    required this.description,
+    required this.location,
+    required this.authorId,
+    required this.inviteeEmails,
+  });
+
+  final DateTime startTime;
+  final DateTime endTime;
+  final String title;
+  final String description;
+  final Location? location;
+  final String authorId;
+  final List<String> inviteeEmails;
+}

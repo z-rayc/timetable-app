@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
+import 'package:timetable_app/models/custom_event.dart';
+import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
@@ -24,12 +27,53 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     });
   }
 
+  List<String> _findUsersByEmails(List<String> emails) {
+    List<String> users = [];
+
+    // TODO: Query database for users with email
+    // Return the user's id
+
+    return users;
+  }
+
   /// Validate and submit the form.
   /// Create a new custom event, and add it to the database.
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _setLoading(true);
       // Check that startdate is before enddate
+      if (_enteredEndTime.isBefore(_enteredStartTime)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('End time must be after start time.'),
+          ),
+        );
+        _setLoading(false);
+      } else {
+        _formKey.currentState!.save();
+        var location = (_enteredRoomName.isNotEmpty &&
+                _enteredBuildingName.isNotEmpty &&
+                _enteredLink.toString().isNotEmpty)
+            ? Location(
+                roomName: _enteredRoomName,
+                buildingName: _enteredBuildingName,
+                link: _enteredLink,
+              )
+            : null;
+
+        // Create new event
+        PartialCustomEvent newEvent = PartialCustomEvent(
+          title: _enteredTitle,
+          description: _enteredDescription,
+          startTime: _enteredStartTime,
+          endTime: _enteredEndTime,
+          location: location,
+          inviteeEmails: _findUsersByEmails(_enteredInvitees),
+          authorId: kSupabase.auth.currentUser!.id,
+        );
+
+        // TODO: Upload to database
+      }
     }
   }
 
@@ -38,7 +82,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   String _enteredRoomName = '';
   String _enteredBuildingName = '';
   Uri _enteredLink = Uri.parse('');
-  List<c_user.User> _enteredInvitees = [];
+  List<String> _enteredInvitees = [];
   DateTime _enteredStartTime = DateTime.now();
   DateTime _enteredEndTime = DateTime.now();
 
@@ -271,6 +315,23 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
+                const CSubtitle('Invitees'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: "E-mails separated by commas",
+                    ),
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        var emails = newValue.split(',');
+                        for (var email in emails) {
+                          _enteredInvitees.add(email.trim());
+                        }
+                      }
+                    },
+                  ),
+                ),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
