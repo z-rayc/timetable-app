@@ -8,25 +8,50 @@ import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
 
 class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
+  late RealtimeChannel _channel;
+
+  ChatRoomProvicer() : super() {
+    _channel = kSupabase.channel('new-chatrooms');
+    _initialize();
+  }
+
+  void _initialize() {
+    _subscribeToChatRooms();
+  }
+
   @override
   FutureOr<List<ChatRoom>> build() async {
-    _subscribeToChatRooms();
     return _fetchChatRooms();
   }
 
   void _subscribeToChatRooms() {
-    kSupabase.channel('new-chatrooms').on(
-      RealtimeListenTypes.postgresChanges,
-      ChannelFilter(
-        table: 'ChatRoomMember',
-        schema: 'public',
-        event: 'INSERT',
-        filter: 'user_id=eq.${kSupabase.auth.currentUser!.id}',
-      ),
-      (payload, [reference]) {
-        ref.invalidateSelf();
-      },
-    ).subscribe();
+    final String filter = 'user_id=eq.${kSupabase.auth.currentUser!.id}';
+    _channel
+        .on(
+          RealtimeListenTypes.postgresChanges,
+          ChannelFilter(
+            table: 'ChatRoomMember',
+            schema: 'public',
+            event: 'INSERT',
+            filter: filter,
+          ),
+          _onChatRoomChange,
+        )
+        .on(
+          RealtimeListenTypes.postgresChanges,
+          ChannelFilter(
+            table: 'ChatRoomMember',
+            schema: 'public',
+            event: 'DELETE',
+            filter: filter,
+          ),
+          _onChatRoomChange,
+        )
+        .subscribe();
+  }
+
+  void _onChatRoomChange(dynamic payload, [dynamic reference]) {
+    ref.invalidateSelf();
   }
 
   Future<ChatRoomCreationError?> addChatRoom(
@@ -133,33 +158,33 @@ final chatRoomLastReadProvider =
 
 class ChatMessagesProvider
     extends AsyncNotifier<Map<String, List<ChatMessage>>> {
-  void _subscribeToAllChatRooms() {
-    final chatRooms = ref.read(chatRoomProvider).value;
-    if (chatRooms == null) {
-      return;
-    }
-    final List<String> chatIds = chatRooms.map((r) => r.id).toList();
-    final String filter = 'chat_room_id=in.(${chatIds.join(',')})';
+  List<String> _chatRoomIds = [];
 
-    kSupabase.channel('new-chat-messages').on(
-      RealtimeListenTypes.postgresChanges,
-      ChannelFilter(
-        table: 'ChatMessage',
-        schema: 'public',
-        event: 'INSERT',
-        filter: filter,
-      ),
-      (payload, [reference]) {
-        ChatMessage message = ChatMessage.fromJson(payload['new']);
-        final Map<String, List<ChatMessage>> dataClone =
-            Map.of(state.value ?? {});
-        if (dataClone[message.chatRoomId] == null) {
-          dataClone[message.chatRoomId] = [];
-        }
-        dataClone[message.chatRoomId]!.add(message);
-        state = AsyncValue.data(dataClone);
-      },
-    ).subscribe();
+  void _subscribeToAllChats() {
+    final String filter = 'chat_room_id=in.(${_chatRoomIds.join(',')})';
+    kSupabase
+        .channel('new-chat-messages')
+        .on(
+          RealtimeListenTypes.postgresChanges,
+          ChannelFilter(
+            table: 'ChatMessage',
+            schema: 'public',
+            event: 'INSERT',
+            filter: filter,
+          ),
+          _onNewChatMessage,
+        )
+        .subscribe();
+  }
+
+  void _onNewChatMessage(dynamic payload, [dynamic reference]) {
+    ChatMessage message = ChatMessage.fromJson(payload['new']);
+    final Map<String, List<ChatMessage>> dataClone = Map.of(state.value ?? {});
+    if (dataClone[message.chatRoomId] == null) {
+      dataClone[message.chatRoomId] = [];
+    }
+    dataClone[message.chatRoomId]!.add(message);
+    state = AsyncValue.data(dataClone);
   }
 
   @override
@@ -169,7 +194,7 @@ class ChatMessagesProvider
       return {};
     }
     final List<String> chatIds = chatRooms.map((r) => r.id).toList();
-
+    _chatRoomIds = chatIds;
     final List<dynamic> reponse = await kSupabase
         .from('ChatMessage')
         .select()
@@ -187,7 +212,8 @@ class ChatMessagesProvider
       }
       messagesMap[message.chatRoomId]!.add(message);
     }
-    _subscribeToAllChatRooms();
+
+    _subscribeToAllChats();
     return messagesMap;
   }
 }
