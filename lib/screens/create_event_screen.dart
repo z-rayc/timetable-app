@@ -27,6 +27,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     });
   }
 
+  List<String> _findUsersByEmails(List<String> emails) {
+    List<String> users = [];
+
+    // TODO: Query database for users with email
+    // Return the user's id
+
+    return users;
+  }
+
   /// Validate and submit the form.
   /// Create a new custom event, and add it to the database.
   void _submitForm() async {
@@ -59,7 +68,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           startTime: _enteredStartTime,
           endTime: _enteredEndTime,
           location: location,
-          inviteeEmails: [],
+          inviteeEmails: _findUsersByEmails(_enteredInvitees),
           authorId: kSupabase.auth.currentUser!.id,
         );
 
@@ -73,7 +82,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   String _enteredRoomName = '';
   String _enteredBuildingName = '';
   Uri _enteredLink = Uri.parse('');
-  List<c_user.User> _enteredInvitees = [];
+  List<String> _enteredInvitees = [];
   DateTime _enteredStartTime = DateTime.now();
   DateTime _enteredEndTime = DateTime.now();
 
@@ -306,6 +315,23 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
+                const CSubtitle('Invitees'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: "E-mails separated by commas",
+                    ),
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        var emails = newValue.split(',');
+                        for (var email in emails) {
+                          _enteredInvitees.add(email.trim());
+                        }
+                      }
+                    },
+                  ),
+                ),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
