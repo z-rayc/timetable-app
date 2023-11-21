@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -212,5 +214,20 @@ class CalendarItemTheme {
         Radius.circular(10),
       ),
     );
+  }
+}
+
+class TimeTableTheme {
+  static double get timeTableColumnWidth {
+    return 300;
+  }
+
+  static double get timeTableHourRowHeight {
+    return 50;
+  }
+
+  // Returns the width of sidebar and height of topbar
+  static List<double> get timeTableSideBarSizes {
+    return [50.0, 50.0];
   }
 }

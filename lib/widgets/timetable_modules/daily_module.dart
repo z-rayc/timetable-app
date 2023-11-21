@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
 
@@ -20,7 +21,7 @@ class DailyModule extends StatelessWidget {
     List<Widget> generateEventWidgets() {
       List<Widget> eventWidgets = [];
       var lastEndTime = 7.0;
-      var extraMargin = 50;
+      var extraMargin = TimeTableTheme.timeTableHourRowHeight / 2;
 
       for (var event in sortedEvents) {
         var difference =
@@ -32,12 +33,12 @@ class DailyModule extends StatelessWidget {
               top: ((event.startTime.hour +
                           (event.startTime.minute / 60) -
                           lastEndTime) *
-                      100 +
+                      TimeTableTheme.timeTableHourRowHeight +
                   extraMargin),
             ),
             height: (event.endTime.difference(event.startTime).inMinutes) /
                 60 *
-                100,
+                TimeTableTheme.timeTableHourRowHeight,
             child: CourseEventClass(event: event),
           ),
         );
@@ -51,7 +52,7 @@ class DailyModule extends StatelessWidget {
     if (sortedEvents.isEmpty) {
       return Container(
           margin: const EdgeInsets.only(top: 50),
-          width: 300,
+          width: TimeTableTheme.timeTableColumnWidth,
           child: showEmptyText
               ? const Center(
                   child: Text(
@@ -61,8 +62,8 @@ class DailyModule extends StatelessWidget {
               : null);
     }
     return SizedBox(
-      width: 300,
-      height: hours.length * 100,
+      width: TimeTableTheme.timeTableColumnWidth,
+      height: hours.length * TimeTableTheme.timeTableHourRowHeight,
       child: Column(
         children: generateEventWidgets(),
       ),

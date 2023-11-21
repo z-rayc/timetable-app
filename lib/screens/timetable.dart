@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
@@ -68,7 +69,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
     Widget horizontalDayItem(String day) {
       return Container(
-        width: 300,
+        width: TimeTableTheme.timeTableColumnWidth,
         child: Center(
           child: Text(day),
         ),
@@ -77,7 +78,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
     Widget verticalHourItem(String hour) {
       return Container(
-        height: 100,
+        height: TimeTableTheme.timeTableHourRowHeight,
         child: Center(
           child: Text(hour),
         ),
@@ -148,13 +149,14 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       ];
       //Make a hashmap of events with the Datetime weekday as the key
 
-      var topOffset = isHorizontal ? 50.0 : 0.0;
+      var topOffset =
+          isHorizontal ? TimeTableTheme.timeTableSideBarSizes[0] : 0.0;
 
       return Stack(
         children: [
           Positioned(
             top: topOffset,
-            left: 50,
+            left: TimeTableTheme.timeTableSideBarSizes[1].toDouble(),
             right: 0,
             bottom: 0,
             child: SingleChildScrollView(
@@ -169,7 +171,12 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                         days: days,
                       ),
                     )
-                  : DailyModule(days: days, sortedEvents: events, hours: hours, showEmptyText: true,),
+                  : DailyModule(
+                      days: days,
+                      sortedEvents: events,
+                      hours: hours,
+                      showEmptyText: true,
+                    ),
             ),
           ),
           Positioned(
@@ -193,11 +200,11 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           ),
           isHorizontal
               ? Positioned(
-                  left: 50,
+                  left: TimeTableTheme.timeTableSideBarSizes[1],
                   top: 0,
                   right: 0,
                   child: Container(
-                    height: 50,
+                    height: TimeTableTheme.timeTableSideBarSizes[0],
                     color: Colors.green,
                     child: ListView(
                       physics: const AlwaysScrollableScrollPhysics(),

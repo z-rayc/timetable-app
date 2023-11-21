@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
 import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
@@ -30,7 +31,7 @@ class _WeeklyModuleState extends State<WeeklyModule> {
     };
 
     return SizedBox(
-      width: widget.days.length * 300,
+      width: widget.days.length * TimeTableTheme.timeTableColumnWidth,
       child: Row(
         children: [
           for (var day in eventMap.keys)
