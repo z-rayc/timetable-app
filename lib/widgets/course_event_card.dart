@@ -49,12 +49,14 @@ class _CourseEventCard extends StatelessWidget {
             horizontal: 15,
             vertical: 10,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.start,
+            runSpacing: 5,
             children: [
               CSubtitle(event.course.nameAlias),
               const SizedBox(height: 5),
               Text(event.course.id),
+              const SizedBox(width: 10),
               hourMinute(event.startTime, event.endTime),
             ],
           ),
