@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_app/screens/timetables/single_day_timetable.dart';
-import 'package:timetable_app/screens/timetables/week_timetable.dart';
+import 'package:timetable_app/screens/timetable.dart';
 
 class TimetableScreen extends StatelessWidget {
   const TimetableScreen({super.key});
@@ -8,8 +7,8 @@ class TimetableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isWide = MediaQuery.of(context).size.width > 600;
-    return WeekTimeTable(
-      tableDate: DateTime.now(),
+    return TimeTable(
+      tableDate: DateTime(2023, 11, 22),
     );
     /* !isWide
         ? const SingleDayTimetable()

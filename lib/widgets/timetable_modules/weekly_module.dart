@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
+import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
 
 class WeeklyModule extends StatefulWidget {
   const WeeklyModule({
@@ -33,28 +34,12 @@ class _WeeklyModuleState extends State<WeeklyModule> {
       child: Row(
         children: [
           for (var day in eventMap.keys)
-            SizedBox(
-              width: 300,
-              height: widget.hours.length * 100,
-              child: Column(
-                children: [
-                  for (var event in eventMap[day]!)
-                    Container(
-                        margin: EdgeInsets.only(
-                            top: (event.startTime.hour +
-                                        (event.startTime.minute / 60) -
-                                        7) *
-                                    100 +
-                                50),
-                        height: (event.endTime
-                                .difference(event.startTime)
-                                .inMinutes) /
-                            60 *
-                            100,
-                        child: CourseEventClass(event: event)),
-                ],
-              ),
-            ),
+            DailyModule(
+              days: widget.days,
+              sortedEvents: eventMap[day]!,
+              hours: widget.hours,
+              showEmptyText: false,
+            )
         ],
       ),
     );
