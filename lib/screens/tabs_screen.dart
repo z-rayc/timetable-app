@@ -10,7 +10,7 @@ import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
 import 'package:timetable_app/screens/chat/new_chat_overlay.dart';
-import 'package:timetable_app/screens/timetable_screen.dart';
+import 'package:timetable_app/screens/timetables/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {

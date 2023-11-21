@@ -10,7 +10,7 @@ import 'package:timetable_app/screens/auth/login_screen.dart';
 import 'package:timetable_app/screens/my_courses_screen.dart';
 import 'package:timetable_app/screens/auth/register_screen.dart';
 import 'package:timetable_app/screens/select_courses_screen.dart';
-import 'package:timetable_app/screens/single_day_timetable.dart';
+import 'package:timetable_app/screens/timetables/single_day_timetable.dart';
 import 'package:timetable_app/screens/splash_screen.dart';
 import 'package:timetable_app/screens/tabs_screen.dart';
 
