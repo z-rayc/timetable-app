@@ -8,8 +8,11 @@ class TimetableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isWide = MediaQuery.of(context).size.width > 600;
-    return !isWide
+    return WeekTimeTable(
+      tableDate: DateTime.now(),
+    );
+    /* !isWide
         ? const SingleDayTimetable()
-        : const WeekTimeTable();
+        : const WeekTimeTable(); */
   }
 }

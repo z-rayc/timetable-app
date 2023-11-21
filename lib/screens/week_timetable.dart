@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
+import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
+import 'package:timetable_app/widgets/timetable_modules/weekly_module.dart';
 
 class WeekTimeTable extends ConsumerStatefulWidget {
-  const WeekTimeTable({super.key});
+  const WeekTimeTable({super.key, required this.tableDate});
+final DateTime tableDate;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -47,22 +51,8 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
     super.dispose();
   }
 
-  Widget horizontalDayItem(String day) {
-    return Container(
-      width: 300,
-      child: Center(
-        child: Text(day),
-      ),
-    );
-  }
-
-  Widget verticalHourItem(String hour) {
-    return Container(
-      height: 100,
-      child: Center(
-        child: Text(hour),
-      ),
-    );
+  ScrollController getHorizontalTableController() {
+    return _horizontalTableController;
   }
 
   @override
@@ -79,77 +69,105 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
       'Sunday'
     ];
 
+    Widget horizontalDayItem(String day) {
+      return Container(
+        width: 300,
+        child: Center(
+          child: Text(day),
+        ),
+      );
+    }
+
+    Widget verticalHourItem(String hour) {
+      return Container(
+        height: 100,
+        child: Center(
+          child: Text(hour),
+        ),
+      );
+    }
+
     return timetable.when(data: (DailyTimetable data) {
-      var events = timetable.asData!.value.courseEvents;
-      var earliestTime = events
-          .reduce((value, element) =>
-              value.startTime.isBefore(element.startTime) ? value : element)
-          .startTime;
-      var latestTime = events
-          .reduce((value, element) =>
-              value.endTime.isAfter(element.endTime) ? value : element)
-          .endTime;
+      if (data.courseEvents.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("No events today or no courses added - Week View"),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                  onPressed: () {
+                    ref.invalidate(myCoursesProvider);
+                    ref.invalidate(dailyTimetableProvider);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Refreshed")));
+                  },
+                  icon: const Icon(Icons.refresh),
+                  label: const Text("Refresh"))
+            ],
+          ),
+        );
+      }
+      var isHorizontal = MediaQuery.of(context).size.width > 600;
+
+      var weekEvents = timetable.asData!.value.courseEvents;
+
+      var todayEvents = weekEvents
+          .where((element) =>
+              element.startTime.day == widget.tableDate.day &&
+              element.startTime.month == widget.tableDate.month &&
+              element.startTime.year == widget.tableDate.year)
+          .toList();
+      var events = isHorizontal ? weekEvents : todayEvents;
+      DateTime earliestTime;
+      DateTime latestTime;
+      if (events.isEmpty) {
+        earliestTime = DateTime(2021, 1, 1, 7, 0);
+        latestTime = DateTime(2021, 1, 1, 16, 0);
+      } else {
+        earliestTime = events
+            .reduce((value, element) =>
+                value.startTime.isBefore(element.startTime) ? value : element)
+            .startTime;
+        latestTime = events
+            .reduce((value, element) =>
+                value.endTime.isAfter(element.endTime) ? value : element)
+            .endTime;
+      }
 
       var hours = [
         for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
           "${earliestTime.hour + i}:00"
       ];
       //Make a hashmap of events with the Datetime weekday as the key
-      var eventMap = {
-        for (int date = DateTime.monday; date < DateTime.sunday; date++)
-          date: events
-              .where((element) => element.startTime.weekday == date)
-              .toList()
-      };
+
+      var topOffset = isHorizontal ? 50.0 : 0.0;
 
       return Stack(
         children: [
           Positioned(
-            top: 50,
+            top: topOffset,
             left: 50,
             right: 0,
             bottom: 0,
             child: SingleChildScrollView(
               controller: _verticalTableController,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: _horizontalTableController,
-                child: SizedBox(
-                  width: days.length * 300,
-                  child: Row(
-                    children: [
-                      for (var day in eventMap.keys)
-                        SizedBox(
-                          width: 300,
-                          height: hours.length * 100,
-                          child: Column(
-                            children: [
-                              for (var event in eventMap[day]!)
-                                Container(
-                                    margin: EdgeInsets.only(
-                                        top: (event.startTime.hour +
-                                                    (event.startTime.minute /
-                                                        60) -
-                                                    7) *
-                                                100 +
-                                            50),
-                                    height: (event.endTime
-                                            .difference(event.startTime)
-                                            .inMinutes) /
-                                        60 *
-                                        100,
-                                    child: CourseEventClass(event: event)),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
+              child: isHorizontal
+                  ? SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      controller: _horizontalTableController,
+                      child: WeeklyModule(
+                        events: events,
+                        hours: hours,
+                        days: days,
+                      ),
+                    )
+                  : DailyModule(days: days, events: events, hours: hours),
             ),
           ),
           Positioned(
-            top: 50,
+            top: topOffset,
             left: 0,
             bottom: 0,
             child: Container(
@@ -167,24 +185,26 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
               ),
             ),
           ),
-          Positioned(
-            left: 50,
-            top: 0,
-            right: 0,
-            child: Container(
-              height: 50,
-              color: Colors.green,
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                controller: _horizontalDayController,
-                shrinkWrap: true,
-                children: [
-                  for (var day in days) horizontalDayItem(day),
-                ],
-              ),
-            ),
-          ),
+          isHorizontal
+              ? Positioned(
+                  left: 50,
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    height: 50,
+                    color: Colors.green,
+                    child: ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      controller: _horizontalDayController,
+                      shrinkWrap: true,
+                      children: [
+                        for (var day in days) horizontalDayItem(day),
+                      ],
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       );
     }, error: (Object error, StackTrace stackTrace) {
