@@ -130,6 +130,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         title: Text(activeTitle),
         actions: activeActions,
       ),
+      extendBody: true,
       drawer: NavDrawer(onSelectedNavItem: _handleDrawerNav),
       body: activePage,
       bottomNavigationBar: isNarrow ||
