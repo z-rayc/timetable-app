@@ -1,11 +1,13 @@
 class ChatRoom {
   final String id;
   final String name;
+  final String ownerId;
   final DateTime lastRead;
 
   ChatRoom({
     required this.id,
     required this.name,
+    required this.ownerId,
     required this.lastRead,
   });
 
@@ -13,6 +15,7 @@ class ChatRoom {
     return ChatRoom(
       id: data['id'].toString(),
       name: data['name'],
+      ownerId: data['owner'].toString(),
       lastRead: DateTime.parse(lastRead),
     );
   }
