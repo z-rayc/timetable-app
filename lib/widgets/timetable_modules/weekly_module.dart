@@ -10,11 +10,13 @@ class WeeklyModule extends StatefulWidget {
     required this.days,
     required this.events,
     required this.hours,
+    required this.eventColours,
   });
 
   final List<String> days;
   final List<CourseEvent> events;
   final List<String> hours;
+  final Map<CourseEvent, Color> eventColours;
 
   @override
   State<WeeklyModule> createState() => _WeeklyModuleState();
@@ -40,6 +42,7 @@ class _WeeklyModuleState extends State<WeeklyModule> {
               sortedEvents: eventMap[day]!,
               hours: widget.hours,
               showEmptyText: false,
+              eventColours: widget.eventColours,
             )
         ],
       ),

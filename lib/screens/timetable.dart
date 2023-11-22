@@ -112,8 +112,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         );
       }
       var isHorizontal = MediaQuery.of(context).size.width > 600;
-
-      var weekEvents = timetable.asData!.value.courseEvents;
+      var colourMap = timetable.asData!.value.courseEvents;
+      var weekEvents = colourMap.keys.toList();
 
       var todayEvents = weekEvents
           .where((element) =>
@@ -171,6 +171,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                         events: events,
                         hours: hours,
                         days: days,
+                        eventColours: colourMap,
                       ),
                     )
                   : DailyModule(
@@ -178,6 +179,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                       sortedEvents: events,
                       hours: hours,
                       showEmptyText: true,
+                      eventColours: colourMap,
                     ),
             ),
           ),

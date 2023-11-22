@@ -4,12 +4,14 @@ import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/widgets/course_event_card.dart';
 
 class DailyModule extends StatelessWidget {
-  const DailyModule(
-      {super.key,
-      required this.days,
-      required this.sortedEvents,
-      required this.hours,
-      required this.showEmptyText});
+  const DailyModule({
+    super.key,
+    required this.days,
+    required this.sortedEvents,
+    required this.hours,
+    required this.showEmptyText,
+    required this.eventColours,
+  });
 
   final List<String> days;
   final List<CourseEvent> sortedEvents;
