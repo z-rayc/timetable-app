@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
-import 'package:timetable_app/widgets/course_event_card.dart';
+import 'package:timetable_app/widgets/event_card.dart';
 
 class DailyModule extends StatelessWidget {
   const DailyModule({
@@ -17,6 +17,7 @@ class DailyModule extends StatelessWidget {
   final List<CourseEvent> sortedEvents;
   final List<String> hours;
   final bool showEmptyText;
+  final Map<CourseEvent, Color> eventColours;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,23 @@ class DailyModule extends StatelessWidget {
       }
       return overlapping;
     }).toList();
+
+    bool checkIfOverlapping(CourseEvent event, List<CourseEvent> events) {
+      var overlapping = false;
+      for (var event2 in events) {
+        if (event == event2) {
+          overlapping = true;
+          break;
+        }
+
+        if (event2.startTime.isBefore(event.endTime) &&
+            event2.endTime.isAfter(event.startTime)) {
+          overlapping = true;
+          break;
+        }
+      }
+      return overlapping;
+    }
 
     List<CourseEvent> decideWhichOverlappingEventToMoveToTheRight(
         List<CourseEvent> overlappingEvents) {
@@ -88,8 +106,8 @@ class DailyModule extends StatelessWidget {
       return doubleOverlappingEvents;
     }
 
-    List<Widget> buildEventWidgets(
-        double topOffset, double leftOffset, List<CourseEvent> events) {
+    List<Widget> buildEventWidgets(double topOffset, double leftOffset,
+        List<CourseEvent> events, List<CourseEvent> overlappingEvents) {
       List<Widget> eventWidgets = [];
       var calendarEarliest = 7.0;
       for (var event in events) {
@@ -109,11 +127,15 @@ class DailyModule extends StatelessWidget {
               height: (event.endTime.difference(event.startTime).inMinutes) /
                   60 *
                   TimeTableTheme.timeTableHourRowHeight,
-              width:
-                  135 /* TimeTableTheme.timeTableColumnWidth *
+              width: (checkIfOverlapping(event, overlappingEvents)
+                  ? 135
+                  : 270) /* TimeTableTheme.timeTableColumnWidth *
                   (overlappingEvents.isEmpty ? 1 : 2 / 3) */
               ,
-              child: CourseEventClass(event: event),
+              child: EventCard(
+                event: event,
+                color: eventColours[event]!,
+              ),
             ),
           ),
         );
@@ -124,13 +146,14 @@ class DailyModule extends StatelessWidget {
     List<Widget> generateEventWidgets() {
       var overlapping =
           decideWhichOverlappingEventToMoveToTheRight(overlappingEvents);
-      var eventWidgets = buildEventWidgets(25, 0, sortedEvents);
+      var eventWidgets = buildEventWidgets(25, 0, sortedEvents, overlapping);
       if (overlapping.isNotEmpty) {
         eventWidgets.addAll(buildEventWidgets(
             25,
             135 /* TimeTableTheme.timeTableColumnWidth *
                 (overlappingEvents.isEmpty ? 0 : 2 / 3) */
             ,
+            overlapping,
             overlapping));
       }
 

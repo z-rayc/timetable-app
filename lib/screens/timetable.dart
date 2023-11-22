@@ -5,7 +5,6 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/widgets/course_event_card.dart';
 import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
 import 'package:timetable_app/widgets/timetable_modules/weekly_module.dart';
 
@@ -147,7 +146,6 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
           "${earliestTime.hour + i}:00"
       ];
-
 
       //Make a hashmap of events with the Datetime weekday as the key
 

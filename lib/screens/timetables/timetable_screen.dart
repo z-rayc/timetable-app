@@ -3,7 +3,6 @@ import 'package:timetable_app/screens/timetable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/providers/selected_day_provider.dart';
 import 'package:timetable_app/screens/timetables/single_day_timetable.dart';
-import 'package:timetable_app/screens/timetables/week_timetable.dart';
 
 class TimetableScreen extends ConsumerWidget {
   const TimetableScreen({super.key});
