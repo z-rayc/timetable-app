@@ -4,7 +4,7 @@ import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/staff.dart';
-import 'package:timetable_app/widgets/course_event_card.dart';
+import 'package:timetable_app/widgets/event_card.dart';
 
 void main() {
   testWidgets('CourseEventCard displays correct information',
@@ -33,13 +33,15 @@ void main() {
       id: 'ujkihsdref',
       teachingSummary: 'fesfesf',
     );
+    const Color color = Colors.grey;
 
     // Build the CourseEventCard widget
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: CourseEventClass(
+          body: EventCard(
             event: event,
+            color: color,
           ),
         ),
       ),
@@ -77,20 +79,22 @@ void main() {
       id: 'ujkihsdref',
       teachingSummary: 'fesfesf',
     );
+    const Color color = Colors.grey;
 
     // Build the CourseEventCard widget
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: CourseEventClass(
+          body: EventCard(
             event: event,
+            color: color,
           ),
         ),
       ),
     );
 
     // Tap the CourseEventCard
-    await tester.tap(find.byType(CourseEventClass));
+    await tester.tap(find.byType(EventCard));
 
     // Verify that the EventDetailsScreen is displayed
     await tester.pumpAndSettle();

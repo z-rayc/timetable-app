@@ -32,7 +32,7 @@ class CourseDetailsScreen extends StatelessWidget {
           Row(
             children: [
               Text(
-                "Colour: #${uc.color.value.toRadixString(16).substring(2)}",
+                "Color: #${uc.color.value.toRadixString(16).substring(2)}",
               ),
               const SizedBox(width: 5),
               Container(

@@ -33,10 +33,18 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   // These are placeholder courses
   final List<Course> _allCourses = [];
-  late List<Course> _preselectedCourses;
+  final List<Course> _preselectedCourses = [];
   final List<Course> _selectedCourses = [];
 
   final db = kSupabase.rest;
+
+  List<String> getCoursesAsNames(List<Course> courses) {
+    return courses.map((course) => course.name).toList();
+  }
+
+  bool listContainsCourseByName(List<Course> courses, String name) {
+    return courses.map((course) => course.name).contains(name);
+  }
 
   void saveCourses() {
     addCourses();
@@ -50,19 +58,35 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   // If the course already exists in the database, it will be ignored
   void addCourses() {
     List<Course> coursesToAdd = [];
-    for (var course in _selectedCourses) {
-      if (!_preselectedCourses.contains(course)) {
-        coursesToAdd.add(course);
+
+    // Get the selected and preselected courses' names
+    List<String> preselectedCoursesNames =
+        getCoursesAsNames(_preselectedCourses);
+    List<String> selectedCoursesNames = getCoursesAsNames(_selectedCourses);
+
+    // Only add the selected courses that are not preselected
+    for (var course in selectedCoursesNames) {
+      if (!preselectedCoursesNames.contains(course)) {
+        coursesToAdd.add(
+            _selectedCourses.firstWhere((element) => element.name == course));
       }
     }
+
+    // Add the courses to the database
     if (coursesToAdd.isNotEmpty) {
-      var coursesToAdd = _selectedCourses
+      var courses = coursesToAdd
           .map((course) => {
                 'course_id': course.id,
-                'color': '0xff555555', // A default colour: grey
+                'color': '0xff555555', // A default color: grey
               })
           .toList();
-      db.from('UserCourses').upsert(coursesToAdd).catchError(
+      db
+          .from('UserCourses')
+          .upsert(
+            courses,
+            ignoreDuplicates: true,
+          )
+          .catchError(
         (error) {
           log(error.toString());
         },
@@ -107,7 +131,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     var data =
         myCourses.asData?.value.userCourses.map((e) => e.course).toList() ?? [];
     _selectedCourses.addAll(data);
-    _preselectedCourses = data;
+    _preselectedCourses.addAll(data);
     _addAllCourses();
   }
 
@@ -148,8 +172,10 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
                 (Course option) {
                   // Search by ID or name
                   // Where the course is not already selected
-                  return !_selectedCourses.contains(option) &&
-                      !_preselectedCourses.contains(option) &&
+                  return !listContainsCourseByName(
+                          _selectedCourses, option.name) &&
+                      !listContainsCourseByName(
+                          _preselectedCourses, option.name) &&
                       (option.name
                               .toLowerCase()
                               .contains(textEditingValue.text.toLowerCase()) ||

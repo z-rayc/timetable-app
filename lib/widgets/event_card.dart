@@ -5,15 +5,24 @@ import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/screens/event_details_screen.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
-class CourseEventClass extends StatelessWidget {
-  const CourseEventClass({super.key, required this.event});
+class EventCard extends StatelessWidget {
+  const EventCard({
+    super.key,
+    required this.event,
+    required this.color,
+  });
 
   final Event event;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     if (event is CourseEvent) {
-      return _CourseEventCard(context: context, event: event as CourseEvent);
+      return _CourseEventCard(
+        context: context,
+        event: event as CourseEvent,
+        color: color,
+      );
     } else {
       return const Text("Not implemented");
     }
@@ -24,17 +33,17 @@ class _CourseEventCard extends StatelessWidget {
   const _CourseEventCard({
     required this.context,
     required this.event,
+    required this.color,
   });
 
   final BuildContext context;
   final CourseEvent event;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: CalendarItemTheme.calendarDecoration(
-        CalendarItemColour.green,
-      ), // TODO: Update with color from course
+      decoration: CalendarItemTheme.calendarDecoration(color),
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () {
