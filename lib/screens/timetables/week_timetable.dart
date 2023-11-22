@@ -79,118 +79,120 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
       'Sunday'
     ];
 
-    return timetable.when(data: (DailyTimetable data) {
-      var events = timetable.asData!.value.courseEvents;
-      var earliestTime = events
-          .reduce((value, element) =>
-              value.startTime.isBefore(element.startTime) ? value : element)
-          .startTime;
-      var latestTime = events
-          .reduce((value, element) =>
-              value.endTime.isAfter(element.endTime) ? value : element)
-          .endTime;
+    return Expanded(
+      child: timetable.when(data: (DailyTimetable data) {
+        var events = timetable.asData!.value.courseEvents;
+        var earliestTime = events
+            .reduce((value, element) =>
+                value.startTime.isBefore(element.startTime) ? value : element)
+            .startTime;
+        var latestTime = events
+            .reduce((value, element) =>
+                value.endTime.isAfter(element.endTime) ? value : element)
+            .endTime;
 
-      var hours = [
-        for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
-          "${earliestTime.hour + i}:00"
-      ];
-      //Make a hashmap of events with the Datetime weekday as the key
-      var eventMap = {
-        for (int date = DateTime.monday; date < DateTime.sunday; date++)
-          date: events
-              .where((element) => element.startTime.weekday == date)
-              .toList()
-      };
+        var hours = [
+          for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
+            "${earliestTime.hour + i}:00"
+        ];
+        //Make a hashmap of events with the Datetime weekday as the key
+        var eventMap = {
+          for (int date = DateTime.monday; date < DateTime.sunday; date++)
+            date: events
+                .where((element) => element.startTime.weekday == date)
+                .toList()
+        };
 
-      return Stack(
-        children: [
-          Positioned(
-            top: 50,
-            left: 50,
-            right: 0,
-            bottom: 0,
-            child: SingleChildScrollView(
-              controller: _verticalTableController,
+        return Stack(
+          children: [
+            Positioned(
+              top: 50,
+              left: 50,
+              right: 0,
+              bottom: 0,
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: _horizontalTableController,
-                child: SizedBox(
-                  width: days.length * 300,
-                  child: Row(
-                    children: [
-                      for (var day in eventMap.keys)
-                        SizedBox(
-                          width: 300,
-                          height: hours.length * 100,
-                          child: Column(
-                            children: [
-                              for (var event in eventMap[day]!)
-                                Container(
-                                    margin: EdgeInsets.only(
-                                        top: (event.startTime.hour +
-                                                    (event.startTime.minute /
-                                                        60) -
-                                                    7) *
-                                                100 +
-                                            50),
-                                    height: (event.endTime
-                                            .difference(event.startTime)
-                                            .inMinutes) /
-                                        60 *
-                                        100,
-                                    child: CourseEventClass(event: event)),
-                            ],
+                controller: _verticalTableController,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  controller: _horizontalTableController,
+                  child: SizedBox(
+                    width: days.length * 300,
+                    child: Row(
+                      children: [
+                        for (var day in eventMap.keys)
+                          SizedBox(
+                            width: 300,
+                            height: hours.length * 100,
+                            child: Column(
+                              children: [
+                                for (var event in eventMap[day]!)
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          top: (event.startTime.hour +
+                                                      (event.startTime.minute /
+                                                          60) -
+                                                      7) *
+                                                  100 +
+                                              50),
+                                      height: (event.endTime
+                                              .difference(event.startTime)
+                                              .inMinutes) /
+                                          60 *
+                                          100,
+                                      child: CourseEventClass(event: event)),
+                              ],
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 50,
-            left: 0,
-            bottom: 0,
-            child: Container(
-              width: 50,
-              height: hours.length * 100,
-              color: Colors.red,
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                controller: _verticalHourController,
-                shrinkWrap: true,
-                children: [
-                  for (var hour in hours) verticalHourItem(hour),
-                ],
+            Positioned(
+              top: 50,
+              left: 0,
+              bottom: 0,
+              child: Container(
+                width: 50,
+                height: hours.length * 100,
+                color: Colors.red,
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  controller: _verticalHourController,
+                  shrinkWrap: true,
+                  children: [
+                    for (var hour in hours) verticalHourItem(hour),
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            left: 50,
-            top: 0,
-            right: 0,
-            child: Container(
-              height: 50,
-              color: Colors.green,
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                controller: _horizontalDayController,
-                shrinkWrap: true,
-                children: [
-                  for (var day in days) horizontalDayItem(day),
-                ],
+            Positioned(
+              left: 50,
+              top: 0,
+              right: 0,
+              child: Container(
+                height: 50,
+                color: Colors.green,
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  controller: _horizontalDayController,
+                  shrinkWrap: true,
+                  children: [
+                    for (var day in days) horizontalDayItem(day),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      );
-    }, error: (Object error, StackTrace stackTrace) {
-      return SingleChildScrollView(child: Text("Error: $error, $stackTrace"));
-    }, loading: () {
-      return const Center(child: CircularProgressIndicator());
-    });
+          ],
+        );
+      }, error: (Object error, StackTrace stackTrace) {
+        return SingleChildScrollView(child: Text("Error: $error, $stackTrace"));
+      }, loading: () {
+        return const Center(child: CircularProgressIndicator());
+      }),
+    );
   }
 }
