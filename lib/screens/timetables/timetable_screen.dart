@@ -21,12 +21,16 @@ class TimetableScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isWide = MediaQuery.of(context).size.width > 600;
-    return Column(
-      children: [
-        _datepicker(context, ref),
-        !isWide ? const SingleDayTimetable() : const WeekTimeTable(),
-      ],
-    );
+    if (!isWide) {
+      return Column(
+        children: [
+          _datepicker(context, ref),
+          const SingleDayTimetable(),
+        ],
+      );
+    } else {
+      return const WeekTimeTable();
+    }
   }
 
   Widget _datepicker(BuildContext context, WidgetRef ref) {
