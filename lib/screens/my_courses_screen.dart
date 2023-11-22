@@ -22,17 +22,11 @@ class MyCoursesScreen extends ConsumerWidget {
           body: ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: myCourses.asData?.value.userCourses.length ?? 0,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: courseTile(
-                        myCourses.asData!.value.userCourses[index], context),
-                  );
-                },
-              ),
+              for (var course in data.userCourses)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: courseTile(course, context),
+                ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
