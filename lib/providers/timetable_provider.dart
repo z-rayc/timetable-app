@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/providers/selected_day_provider.dart';
 
 class DailyTimetable {
   List<CourseEvent> courseEvents = [];
@@ -26,6 +27,7 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
   @override
   FutureOr<DailyTimetable> build() async {
     final db = kSupabase.rest;
+    final selectedDay = ref.watch(dateSelectedProvider).asData!.value.date;
     List<Map<String, dynamic>> courses =
         await db.from('UserCourses').select('*');
     List<String> courseIds = [];
@@ -35,7 +37,7 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
 
     return DailyTimetable(
         courseEvents: await convertToCourseEvents(
-            getCourseEventsForDay(DateTime.now(), courseIds)));
+            getCourseEventsForDay(selectedDay, courseIds)));
   }
 }
 
@@ -49,7 +51,7 @@ Future<List<Map<String, dynamic>>> getCourseEventsForDay(
   DateTime now = day;
   DateTime startOfDay = DateTime(now.year, now.month, now.day);
   // setting end of day to 54 days from now to test
-  DateTime endOfDay = startOfDay.add(const Duration(days: 54));
+  DateTime endOfDay = startOfDay.add(const Duration(days: 1));
   final db = kSupabase.rest;
   final response = await db
       .from('Events')
