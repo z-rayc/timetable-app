@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/widgets/course_event_card.dart';
+import 'package:timetable_app/widgets/event_card.dart';
 
 class WeekTimeTable extends ConsumerStatefulWidget {
   const WeekTimeTable({super.key});
@@ -139,7 +139,7 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
                                               .inMinutes) /
                                           60 *
                                           100,
-                                      child: CourseEventClass(event: event)),
+                                      child: EventCard(event: event)),
                               ],
                             ),
                           ),

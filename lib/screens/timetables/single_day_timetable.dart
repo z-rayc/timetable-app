@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/widgets/course_event_card.dart';
+import 'package:timetable_app/widgets/event_card.dart';
 
 class SingleDayTimetable extends ConsumerWidget {
   const SingleDayTimetable({super.key});
@@ -49,7 +49,7 @@ class SingleDayTimetable extends ConsumerWidget {
             itemCount: timetable.asData!.value.courseEvents.length,
             itemBuilder: (context, index) {
               var courseEvent = timetable.asData!.value.courseEvents[index];
-              return CourseEventClass(event: courseEvent);
+              return EventCard(event: courseEvent);
             },
           );
         }
