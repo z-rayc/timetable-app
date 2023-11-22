@@ -68,7 +68,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     String activeTitle = 'Timetable';
-    Widget activePage = TimetableScreen();
+    Widget activePage = const TimetableScreen();
     List<Widget> activeActions = [
       IconButton(
         icon: const Icon(Icons.edit),
@@ -130,13 +130,14 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         title: Text(activeTitle),
         actions: activeActions,
       ),
-      extendBody: true,
+      extendBody: false,
       drawer: NavDrawer(onSelectedNavItem: _handleDrawerNav),
       body: activePage,
       bottomNavigationBar: isNarrow ||
               isTall // don't show navbar on wide screen with little height
           ? Container(
-              margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+              margin: const EdgeInsets.only(
+                  bottom: 10, left: 10, right: 10, top: 10),
               decoration: AppThemes.bottomNavBarBoxDecoration,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(kBottomNavBarRounding),
