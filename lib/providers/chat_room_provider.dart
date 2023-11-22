@@ -54,9 +54,9 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     ref.invalidateSelf();
   }
 
-  Future<ChatRoomCreationError?> addChatRoom(
+  Future<ChatRoomFetchError?> addChatRoom(
       String chatName, List<String> emails) async {
-    ChatRoomCreationError? maybeError;
+    ChatRoomFetchError? maybeError;
     state = const AsyncValue.loading();
     try {
       var response = await kSupabase.functions.invoke('createChatRoom', body: {
@@ -65,7 +65,7 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
       }).timeout(kDefaultTimeout);
 
       if (response.status != 201) {
-        maybeError = ChatRoomCreationError(response.data['error']);
+        maybeError = ChatRoomFetchError(response.data['error']);
       }
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -73,12 +73,12 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return maybeError;
   }
 
-  Future<ChatRoomCreationError?> updateChatRoom(
+  Future<ChatRoomFetchError?> updateChatRoom(
     String chatRoomId,
     String newChatName,
     List<String> emails,
   ) async {
-    ChatRoomCreationError? maybeError;
+    ChatRoomFetchError? maybeError;
     state = const AsyncValue.loading();
     try {
       var response = await kSupabase.functions.invoke('updateChatRoom', body: {
@@ -86,12 +86,30 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
         'chatroomName': newChatName,
         'memberEmails': emails,
       }).timeout(kDefaultTimeout);
-      print(response.data);
       if (response.status != 200) {
-        maybeError = ChatRoomCreationError(response.data['error']);
+        maybeError = ChatRoomFetchError(response.data['error']);
       }
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
+      maybeError = ChatRoomFetchError(e.toString());
+    }
+    ref.invalidateSelf();
+    return maybeError;
+  }
+
+  Future<ChatRoomFetchError?> deleteChatRoom(String id) async {
+    ChatRoomFetchError? maybeError;
+    try {
+      await kSupabase
+          .from('ChatRoom')
+          .delete()
+          .eq('id', id)
+          .timeout(kDefaultTimeout);
+    } on PostgrestException catch (e) {
+      maybeError = ChatRoomFetchError(e.message);
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      maybeError = ChatRoomFetchError(e.toString());
     }
     ref.invalidateSelf();
     return maybeError;
@@ -134,9 +152,9 @@ final chatRoomProvider =
   },
 );
 
-class ChatRoomCreationError {
+class ChatRoomFetchError {
   final String message;
-  ChatRoomCreationError(this.message);
+  ChatRoomFetchError(this.message);
   @override
   String toString() {
     return message;

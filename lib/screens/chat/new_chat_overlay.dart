@@ -6,6 +6,7 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
+import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/chat/email_list_tile.dart';
 import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
@@ -131,7 +132,50 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
     }
   }
 
-  void _deleteChatRoom() {}
+  void _onDeleteChatRoomTapped() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Chatroom'),
+          content: const Text(
+              'Are you sure you want to delete this chatroom? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                _deleteChatRoom();
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteChatRoom() async {
+    _setLoading(true);
+    final deleteError = await ref
+        .read(chatRoomProvider.notifier)
+        .deleteChatRoom(widget.chatRoom!.id);
+    _setLoading(false);
+    if (deleteError != null) {
+      if (context.mounted) {
+        showErrorDialog(context, deleteError.toString());
+      }
+    } else {
+      if (context.mounted) {
+        popAllScreens(context);
+      }
+    }
+  }
 
   void _initializeEditing() async {
     if (!widget.isNewMode) {
@@ -245,7 +289,8 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
       children: [
         if (!widget.isNewMode)
           TextButton.icon(
-              onPressed: _deleteChatRoom,
+              onPressed:
+                  (!_isLoading && !_loadingEditing) ? _onDeleteChatRoomTapped : null,
               icon: const Icon(Icons.delete_forever),
               label: const Text('Delete')),
         const Spacer(),
@@ -256,9 +301,10 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: _isLoading ? null : _submitCreateOrEdit,
+          onPressed:
+              (!_isLoading && !_loadingEditing) ? _submitCreateOrEdit : null,
           style: AppThemes.entryButtonTheme,
-          child: _isLoading
+          child: _isLoading && !_loadingEditing
               ? const PrimaryElevatedButtonLoadingChild()
               : Text(
                   widget.isNewMode ? 'Create' : 'Save',
@@ -287,7 +333,7 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
                     controller: _chatNameController,
                     decoration: AppThemes.entryFieldTheme.copyWith(
                       hintText: 'Chatroom name',
-                      enabled: !_isLoading || !_loadingEditing,
+                      enabled: (!_isLoading && !_loadingEditing),
                     ),
                     validator: (value) {
                       if (value == null ||
