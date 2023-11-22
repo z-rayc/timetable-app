@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
@@ -6,12 +7,13 @@ import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/providers/selected_day_provider.dart';
 
 class DailyTimetable {
-  List<CourseEvent> courseEvents = [];
-
-  DailyTimetable({required this.courseEvents});
+  Map<CourseEvent, Color> courseEvents = {};
+  DailyTimetable({
+    required this.courseEvents,
+  });
 
   DailyTimetable copyWith({
-    List<CourseEvent>? courseEvents,
+    Map<CourseEvent, Color>? courseEvents,
   }) {
     return DailyTimetable(
       courseEvents: courseEvents ?? this.courseEvents,
@@ -35,9 +37,17 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
       courseIds.add(course['course_id']);
     }
 
-    return DailyTimetable(
-        courseEvents: await convertToCourseEvents(
-            getCourseEventsForDay(selectedDay.date, courseIds)));
+    // Get the course events for the selected day
+    // and then map each to a UserCourse color
+    Map<CourseEvent, Color> eventsWithColor = {};
+    List<CourseEvent> events = await convertToCourseEvents(
+        getCourseEventsForDay(selectedDay.date, courseIds));
+    for (var event in events) {
+      eventsWithColor[event] = Color(int.parse(courses.firstWhere(
+          (course) => course['course_id'] == event.course.id)['color']));
+    }
+
+    return DailyTimetable(courseEvents: eventsWithColor);
   }
 }
 

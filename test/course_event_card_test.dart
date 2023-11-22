@@ -33,6 +33,7 @@ void main() {
       id: 'ujkihsdref',
       teachingSummary: 'fesfesf',
     );
+    const Color color = Colors.grey;
 
     // Build the CourseEventCard widget
     await tester.pumpWidget(
@@ -40,6 +41,7 @@ void main() {
         home: Scaffold(
           body: EventCard(
             event: event,
+            color: color,
           ),
         ),
       ),
@@ -77,6 +79,7 @@ void main() {
       id: 'ujkihsdref',
       teachingSummary: 'fesfesf',
     );
+    const Color color = Colors.grey;
 
     // Build the CourseEventCard widget
     await tester.pumpWidget(
@@ -84,6 +87,7 @@ void main() {
         home: Scaffold(
           body: EventCard(
             event: event,
+            color: color,
           ),
         ),
       ),

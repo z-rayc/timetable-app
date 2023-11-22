@@ -67,6 +67,8 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
 
   @override
   Widget build(BuildContext context) {
+    return Text("Placeholder!");
+
     var timetable = ref.watch(dailyTimetableProvider);
 
     var days = [
@@ -79,7 +81,7 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
       'Sunday'
     ];
 
-    return Expanded(
+    /* return Expanded(
       child: timetable.when(data: (DailyTimetable data) {
         var events = timetable.asData!.value.courseEvents;
         var earliestTime = events
@@ -193,6 +195,6 @@ class _WeekTimeTableState extends ConsumerState<WeekTimeTable> {
       }, loading: () {
         return const Center(child: CircularProgressIndicator());
       }),
-    );
+    ); */
   }
 }

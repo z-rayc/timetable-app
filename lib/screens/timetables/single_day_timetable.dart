@@ -34,22 +34,16 @@ class SingleDayTimetable extends ConsumerWidget {
             ),
           );
         } else {
-          // sort events by start time and date (earliest first)
-          data.courseEvents.sort((a, b) {
-            if (a.startTime.isBefore(b.startTime)) {
-              return -1;
-            } else if (a.startTime.isAfter(b.startTime)) {
-              return 1;
-            } else {
-              return 0;
-            }
-          });
+          Iterable<EventCard> cards =
+              data.courseEvents.keys.map((key) => EventCard(
+                    event: key,
+                    color: data.courseEvents[key]!,
+                  ));
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: timetable.asData!.value.courseEvents.length,
             itemBuilder: (context, index) {
-              var courseEvent = timetable.asData!.value.courseEvents[index];
-              return EventCard(event: courseEvent);
+              return cards.elementAt(index);
             },
           );
         }
