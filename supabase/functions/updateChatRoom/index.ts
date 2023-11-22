@@ -121,7 +121,7 @@ Deno.serve(async (req: Request) => {
   }
 
   // remove old members
-  const { error: removeMembersError } = await adminAuthCLient.from('ChatRoomMember').delete().in('user_id', userIdsToRemove);
+  const { error: removeMembersError } = await adminAuthCLient.from('ChatRoomMember').delete().eq('chatroom_id', chatroomId).in('user_id', userIdsToRemove);
   if (removeMembersError) {
     return new Response(JSON.stringify({ error: `Error removing members: ${removeMembersError.code}` }), {
       headers: { ...corsHeaders, 'content-type': 'application/json' },
