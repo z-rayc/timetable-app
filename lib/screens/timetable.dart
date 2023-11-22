@@ -147,6 +147,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
           "${earliestTime.hour + i}:00"
       ];
+
+
       //Make a hashmap of events with the Datetime weekday as the key
 
       var topOffset =

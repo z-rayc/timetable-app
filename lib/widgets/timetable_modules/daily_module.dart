@@ -18,36 +18,127 @@ class DailyModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> generateEventWidgets() {
-      List<Widget> eventWidgets = [];
-      var lastEndTime = 7.0;
-      var extraMargin = TimeTableTheme.timeTableHourRowHeight / 2;
-
+    var overlappingEvents = sortedEvents.where((element) {
+      var overlapping = false;
       for (var event in sortedEvents) {
-        var difference =
-            event.endTime.difference(event.startTime).inMinutes / 60;
+        if (event == element) continue;
+        if (event.startTime.isBefore(element.endTime) &&
+            event.endTime.isAfter(element.startTime)) {
+          overlapping = true;
+          break;
+        }
+      }
+      return overlapping;
+    }).toList();
+
+    List<CourseEvent> decideWhichOverlappingEventToMoveToTheRight(
+        List<CourseEvent> overlappingEvents) {
+      //Check if any of the events are overlapping two or more events
+      var doubleOverlappingEvents = overlappingEvents.where((element) {
+        var overlapping = false;
+        int overlappingCount = 0;
+        for (var event in overlappingEvents) {
+          if (event == element) continue;
+          if (event.startTime.isBefore(element.endTime) &&
+              event.endTime.isAfter(element.startTime)) {
+            overlappingCount++;
+          }
+        }
+        if (overlappingCount > 1) {
+          overlapping = true;
+        }
+
+        return overlapping;
+      }).toList();
+
+      //Remove the events that are overlapping two or more events from the list
+      for (var event in doubleOverlappingEvents) {
+        overlappingEvents.remove(event);
+      }
+
+      //Check if any of the remaining events are overlapping one event.
+
+      List<CourseEvent> singleOverlappingEvents = [];
+      for (var event in overlappingEvents) {
+        var overlapping = false;
+        for (var event2 in overlappingEvents) {
+          if (event == event2) continue;
+          if (event2.startTime.isBefore(event.endTime) &&
+              event2.endTime.isAfter(event.startTime) &&
+              !singleOverlappingEvents.contains(event2)) {
+            overlapping = true;
+            break;
+          }
+        }
+        if (overlapping) {
+          singleOverlappingEvents.add(event);
+        }
+      }
+
+      //Combine the events that are overlapping one event with the events that are overlapping two or more events
+      doubleOverlappingEvents.addAll(singleOverlappingEvents);
+
+      //Remove overlapping events from sortedEvents
+      for (var event in doubleOverlappingEvents) {
+        sortedEvents.remove(event);
+      }
+
+      return doubleOverlappingEvents;
+    }
+
+    List<Widget> buildEventWidgets(
+        double topOffset, double leftOffset, List<CourseEvent> events) {
+      List<Widget> eventWidgets = [];
+      var calendarEarliest = 7.0;
+      for (var event in events) {
+        var height = (event.endTime.difference(event.startTime).inMinutes) /
+            60 *
+            TimeTableTheme.timeTableHourRowHeight;
 
         eventWidgets.add(
-          Container(
-            margin: EdgeInsets.only(
-              top: ((event.startTime.hour +
-                          (event.startTime.minute / 60) -
-                          lastEndTime) *
-                      TimeTableTheme.timeTableHourRowHeight +
-                  extraMargin),
+          Positioned(
+            top: (event.startTime.hour +
+                        (event.startTime.minute / 60) -
+                        calendarEarliest) *
+                    TimeTableTheme.timeTableHourRowHeight +
+                topOffset,
+            left: leftOffset,
+            child: SizedBox(
+              height: (event.endTime.difference(event.startTime).inMinutes) /
+                  60 *
+                  TimeTableTheme.timeTableHourRowHeight,
+              width:
+                  135 /* TimeTableTheme.timeTableColumnWidth *
+                  (overlappingEvents.isEmpty ? 1 : 2 / 3) */
+              ,
+              child: CourseEventClass(event: event),
             ),
-            height: (event.endTime.difference(event.startTime).inMinutes) /
-                60 *
-                TimeTableTheme.timeTableHourRowHeight,
-            child: CourseEventClass(event: event),
           ),
         );
-
-        lastEndTime = event.endTime.hour + (event.endTime.minute / 60);
-        extraMargin = 0;
       }
       return eventWidgets;
     }
+
+    List<Widget> generateEventWidgets() {
+      var overlapping =
+          decideWhichOverlappingEventToMoveToTheRight(overlappingEvents);
+      var eventWidgets = buildEventWidgets(25, 0, sortedEvents);
+      if (overlapping.isNotEmpty) {
+        eventWidgets.addAll(buildEventWidgets(
+            25,
+            135 /* TimeTableTheme.timeTableColumnWidth *
+                (overlappingEvents.isEmpty ? 0 : 2 / 3) */
+            ,
+            overlapping));
+      }
+
+      return eventWidgets;
+    }
+
+    //Remove overlapping events from sortedEvents
+    /* for (var event in overlappingEvents) {
+      sortedEvents.remove(event);
+    } */
 
     if (sortedEvents.isEmpty) {
       return Container(
@@ -64,7 +155,7 @@ class DailyModule extends StatelessWidget {
     return SizedBox(
       width: TimeTableTheme.timeTableColumnWidth,
       height: hours.length * TimeTableTheme.timeTableHourRowHeight,
-      child: Column(
+      child: Stack(
         children: generateEventWidgets(),
       ),
     );
