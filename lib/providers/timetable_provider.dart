@@ -27,7 +27,7 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
   @override
   FutureOr<DailyTimetable> build() async {
     final db = kSupabase.rest;
-    final selectedDay = ref.watch(dateSelectedProvider).asData!.value.date;
+    final selectedDay = ref.watch(dateSelectedProvider);
     List<Map<String, dynamic>> courses =
         await db.from('UserCourses').select('*');
     List<String> courseIds = [];
@@ -37,7 +37,7 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
 
     return DailyTimetable(
         courseEvents: await convertToCourseEvents(
-            getCourseEventsForDay(selectedDay, courseIds)));
+            getCourseEventsForDay(selectedDay.date, courseIds)));
   }
 }
 

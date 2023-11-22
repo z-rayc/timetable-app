@@ -68,7 +68,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     String activeTitle = 'Timetable';
-    Widget activePage = const TimetableScreen();
+    Widget activePage = TimetableScreen();
     List<Widget> activeActions = [
       IconButton(
         icon: const Icon(Icons.edit),

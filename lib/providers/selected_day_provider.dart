@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DateSelected {
@@ -19,19 +18,23 @@ class DateSelected {
   }
 }
 
-class DateSelectedNotifier extends AsyncNotifier<DateSelected> {
-  @override
-  FutureOr<DateSelected> build() async {
-    return DateSelected(date: DateTime.now());
+class DateSelectedNotifier extends StateNotifier<DateSelected> {
+  DateSelectedNotifier() : super(DateSelected(date: DateTime.now()));
+
+  void setDate(DateTime newDate) {
+    state = state.copyWith(date: newDate);
   }
 
-  final dateSelectedProvider =
-      AsyncNotifierProvider<DateSelectedNotifier, DateSelected>(() {
-    return DateSelectedNotifier();
-  });
+  void goForward() {
+    state = state.copyWith(date: state.date.add(const Duration(days: 1)));
+  }
+
+  void goBackward() {
+    state = state.copyWith(date: state.date.subtract(const Duration(days: 1)));
+  }
 }
 
 final dateSelectedProvider =
-    AsyncNotifierProvider<DateSelectedNotifier, DateSelected>(() {
+    StateNotifierProvider<DateSelectedNotifier, DateSelected>((ref) {
   return DateSelectedNotifier();
 });
