@@ -56,13 +56,19 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
       }
     }
     if (coursesToAdd.isNotEmpty) {
-      var coursesToAdd = _selectedCourses
+      var courses = coursesToAdd
           .map((course) => {
                 'course_id': course.id,
                 'color': '0xff555555', // A default colour: grey
               })
           .toList();
-      db.from('UserCourses').upsert(coursesToAdd).catchError(
+      db
+          .from('UserCourses')
+          .upsert(
+            courses,
+            ignoreDuplicates: true,
+          )
+          .catchError(
         (error) {
           log(error.toString());
         },
