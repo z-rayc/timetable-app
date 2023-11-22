@@ -4,6 +4,7 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
+import 'package:timetable_app/screens/chat/new_chat_overlay.dart';
 import 'package:timetable_app/widgets/chat/chat_messages.dart';
 import 'package:timetable_app/widgets/chat/new_chat_message.dart';
 
@@ -30,6 +31,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     Navigator.of(context).pop();
   }
 
+  void _showNewChatOverlay() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return NewChatOverlay(chatRoom: widget.chatRoom);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isOwner =
@@ -38,7 +50,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final Widget acion = isOwner
         ? IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: _showNewChatOverlay,
           )
         : PopupMenuButton<int>(
             onSelected: (value) => _handleMenuSelection(value),
@@ -56,7 +68,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     ),
                   ),
                 ]);
-                
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.chatRoom.name),

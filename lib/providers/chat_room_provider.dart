@@ -73,6 +73,30 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return maybeError;
   }
 
+  Future<ChatRoomCreationError?> updateChatRoom(
+    String chatRoomId,
+    String newChatName,
+    List<String> emails,
+  ) async {
+    ChatRoomCreationError? maybeError;
+    state = const AsyncValue.loading();
+    try {
+      var response = await kSupabase.functions.invoke('updateChatRoom', body: {
+        'chatroomId': chatRoomId,
+        'chatroomName': newChatName,
+        'memberEmails': emails,
+      }).timeout(kDefaultTimeout);
+      print(response.data);
+      if (response.status != 200) {
+        maybeError = ChatRoomCreationError(response.data['error']);
+      }
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
+    ref.invalidateSelf();
+    return maybeError;
+  }
+
   Future<List<ChatRoom>> _fetchChatRooms() async {
     List<dynamic> chatRoomsDynamic = await kSupabase
         .from('ChatRoomMember')
