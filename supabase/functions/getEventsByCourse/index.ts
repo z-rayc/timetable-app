@@ -1,252 +1,237 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
-const SUPABASE_URL =  Deno.env.get('SUPABASE_URL');
-const SUPABASE_ANON_KEY =  Deno.env.get('SUPABASE_ANON_KEY');
-const API_KEY =  Deno.env.get('API_KEY');
-const TP_URL =  Deno.env.get('TP_URL');
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+const API_KEY = Deno.env.get("API_KEY");
+const TP_URL = Deno.env.get("TP_URL");
 
 export interface Event {
-  semesterid: string
-  courseid: string
-  courseversion: string
-  actid: string
-  id: string
-  weeknr: number
-  dtstart: string
-  dtend: string
-  lopenr: number
-  "teaching-method": string
-  "teaching-method-name": string
-  "teaching-title": string
-  summary: string
-  status_plenary: boolean
-  staffs: Staff[]
-  studentgroups: string[]
-  room: Room[]
-  terminnr: number
-  aid: string
-  active: boolean
-  compulsory: boolean
-  discipline: any[]
-  disciplineobj: any[]
-  resources: any[]
-  alerts: any[]
-  coursetype: string
-  staff: string[]
-  staffnames: string[]
-  editurl: string
-  curr: string
-  status: string
-  weekday: number
-  eventid: string
-  multiday: boolean
+  semesterid: string;
+  courseid: string;
+  courseversion: string;
+  actid: string;
+  id: string;
+  weeknr: number;
+  dtstart: string;
+  dtend: string;
+  lopenr: number;
+  "teaching-method": string;
+  "teaching-method-name": string;
+  "teaching-title": string;
+  summary: string;
+  status_plenary: boolean;
+  staffs: Staff[];
+  studentgroups: string[];
+  room: Room[];
+  terminnr: number;
+  aid: string;
+  active: boolean;
+  compulsory: boolean;
+  discipline: any[];
+  disciplineobj: any[];
+  resources: any[];
+  alerts: any[];
+  coursetype: string;
+  staff: string[];
+  staffnames: string[];
+  editurl: string;
+  curr: string;
+  status: string;
+  weekday: number;
+  eventid: string;
+  multiday: boolean;
 }
 export interface Staff {
-  id: string
-  lastname: string
-  firstname: string
-  shortname: string
-  url: string
+  id: string;
+  lastname: string;
+  firstname: string;
+  shortname: string;
+  url: string;
 }
 
 export interface Room {
-  id: string
-  roomid: string
-  roomurl: string
-  campusid: string
-  roomname: string
-  videolink: boolean
-  buildingid: string
-  buildingurl: string
-  campusowner: any
-  roomacronym: string
-  buildingname: string
-  showforstudent: boolean
-  buildingacronym: string
-  equipment_function: any
+  id: string;
+  roomid: string;
+  roomurl: string;
+  campusid: string;
+  roomname: string;
+  videolink: boolean;
+  buildingid: string;
+  buildingurl: string;
+  campusowner: any;
+  roomacronym: string;
+  buildingname: string;
+  showforstudent: boolean;
+  buildingacronym: string;
+  equipment_function: any;
 }
 
 export const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
 Deno.serve(async (req) => {
-
   /// If the request is an OPTIONS request, return a simple response
-  if (req.method === 'OPTIONS') {
-    return new Response('<html><body><h1>This is not the endpoint you want</h1></body></html>', {
-      headers: corsHeaders,
-    })
+  if (req.method === "OPTIONS") {
+    return new Response(
+      "<html><body><h1>This is not the endpoint you want</h1></body></html>",
+      {
+        headers: corsHeaders,
+      }
+    );
   }
 
   /// If the request is not a POST request, return an error
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      headers: {...corsHeaders, 'content-type': 'application/json'},
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      headers: { ...corsHeaders, "content-type": "application/json" },
       status: 401,
-      statusText: 'This endpoint only accepts POST requests'
-    })
+      statusText: "This endpoint only accepts POST requests",
+    });
   }
-
 
   /// Create a supabase client
-const supabaseClient = createClient(
-      SUPABASE_URL!,
-      SUPABASE_ANON_KEY!,
+  const supabaseClient = createClient(
+    SUPABASE_URL!,
+    SUPABASE_ANON_KEY!,
 
-      {
-        global: {
-          headers: {Authorization: req.headers.get('Authorization')!},
-        },
-      }
-    )
-
-    /// Get the user from the request
-    const {
-      data: { user},
-    } = await supabaseClient.auth.getUser()
-
-    /// If there is no user, return an error
-    if (!user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        headers: {...corsHeaders, 'content-type': 'application/json'},
-        status: 401,
-      })
+    {
+      global: {
+        headers: { Authorization: req.headers.get("Authorization")! },
+      },
     }
+  );
 
+  /// Get the user from the request
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser();
 
-  const { id, sem } = await req.json()
-  const tpResponse = await fetch(`${TP_URL}ws/1.4/course.php?id=${id}&sem=${sem}`, {
-    headers: {
-      'X-Gravitee-Api-Key': `${API_KEY}`
-    }
-  })
-
-
-  if (!tpResponse.ok) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      headers: {...corsHeaders, 'content-type': 'application/json'},
+  /// If there is no user, return an error
+  if (!user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      headers: { ...corsHeaders, "content-type": "application/json" },
       status: 401,
-      statusText: 'Could not fetch course data from TP API'
-    })
+    });
   }
 
+  const { id, sem } = await req.json();
+  const tpResponse = await fetch(
+    `${TP_URL}ws/1.4/course.php?id=${id}&sem=${sem}`,
+    {
+      headers: {
+        "X-Gravitee-Api-Key": `${API_KEY}`,
+      },
+    }
+  );
 
+  if (!tpResponse.ok) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      headers: { ...corsHeaders, "content-type": "application/json" },
+      status: 401,
+      statusText: "Could not fetch course data from TP API",
+    });
+  }
 
-  const tpData = await tpResponse.json()
+  const tpData = await tpResponse.json();
 
+  const { courseid } = tpData;
 
+  // Insert the course data into the database
 
-    const { courseid} = tpData
+  // Insert the events data into the database
+  const events: Event[] = tpData.events;
 
-    // Insert the course data into the database
+  // create an array of events to insert in the form of {courseId, semesterid, start, end}
+  const eventsToInsert = events.map((event) => {
+    return {
+      courseId: courseid,
+      semesterid: event.semesterid,
+      start: event.dtstart,
+      end: event.dtend,
+      id: event.eventid,
+      roomid: event.room[0].id,
+      staffid: event.staffs[0].id,
+      teaching_summary: event.summary,
+    };
+  });
 
+  // create an array of rooms to insert in the form of {id, roomid, roomurl, campusid, roomname,roomacronym, buildingname}
+  let roomsToInsert = events.map((event) => {
+    return {
+      id: event.room[0].id,
+      roomid: event.room[0].roomid,
+      roomurl: event.room[0].roomurl,
+      campusid: event.room[0].campusid,
+      roomname: event.room[0].roomname,
+      roomacronym: event.room[0].roomacronym,
+      buildingname: event.room[0].buildingname,
+    };
+  });
 
-      // Insert the events data into the database
-      const events: Event[] = tpData.events
+  // remove duplicates from the rooms array
+  roomsToInsert = roomsToInsert.filter(
+    (room, index, self) => index === self.findIndex((t) => t.id === room.id)
+  );
 
-      // create an array of events to insert in the form of {courseId, semesterid, start, end}
-      const eventsToInsert = events.map(event => {
-        return {
-          courseId: courseid,
-          semesterid: event.semesterid,
-          start: event.dtstart,
-          end: event.dtend,
-          id: event.eventid,
-          roomid: event.room[0].id,
-          staffid: event.staffs[0].id,
-          "teaching_summary": event.summary,
-        }
-      })
+  // create an array of staffs to insert in the form of {id, lastname, firstname, shortname, url}
+  let staffsToInsert = events.map((event) => {
+    return {
+      id: event.staffs[0].id,
+      lastname: event.staffs[0].lastname,
+      firstname: event.staffs[0].firstname,
+      shortname: event.staffs[0].shortname,
+      url: event.staffs[0].url,
+    };
+  });
 
+  // remove duplicates from the staffs array
+  staffsToInsert = staffsToInsert.filter(
+    (staff, index, self) => index === self.findIndex((t) => t.id === staff.id)
+  );
 
-      // create an array of rooms to insert in the form of {id, roomid, roomurl, campusid, roomname,roomacronym, buildingname}
-      let roomsToInsert = events.map(event => {
-        return {
-          id: event.room[0].id,
-          roomid: event.room[0].roomid,
-          roomurl: event.room[0].roomurl,
-          campusid: event.room[0].campusid,
-          roomname: event.room[0].roomname,
-          roomacronym: event.room[0].roomacronym,
-          buildingname: event.room[0].buildingname
-        }
-      })
+  // Insert the rooms data into the database
+  const { data: roomResponse, error: roomError } = await supabaseClient
+    .from("Room")
+    .upsert(roomsToInsert, {
+      onConflict: "id",
+      ignoreDuplicates: true,
+    });
 
-      // remove duplicates from the rooms array
-      roomsToInsert = roomsToInsert.filter((room, index, self) =>
-        index === self.findIndex((t) => (
-          t.id === room.id
-        ))
-      )
-
-
-      // create an array of staffs to insert in the form of {id, lastname, firstname, shortname, url}
-      let staffsToInsert = events.map(event => {
-        return {
-          id: event.staffs[0].id,
-          lastname: event.staffs[0].lastname,
-          firstname: event.staffs[0].firstname,
-          shortname: event.staffs[0].shortname,
-          url: event.staffs[0].url
-        }
-      })
-
-      // remove duplicates from the staffs array
-      staffsToInsert = staffsToInsert.filter((staff, index, self) =>
-        index === self.findIndex((t) => (
-          t.id === staff.id
-        ))
-      )
-
-
-      // Insert the rooms data into the database
-      const { data: roomResponse, error: roomError } = await supabaseClient
-      .from('Room')
-      .upsert(roomsToInsert, {
-        onConflict: 'id',
-        ignoreDuplicates: true,
-      })
-
-      // Insert the staffs data into the database
-      const { data: staffResponse, error: staffError } = await supabaseClient
-      .from('Staff')
-      .upsert(staffsToInsert, {
-        onConflict: 'id',
-        ignoreDuplicates: true,
-      })
-
-
-
+  // Insert the staffs data into the database
+  const { data: staffResponse, error: staffError } = await supabaseClient
+    .from("Staff")
+    .upsert(staffsToInsert, {
+      onConflict: "id",
+      ignoreDuplicates: true,
+    });
 
   const { data: eventResponse, error: eventError } = await supabaseClient
-  .from('Events')
-  .upsert(eventsToInsert, {
-    onConflict: 'id',
-    ignoreDuplicates: true,
-  })
-  
+    .from("CourseEvents")
+    .upsert(eventsToInsert, {
+      onConflict: "id",
+      ignoreDuplicates: true,
+    });
+
   // concatenate all results into one array
-  const allErrors = [roomError, staffError, eventError].filter(Boolean)
-  const allData = [roomResponse, staffResponse, eventResponse].filter(Boolean)
+  const allErrors = [roomError, staffError, eventError].filter(Boolean);
+  const allData = [roomResponse, staffResponse, eventResponse].filter(Boolean);
 
+  //handle all errors and return the error message if there is one else return success
+  if (roomError || staffError || eventError) {
+    const data = {
+      error: roomError?.message || staffError?.message || eventError?.message,
+    };
+    return new Response(JSON.stringify(data), {
+      headers: { ...corsHeaders, "content-type": "application/json" },
+      status: 400,
+    });
+  }
 
-    //handle all errors and return the error message if there is one else return success
-    if (  roomError || staffError || eventError) {
-      const data = { error: roomError?.message || staffError?.message || eventError?.message }
-      return new Response(JSON.stringify(data), {
-        headers: {...corsHeaders, 'content-type': 'application/json'},
-        status: 400,
-      })
-    }
-
- 
-    return new Response(JSON.stringify(allData), {
-      headers: {...corsHeaders, 'content-type': 'application/json'},
-      status: 200,
-    })
-
-
-})
-
+  return new Response(JSON.stringify(allData), {
+    headers: { ...corsHeaders, "content-type": "application/json" },
+    status: 200,
+  });
+});

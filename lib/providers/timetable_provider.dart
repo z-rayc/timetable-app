@@ -64,7 +64,7 @@ Future<List<Map<String, dynamic>>> getCourseEventsForDay(
   DateTime endOfDay = startOfDay.add(const Duration(days: 1));
   final db = kSupabase.rest;
   final response = await db
-      .from('Events')
+      .from('CourseEvents')
       .select<PostgrestList>(
           '*, Course!courseId(*), Staff!staffid(*), Room!roomid(*)')
       .in_('courseId', courses)
