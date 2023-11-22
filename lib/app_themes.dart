@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
  */
 
 const double kDefaultBorderRadius = 20.0;
-const Color kThemeSeedColour = Color.fromRGBO(140, 20, 197, 1);
+const Color kThemeSeedColor = Color.fromRGBO(140, 20, 197, 1);
 const Color kOffWhite = Color.fromRGBO(240, 240, 240, 1);
 const double kDrawerBorderRadius = 30.0;
 const double kBottomNavBarRounding = 25;
@@ -26,7 +26,7 @@ class AppThemes {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: kThemeSeedColour,
+        seedColor: kThemeSeedColor,
       ).copyWith(
         background: kOffWhite,
         secondary: const Color.fromRGBO(156, 39, 176, 1),
@@ -44,7 +44,7 @@ class AppThemes {
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: kThemeSeedColour,
+        backgroundColor: kThemeSeedColor,
         titleTextStyle: AppBarThemes.titleTextStyle,
         foregroundColor: Colors.white,
       ),
@@ -57,14 +57,14 @@ class AppThemes {
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: kThemeSeedColour,
+        backgroundColor: kThemeSeedColor,
         selectedItemColor: Colors.white,
         unselectedItemColor: Color.fromARGB(255, 207, 207, 207),
       ),
     );
   }
 
-  static Color get accentColour {
+  static Color get accentColor {
     return const Color.fromRGBO(206, 148, 251, 1);
   }
 
@@ -78,7 +78,7 @@ class AppThemes {
         ),
       ),
       backgroundColor: MaterialStateProperty.all<Color>(
-        kThemeSeedColour,
+        kThemeSeedColor,
       ),
       foregroundColor: MaterialStateProperty.all<Color>(
         const Color.fromRGBO(255, 255, 255, 1),
@@ -182,7 +182,6 @@ class AppBarThemes {
 }
 
 /// Specific themes for the calendar.
-/// To use the gradient, choose a colour from the enum [CalendarItemColour].
 class CalendarItemTheme {
   static BoxDecoration calendarDecoration(Color startColor) {
     return BoxDecoration(
