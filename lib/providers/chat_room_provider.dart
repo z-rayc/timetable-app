@@ -54,9 +54,9 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     ref.invalidateSelf();
   }
 
-  Future<ChatRoomCreationError?> addChatRoom(
+  Future<ChatRoomFetchError?> addChatRoom(
       String chatName, List<String> emails) async {
-    ChatRoomCreationError? maybeError;
+    ChatRoomFetchError? maybeError;
     state = const AsyncValue.loading();
     try {
       var response = await kSupabase.functions.invoke('createChatRoom', body: {
@@ -65,7 +65,7 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
       }).timeout(kDefaultTimeout);
 
       if (response.status != 201) {
-        maybeError = ChatRoomCreationError(response.data['error']);
+        maybeError = ChatRoomFetchError(response.data['error']);
       }
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -73,10 +73,52 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return maybeError;
   }
 
+  Future<ChatRoomFetchError?> updateChatRoom(
+    String chatRoomId,
+    String newChatName,
+    List<String> emails,
+  ) async {
+    ChatRoomFetchError? maybeError;
+    state = const AsyncValue.loading();
+    try {
+      var response = await kSupabase.functions.invoke('updateChatRoom', body: {
+        'chatroomId': chatRoomId,
+        'chatroomName': newChatName,
+        'memberEmails': emails,
+      }).timeout(kDefaultTimeout);
+      if (response.status != 200) {
+        maybeError = ChatRoomFetchError(response.data['error']);
+      }
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      maybeError = ChatRoomFetchError(e.toString());
+    }
+    ref.invalidateSelf();
+    return maybeError;
+  }
+
+  Future<ChatRoomFetchError?> deleteChatRoom(String id) async {
+    ChatRoomFetchError? maybeError;
+    try {
+      await kSupabase
+          .from('ChatRoom')
+          .delete()
+          .eq('id', id)
+          .timeout(kDefaultTimeout);
+    } on PostgrestException catch (e) {
+      maybeError = ChatRoomFetchError(e.message);
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      maybeError = ChatRoomFetchError(e.toString());
+    }
+    ref.invalidateSelf();
+    return maybeError;
+  }
+
   Future<List<ChatRoom>> _fetchChatRooms() async {
     List<dynamic> chatRoomsDynamic = await kSupabase
         .from('ChatRoomMember')
-        .select('user_id, chatroom_id, last_read, ChatRoom(id, name)')
+        .select('user_id, chatroom_id, last_read, ChatRoom(*)')
         .filter('user_id', 'eq', kSupabase.auth.currentUser!.id)
         .timeout(kDefaultTimeout);
 
@@ -89,6 +131,18 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     }
     return tempChatRooms;
   }
+
+  void leaveChat(String id) async {
+    state = const AsyncValue.loading();
+    await kSupabase
+        .from('ChatRoomMember')
+        .delete()
+        .eq('chatroom_id', id)
+        .eq('user_id', kSupabase.auth.currentUser!.id);
+    final List<ChatRoom> dataClone = List.of(state.value ?? {});
+    dataClone.removeWhere((element) => element.id == id);
+    state = AsyncValue.data(dataClone);
+  }
 }
 
 final chatRoomProvider =
@@ -98,9 +152,9 @@ final chatRoomProvider =
   },
 );
 
-class ChatRoomCreationError {
+class ChatRoomFetchError {
   final String message;
-  ChatRoomCreationError(this.message);
+  ChatRoomFetchError(this.message);
   @override
   String toString() {
     return message;
@@ -109,21 +163,28 @@ class ChatRoomCreationError {
 
 class ChatRoomLastReadProvider extends AsyncNotifier<Map<String, DateTime>> {
   void updateLastRead(String chatRoomId) async {
-    final updatedRow = await kSupabase
-        .from('ChatRoomMember')
-        .update({
-          'last_read': DateTime.now().toIso8601String(),
-        })
-        .eq('chatroom_id', chatRoomId)
-        .eq('user_id', kSupabase.auth.currentUser!.id)
-        .select()
-        .single();
-    final String returnedChatRoomId = updatedRow['chatroom_id'].toString();
-    final DateTime newLastRead = DateTime.parse(updatedRow['last_read']);
+    try {
+      final updatedRow = await kSupabase
+          .from('ChatRoomMember')
+          .update({
+            'last_read': DateTime.now().toIso8601String(),
+          })
+          .eq('chatroom_id', chatRoomId)
+          .eq('user_id', kSupabase.auth.currentUser!.id)
+          .select<Map<String, dynamic>>()
+          .single();
 
-    final Map<String, DateTime> dataClone = Map.of(state.value ?? {});
-    dataClone[returnedChatRoomId] = newLastRead;
-    state = AsyncValue.data(dataClone);
+      final String returnedChatRoomId = updatedRow['chatroom_id'].toString();
+      final DateTime newLastRead = DateTime.parse(updatedRow['last_read']);
+
+      final Map<String, DateTime> dataClone = Map.of(state.value ?? {});
+      dataClone[returnedChatRoomId] = newLastRead;
+      state = AsyncValue.data(dataClone);
+    } on PostgrestException catch (e) {
+      if (e.code == '406') {
+        // the user is no longer a member of the chat room, do nothing
+      }
+    }
   }
 
   @override
