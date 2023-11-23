@@ -39,13 +39,12 @@ class TimetableScreen extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "${ref.watch(dateSelectedProvider).date.day}/${ref.watch(dateSelectedProvider).date.month}/${ref.watch(dateSelectedProvider).date.year}",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
             TextButton(
               onPressed: () => _selectDate(context, ref),
-              child: const Text('Select date'),
+              child: Text(
+                "${ref.watch(dateSelectedProvider).date.day}/${ref.watch(dateSelectedProvider).date.month}/${ref.watch(dateSelectedProvider).date.year}",
+                style: const TextStyle(fontSize: 20),
+              ),
             ),
           ],
         ),
@@ -55,7 +54,7 @@ class TimetableScreen extends ConsumerWidget {
             TextButton(
               onPressed: () =>
                   ref.read(dateSelectedProvider.notifier).goBackward(),
-              child: const Text('Yesterday'),
+              child: const Icon(Icons.arrow_back),
             ),
             TextButton(
               onPressed: () => ref
@@ -66,7 +65,7 @@ class TimetableScreen extends ConsumerWidget {
             TextButton(
               onPressed: () =>
                   ref.read(dateSelectedProvider.notifier).goForward(),
-              child: const Text('Tomorrow'),
+              child: const Icon(Icons.arrow_forward),
             ),
           ],
         ),
