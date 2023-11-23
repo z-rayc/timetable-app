@@ -7,7 +7,6 @@ import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
 
 class SelectCoursesScreen extends ConsumerStatefulWidget {
   const SelectCoursesScreen({super.key});
@@ -24,14 +23,6 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   String? selectedProgram;
   String? selectedSemester;
 
-  // Placeholder semesters
-  final List<DropdownMenuEntry<String>> _semesters = [
-    const DropdownMenuEntry(label: "Autumn 2021", value: "H2021"),
-    const DropdownMenuEntry(label: "Autumn 2022", value: "H2022"),
-    const DropdownMenuEntry(label: "Autumn 2023", value: "H2023"),
-  ];
-
-  // These are placeholder courses
   final List<Course> _allCourses = [];
   final List<Course> _preselectedCourses = [];
   final List<Course> _selectedCourses = [];
@@ -78,6 +69,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
           .map((course) => {
                 'course_id': course.id,
                 'color': '0xff555555', // A default color: grey
+                'name_alias': course.name,
               })
           .toList();
       db
@@ -116,8 +108,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   void _addAllCourses() async {
     // Get all courses from the DB and convert them to Course objects
-    final List<dynamic> response =
-        await db.from('Course').select('id, name, nameAlias');
+    final List<dynamic> response = await db.from('Course').select('id, name');
 
     final List<Course> courses =
         response.map((e) => Course.fromJson(e)).toList();
@@ -146,20 +137,6 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          LayoutBuilder(builder: (context, constraints) {
-            return FormDropdownMenu(
-              name: "Semester",
-              width: constraints.maxWidth,
-              controller: semesterController,
-              items: _semesters,
-              onSelected: (String? semester) {
-                setState(() {
-                  selectedSemester = semester;
-                });
-              },
-            );
-          }),
-          const SizedBox(height: 20),
           const Text("Find a course"),
           const SizedBox(height: 10),
           Autocomplete<Course>(

@@ -18,7 +18,7 @@ class EventDetailsScreen extends StatelessWidget {
       final newEvent = event as CourseEvent;
 
       content.add(Text(
-        newEvent.course.nameAlias,
+        newEvent.course.nameAlias ?? newEvent.course.name,
         style: Theme.of(context)
             .textTheme
             .headlineMedium!

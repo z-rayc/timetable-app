@@ -61,7 +61,7 @@ class _CourseEventCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CSubtitle(event.course.nameAlias),
+              CSubtitle(event.course.nameAlias ?? event.course.name),
               const SizedBox(height: 5),
               Text(event.course.id),
               hourMinute(event.startTime, event.endTime),
