@@ -4,7 +4,6 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/custom_event.dart';
 import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
-import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
