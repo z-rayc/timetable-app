@@ -11,7 +11,7 @@ class EventDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = <Widget>[];
+    final List<Widget> content = [];
 
     // If CourseEvent
     if (event is CourseEvent) {
