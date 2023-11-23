@@ -36,8 +36,8 @@ class ChatRoomTile extends ConsumerWidget {
       child: ListTile(
           onTap: onTap,
           onLongPress: onLongPress,
-          leading: const CircleAvatar(
-            child: Icon(Icons.chat),
+          leading: CircleAvatar(
+            child: Icon(chatRoom.isCourseChat ? Icons.school : Icons.chat),
           ),
           title: Text(chatRoom.name),
           subtitle: Text(
