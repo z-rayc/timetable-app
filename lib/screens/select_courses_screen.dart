@@ -69,6 +69,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
           .map((course) => {
                 'course_id': course.id,
                 'color': '0xff555555', // A default color: grey
+                'name_alias': course.name,
               })
           .toList();
       db
@@ -107,8 +108,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   void _addAllCourses() async {
     // Get all courses from the DB and convert them to Course objects
-    final List<dynamic> response =
-        await db.from('Course').select('id, name, nameAlias');
+    final List<dynamic> response = await db.from('Course').select('id, name');
 
     final List<Course> courses =
         response.map((e) => Course.fromJson(e)).toList();
