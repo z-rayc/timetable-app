@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -43,8 +44,13 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
     List<CourseEvent> events = await convertToCourseEvents(
         getCourseEventsForDay(selectedDay.date, courseIds));
     for (var event in events) {
-      eventsWithColor[event] = Color(int.parse(courses.firstWhere(
-          (course) => course['course_id'] == event.course.id)['color']));
+      try {
+        eventsWithColor[event] = Color(int.parse(courses.firstWhere(
+            (course) => course['course_id'] == event.course.id)['color']));
+      } catch (_) {
+        eventsWithColor[event] = Colors.grey;
+        log("Error. Color could not be parsed correctly for event with ID: ${event.id}");
+      }
     }
 
     return DailyTimetable(courseEvents: eventsWithColor);
