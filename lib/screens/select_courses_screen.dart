@@ -8,6 +8,9 @@ import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 
+/// Displays the list of courses the user can select from.
+/// Allows the user to search for a course by name or ID.
+/// User can add or remove a course from their list.
 class SelectCoursesScreen extends ConsumerStatefulWidget {
   const SelectCoursesScreen({super.key});
 
