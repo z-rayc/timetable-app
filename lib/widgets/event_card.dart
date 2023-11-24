@@ -43,8 +43,10 @@ class _CourseEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: CalendarItemTheme.calendarDecoration(color),
-      margin: EdgeInsets.zero,
+      decoration: CalendarItemTheme.calendarDecoration(color).copyWith(
+        boxShadow: [AppThemes.boxShadow(3.0)],
+      ),
+      margin: const EdgeInsets.all(3.0),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
