@@ -49,7 +49,7 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
             (course) => course['course_id'] == event.course.id)['color']));
       } catch (_) {
         eventsWithColor[event] = Colors.grey;
-        log("Error. Color could not be parsed correctly for event with ID: ${event.id}");
+        log("Color parsing error. Event ID: ${event.id}. Color: ${courses.firstWhere((course) => course['course_id'] == event.course.id)['color']}");
       }
     }
 
