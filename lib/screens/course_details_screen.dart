@@ -1,15 +1,20 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/user_course.dart';
+import 'package:timetable_app/providers/courses_provider.dart';
+import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/widgets/color_picker_button.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
 
 /// Displays the details of a course.
 /// Allows the user to change the course's alias and color.
-class CourseDetailsScreen extends StatefulWidget {
+class CourseDetailsScreen extends ConsumerStatefulWidget {
   const CourseDetailsScreen({
     super.key,
     required this.uc,
@@ -18,12 +23,12 @@ class CourseDetailsScreen extends StatefulWidget {
   final UserCourse uc;
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ConsumerStatefulWidget> createState() {
     return _CourseDetailsScreenState();
   }
 }
 
-class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
+class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
@@ -33,38 +38,83 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
     });
   }
 
+  // The initial values, before initState() is called
   String _enteredAlias = '';
   Color _enteredColor = Colors.grey;
   TextEditingController colorController = TextEditingController();
 
+  void setColor(Color color) {
+    setState(() {
+      _enteredColor = color;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    _enteredAlias = widget.uc.course.nameAlias ?? '';
+    _enteredAlias = widget.uc.nameAlias;
     _enteredColor = widget.uc.color;
   }
 
   final db = kSupabase.rest;
 
   // Updates the course's alias and color in the database
-  void _submitForm() {
-    String colorAsString = _enteredColor.value.toRadixString(16);
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      FocusScope.of(context).unfocus();
       _setLoading(true);
+      try {
+        String colorAsString =
+            _enteredColor.value.toRadixString(16).padLeft(9, '0x');
+        log("New color: ${colorAsString}");
+        var response = await kSupabase
+            .from('UserCourses')
+            .update({
+              'name_alias': _enteredAlias,
+              'color': colorAsString,
+            })
+            .eq('user_id', kSupabase.auth.currentUser!.id)
+            .eq('course_id', widget.uc.course.id)
+            .select();
+      } on AuthException catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.message),
+            ),
+          );
+        }
+      } on TimeoutException {
+        _showTimeoutSnackbar();
+      } finally {
+        // Force refresh data
+        ref.invalidate(myCoursesProvider);
+        ref.invalidate(dailyTimetableProvider);
 
-      // Update in database
-      db
-          .from('UserCourses')
-          .update({
-            'name_alias': _enteredAlias,
-            'color': colorAsString,
-          })
-          .eq('user_id', kSupabase.auth.currentUser!.id)
-          .eq('course_id', widget.uc.course.id)
-          .catchError((error) => log(error.toString()));
+        _setLoading(false);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Changes saved.'),
+            ),
+          );
+        }
+      }
     }
-    throw UnimplementedError();
+  }
+
+  void _showTimeoutSnackbar() {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Request timed out.'),
+        ),
+      );
+    }
   }
 
   @override
@@ -109,7 +159,10 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                 const SizedBox(height: 20),
                 const CLabel("Color"),
                 const SizedBox(height: 10),
-                ColorPickerButton(_enteredColor),
+                ColorPickerButton(
+                  initialColor: _enteredColor,
+                  setColor: setColor,
+                ),
               ],
             ),
           ),
