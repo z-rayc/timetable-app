@@ -19,7 +19,7 @@ class CustomEvent extends Event {
 
   static CustomEvent fromJson(dynamic json) {
     return CustomEvent(
-      id: json['id'],
+      id: json['id'].toString(),
       name: json['name'],
       description: json['description'],
       startTime: DateTime.parse(json['start_time']),
