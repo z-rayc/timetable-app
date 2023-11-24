@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -56,8 +55,6 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
     _enteredColor = widget.uc.color;
   }
 
-  final db = kSupabase.rest;
-
   // Updates the course's alias and color in the database
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -67,8 +64,7 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
       try {
         String colorAsString =
             _enteredColor.value.toRadixString(16).padLeft(9, '0x');
-        log("New color: ${colorAsString}");
-        var response = await kSupabase
+        kSupabase
             .from('UserCourses')
             .update({
               'name_alias': _enteredAlias,
