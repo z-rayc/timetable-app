@@ -1,20 +1,22 @@
 class Course {
-  const Course({
+  Course({
     required this.id,
     required this.name,
-    this.nameAlias,
   });
 
   final String id;
   final String name;
-  final String? nameAlias;
+  String? nameAlias;
 
   static Course fromJson(Map<String, dynamic> json) {
     return Course(
       id: json['id'],
       name: json['name'],
-      nameAlias: json['nameAlias'], // TODO: Move this to UserCourse
     );
+  }
+
+  void setNameAlias(String nameAlias) {
+    this.nameAlias = nameAlias;
   }
 
   @override

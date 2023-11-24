@@ -31,25 +31,32 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
   FutureOr<DailyTimetable> build() async {
     final db = kSupabase.rest;
     final selectedDay = ref.watch(dateSelectedProvider);
-    List<Map<String, dynamic>> courses =
+
+    // Get a user's courses and store the course IDs in a list
+    List<Map<String, dynamic>> userCourses =
         await db.from('UserCourses').select('*');
     List<String> courseIds = [];
-    for (var course in courses) {
+    for (var course in userCourses) {
       courseIds.add(course['course_id']);
     }
 
-    // Get the course events for the selected day
-    // and then map each to a UserCourse color
-    Map<CourseEvent, Color> eventsWithColor = {};
+    // Get all of a user's course events for the selected day
     List<CourseEvent> events = await convertToCourseEvents(
         getCourseEventsForDay(selectedDay.date, courseIds));
+
+    Map<CourseEvent, Color> eventsWithColor = {};
     for (var event in events) {
+      // Add the name alias to the course
+      event.course.setNameAlias(userCourses.firstWhere(
+          (course) => course['course_id'] == event.course.id)['name_alias']);
       try {
-        eventsWithColor[event] = Color(int.parse(courses.firstWhere(
+        // Add the color to the event
+        eventsWithColor[event] = Color(int.parse(userCourses.firstWhere(
             (course) => course['course_id'] == event.course.id)['color']));
       } catch (_) {
+        // If the color is invalid, set it to grey
         eventsWithColor[event] = Colors.grey;
-        log("Color parsing error. Event ID: ${event.id}. Color: ${courses.firstWhere((course) => course['course_id'] == event.course.id)['color']}");
+        log("Color parsing error. Event ID: ${event.id}. Color: ${userCourses.firstWhere((course) => course['course_id'] == event.course.id)['color']}");
       }
     }
 
