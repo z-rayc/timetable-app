@@ -49,10 +49,9 @@ class EventDetailsScreen extends StatelessWidget {
 
   List<Widget> getCustomEvent(CustomEvent event) {
     return [
-      CTitle(event.title),
+      CTitle(event.name),
       const SizedBox(height: 10),
       Text("Description: ${event.description}"),
-      Text("Author: ${event.author.username}"),
       const SizedBox(height: 30),
       if (event.location != null)
         Text(
