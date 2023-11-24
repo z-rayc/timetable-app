@@ -68,7 +68,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           endTime: _enteredEndTime,
           location: location,
           inviteeEmails: _findUsersByEmails(_enteredInvitees),
-          authorId: kSupabase.auth.currentUser!.id,
+          creatorId: kSupabase.auth.currentUser!.id,
         );
 
         // TODO: Upload to database
