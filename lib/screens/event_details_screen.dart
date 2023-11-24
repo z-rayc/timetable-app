@@ -3,35 +3,25 @@ import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/custom_event.dart';
 import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/models/time.dart';
+import 'package:timetable_app/widgets/texts/title.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EventDetailsScreen extends StatelessWidget {
   const EventDetailsScreen({super.key, required this.event});
   final Event event;
 
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> content = [];
-
-    // If CourseEvent
-    if (event is CourseEvent) {
-      final newEvent = event as CourseEvent;
-
-      content.add(Text(
-        newEvent.course.nameAlias ?? newEvent.course.name,
-        style: Theme.of(context)
-            .textTheme
-            .headlineMedium!
-            .copyWith(color: Colors.black),
-      ));
-      content.add(Text("Code: ${newEvent.course.id}"));
-      content.add(const Text("Staff: "));
-      for (var staff in newEvent.staff) {
-        content.add(Text("• ${staff.shortname}"));
-      }
-      content.add(Text(
-          "Location: ${newEvent.location.roomName}, ${newEvent.location.buildingName}"));
-      content.add(Row(
+  List<Widget> getCourseEvent(CourseEvent event) {
+    return [
+      CTitle(event.course.nameAlias ?? event.course.name),
+      const SizedBox(height: 10),
+      Text("Code: ${event.course.id}"),
+      Text("Type: ${event.teachingSummary}"),
+      const Text("Staff: "),
+      for (var staff in event.staff) Text("• ${staff.shortname}"),
+      const SizedBox(height: 30),
+      Text(
+          "Location: ${event.location.roomName}, ${event.location.buildingName}"),
+      Row(
         children: [
           const Text("Link: "),
           Flexible(
@@ -43,46 +33,67 @@ class EventDetailsScreen extends StatelessWidget {
                   color: Colors.blue,
                 ),
                 overflow: TextOverflow.ellipsis,
-                "${newEvent.location.link}",
+                "${event.location.link}",
               ),
-              onTap: () => launchUrl(newEvent.location.link),
+              onTap: () => launchUrl(event.location.link),
             ),
           )
         ],
-      ));
-      content.add(const SizedBox(height: 30));
-      content.add(Text("Type: ${newEvent.teachingSummary}"));
-      content.add(const SizedBox(height: 30));
-      content.add(Text("Date: ${Time(newEvent.startTime).dayMonthYear}"));
-      content.add(Text("Start: ${Time(newEvent.startTime).hourMinutes}"));
-      content.add(Text("End: ${Time(newEvent.endTime).hourMinutes}"));
-    }
-    // If CustomEvent
-    else if (event is CustomEvent) {
-      final newEvent = event as CustomEvent;
+      ),
+      const SizedBox(height: 30),
+      Text("Date: ${Time(event.startTime).dayMonthYear}"),
+      Text("Start: ${Time(event.startTime).hourMinutes}"),
+      Text("End: ${Time(event.endTime).hourMinutes}"),
+    ];
+  }
 
-      content.add(Text(
-        newEvent.title,
-        style: Theme.of(context)
-            .textTheme
-            .headlineMedium!
-            .copyWith(color: Colors.black),
-      ));
-      content.add(Text("Description: ${newEvent.description}"));
-      content.add(Text("Author: ${newEvent.author.username}"));
-      if (newEvent.location != null) {
-        content.add(Text(
-            "Location: ${newEvent.location!.roomName}, ${newEvent.location!.buildingName}"));
-      }
-      content.add(const SizedBox(height: 30));
-      content.add(Text("Date: ${Time(newEvent.startTime).dayMonthYear}"));
-      content.add(Text("Start: ${Time(newEvent.startTime).hourMinutes}"));
-      content.add(Text("End: ${Time(newEvent.endTime).hourMinutes}"));
-    }
+  List<Widget> getCustomEvent(CustomEvent event) {
+    return [
+      CTitle(event.title),
+      const SizedBox(height: 10),
+      Text("Description: ${event.description}"),
+      Text("Author: ${event.author.username}"),
+      const SizedBox(height: 30),
+      if (event.location != null)
+        Text(
+            "Location: ${event.location!.roomName}, ${event.location!.buildingName}"),
+      Row(
+        children: [
+          const Text("Link: "),
+          Flexible(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              splashColor: Colors.blue,
+              child: Text(
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
+                overflow: TextOverflow.ellipsis,
+                "${event.location!.link}",
+              ),
+              onTap: () => launchUrl(event.location!.link),
+            ),
+          )
+        ],
+      ),
+      const SizedBox(height: 30),
+      Text("Date: ${Time(event.startTime).dayMonthYear}"),
+      Text("Start: ${Time(event.startTime).hourMinutes}"),
+      Text("End: ${Time(event.endTime).hourMinutes}"),
+    ];
+  }
 
-    // If unknown event type
-    else {
-      content.add(const Text("Error: Unknown event type"));
+  @override
+  Widget build(BuildContext context) {
+    late List<Widget> content;
+
+    // Check type of event
+    if (event is CourseEvent) {
+      content = getCourseEvent(event as CourseEvent);
+    } else if (event is CustomEvent) {
+      content = getCustomEvent(event as CustomEvent);
+    } else {
+      content = [const Text("Error: Unknown event type")];
     }
 
     return Scaffold(
