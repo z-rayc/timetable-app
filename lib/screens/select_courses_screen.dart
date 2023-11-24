@@ -50,7 +50,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   // Adds all the selected courses to the database
   // If the course already exists in the database, it will be ignored
-  void addCourses() {
+  void addCourses() async {
     List<Course> coursesToAdd = [];
 
     // Get the selected and preselected courses' names
@@ -75,7 +75,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
                 'name_alias': course.name,
               })
           .toList();
-      db
+      await db
           .from('UserCourses')
           .upsert(
             courses,
@@ -91,14 +91,14 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   // Remove the courses in the database that
   // have been deselected
-  void removeCourses() {
+  void removeCourses() async {
     var coursesToRemove = [];
     for (var course in _preselectedCourses) {
       if (!_selectedCourses.contains(course)) {
         coursesToRemove.add(course.id);
       }
     }
-    db
+    await db
         .from('UserCourses')
         .delete()
         .in_('course_id', coursesToRemove)

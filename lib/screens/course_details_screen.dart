@@ -64,7 +64,7 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
       try {
         String colorAsString =
             _enteredColor.value.toRadixString(16).padLeft(9, '0x');
-        kSupabase
+        await kSupabase
             .from('UserCourses')
             .update({
               'name_alias': _enteredAlias,
