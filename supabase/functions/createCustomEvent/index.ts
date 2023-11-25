@@ -48,17 +48,18 @@ Deno.serve(async (req: Request) => {
   });
 
   const {
-    title,
+    name,
     description,
     start_time,
     end_time,
-    creator,
+    creatorId,
     room,
     building,
     link,
     memberEmails,
   } = await req.json();
 
+  // Get the IDs of the users
   const { data: users, error } = await adminAuthClient
     .from("UserProfile")
     .select("id")
@@ -81,17 +82,61 @@ Deno.serve(async (req: Request) => {
   const { data: customEvent, error: customEventError } = await supabaseClient
     .from("CustomEvents")
     .insert({
-      title,
-      description,
-      start_time,
-      end_time,
-      creator,
-      room,
-      building,
-      link,
-    });
+      name: name,
+      description: description,
+      start_time: start_time,
+      end_time: end_time,
+      creator: creatorId,
+      room: room,
+      building: building,
+      link: link,
+    })
+    .select()
+    .single();
+
+  // Print the custom event and error
+  console.dir(customEvent);
+  console.dir(customEventError);
+
+  if (customEventError) {
+    return new Response(
+      JSON.stringify({
+        error: `Error creating custom event: ${customEventError.code}`,
+      }),
+      {
+        headers: { ...corsHeaders, "content-type": "application/json" },
+        status: 500,
+      }
+    );
+  }
 
   const eventId = customEvent.id;
 
   // Create the custom event members
+  const { error: memberError } = await supabaseClient
+    .from("CustomEventsMembers")
+    .insert(
+      memberIds.map((memberid: string) => ({
+        event_id: eventId,
+        user_id: memberid,
+      }))
+    );
+  if (memberError) {
+    return new Response(
+      JSON.stringify({
+        error: `Error creating custom event members: ${JSON.stringify(
+          memberError
+        )}`,
+      }),
+      {
+        headers: { ...corsHeaders, "content-type": "application/json" },
+        status: 500,
+      }
+    );
+  }
+
+  return new Response(JSON.stringify({ customEvent }), {
+    headers: { ...corsHeaders, "content-type": "application/json" },
+    status: 201,
+  });
 });
