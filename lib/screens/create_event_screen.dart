@@ -331,6 +331,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 30),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
