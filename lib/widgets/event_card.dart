@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/models/custom_event.dart';
 import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/screens/events/event_details_screen.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
@@ -17,36 +18,23 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String title = "[TITLE]";
+    // Set title based on event type
     if (event is CourseEvent) {
-      return _CourseEventCard(
-        context: context,
-        event: event as CourseEvent,
-        color: color,
-      );
-    } else {
-      return const Text("Not implemented");
+      CourseEvent newEvent = event as CourseEvent;
+      title = newEvent.course.nameAlias ?? newEvent.course.name;
+    } else if (event is CustomEvent) {
+      CustomEvent newEvent = event as CustomEvent;
+      title = newEvent.name;
     }
-  }
-}
 
-class _CourseEventCard extends StatelessWidget {
-  const _CourseEventCard({
-    required this.context,
-    required this.event,
-    required this.color,
-  });
+    const double shadowSize = 3.0;
 
-  final BuildContext context;
-  final CourseEvent event;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
       decoration: CalendarItemTheme.calendarDecoration(color).copyWith(
-        boxShadow: [AppThemes.boxShadow(3.0)],
+        boxShadow: [AppThemes.boxShadow(shadowSize)],
       ),
-      margin: const EdgeInsets.all(3.0),
+      margin: const EdgeInsets.all(shadowSize),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -60,14 +48,11 @@ class _CourseEventCard extends StatelessWidget {
             horizontal: 15,
             vertical: 10,
           ),
-          child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.start,
-            runSpacing: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CSubtitle(event.course.nameAlias ?? event.course.name),
+              CSubtitle(title),
               const SizedBox(height: 5),
-              Text(event.course.id),
-              const SizedBox(width: 10),
               hourMinute(event.startTime, event.endTime),
             ],
           ),
