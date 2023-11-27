@@ -69,6 +69,13 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     Widget horizontalDayItem(String day) {
       return Container(
         width: TimeTableTheme.timeTableColumnWidth,
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
+        ),
         child: Center(
           child: Text(day),
         ),
@@ -78,8 +85,15 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     Widget verticalHourItem(String hour) {
       return Container(
         height: TimeTableTheme.timeTableHourRowHeight,
+        decoration: const BoxDecoration(
+          border: Border(
+            right: BorderSide(
+              color: Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
+        ),
         child: Center(
-          child: Text(hour),
+          child: Text(hour, style: const TextStyle(fontSize: 10)),
         ),
       );
     }
@@ -144,7 +158,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
       var hours = [
         for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
-          "${earliestTime.hour + i}:00"
+          "${earliestTime.hour + i}:00".padLeft(5, '0')
       ];
 
       //Make a hashmap of events with the Datetime weekday as the key
@@ -188,7 +202,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
             child: Container(
               width: 50,
               height: hours.length * 100,
-              color: Colors.red,
+              /* color: Colors.red, */
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -207,7 +221,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                   right: 0,
                   child: Container(
                     height: TimeTableTheme.timeTableSideBarSizes[0],
-                    color: Colors.green,
+                    /* color: Colors.green, */
                     child: ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,

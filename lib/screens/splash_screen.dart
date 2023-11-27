@@ -10,15 +10,16 @@ class SplashScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
         decoration: splashBackgroundDecoration,
-        child: Scaffold(
+        child: const Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  "assets/images/LogoIpsum.svg",
-                  height: 150,
+                Icon(
+                  Icons.hourglass_empty_rounded,
+                  size: 150,
+                  color: Colors.white,
                 ),
               ],
             ),
