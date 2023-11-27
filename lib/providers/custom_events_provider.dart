@@ -1,7 +1,17 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/custom_event.dart';
+
+class CustomEventsFetchError {
+  final String message;
+  CustomEventsFetchError(this.message);
+  @override
+  String toString() {
+    return message;
+  }
+}
 
 class CustomEvents {
   CustomEvents({required this.customEvents});
@@ -10,6 +20,42 @@ class CustomEvents {
 }
 
 class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
+  Future<CustomEventsFetchError?> addCustomEvent(
+      String name,
+      String description,
+      DateTime startTime,
+      DateTime endTime,
+      String creatorId,
+      String room,
+      String building,
+      String link,
+      List<String> memberEmails) async {
+    CustomEventsFetchError? maybeError;
+    state = const AsyncValue.loading();
+    try {
+      var response =
+          await kSupabase.functions.invoke('createCustomEvent', body: {
+        'name': name,
+        'description': description,
+        'start_time': startTime.toIso8601String(),
+        'end_time': endTime.toIso8601String(),
+        'creatorId': creatorId,
+        'room': room,
+        'building': building,
+        'link': link,
+        'memberEmails': memberEmails,
+      }).timeout(kDefaultTimeout);
+
+      if (response.status != 201) {
+        maybeError = CustomEventsFetchError(response.data['error']);
+      }
+    } catch (e, stack) {
+      log(e.toString());
+      state = AsyncValue.error(e, stack);
+    }
+    return maybeError;
+  }
+
   @override
   FutureOr<CustomEvents> build() async {
     final db = kSupabase.rest;
