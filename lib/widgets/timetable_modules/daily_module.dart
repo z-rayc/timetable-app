@@ -160,11 +160,6 @@ class DailyModule extends StatelessWidget {
       return eventWidgets;
     }
 
-    //Remove overlapping events from sortedEvents
-    /* for (var event in overlappingEvents) {
-      sortedEvents.remove(event);
-    } */
-
     if (sortedEvents.isEmpty) {
       return Container(
           margin: const EdgeInsets.only(top: 50),

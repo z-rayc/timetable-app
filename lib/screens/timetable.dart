@@ -71,8 +71,9 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         width: TimeTableTheme.timeTableColumnWidth,
         decoration: const BoxDecoration(
           border: Border(
-            bottom: BorderSide(
-              color: Color.fromARGB(255, 0, 0, 0),
+            right: BorderSide(
+              color: Color.fromARGB(255, 64, 64, 64),
+              width: 1,
             ),
           ),
         ),
@@ -87,8 +88,9 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         height: TimeTableTheme.timeTableHourRowHeight,
         decoration: const BoxDecoration(
           border: Border(
-            right: BorderSide(
-              color: Color.fromARGB(255, 0, 0, 0),
+            top: BorderSide(
+              color: Color.fromARGB(255, 64, 64, 64),
+              width: 1,
             ),
           ),
         ),
@@ -202,7 +204,14 @@ class _TimeTableState extends ConsumerState<TimeTable> {
             child: Container(
               width: 50,
               height: hours.length * 100,
-              /* color: Colors.red, */
+              decoration: const BoxDecoration(
+                border: Border(
+                  right: BorderSide(
+                    color: Colors.grey,
+                    width: 1,
+                  ),
+                ),
+              ),
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -221,7 +230,14 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                   right: 0,
                   child: Container(
                     height: TimeTableTheme.timeTableSideBarSizes[0],
-                    /* color: Colors.green, */
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                      ),
+                    ),
                     child: ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,
