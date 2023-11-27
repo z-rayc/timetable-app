@@ -47,7 +47,7 @@ void main() {
     );
 
     // Verify that the correct information is displayed
-    expect(find.text('Math'), findsOneWidget);
+    expect(find.text('Mathematics'), findsOneWidget);
     expect(find.text('MATH101'), findsOneWidget);
     expect(find.text('09:00 - 10:00'), findsOneWidget);
   });
