@@ -4,7 +4,7 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/user_course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
-import 'package:timetable_app/screens/course_details_screen.dart';
+import 'package:timetable_app/screens/courses/course_details_screen.dart';
 
 class MyCoursesScreen extends ConsumerWidget {
   const MyCoursesScreen({super.key});

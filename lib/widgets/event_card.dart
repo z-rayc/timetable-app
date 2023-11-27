@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/event.dart';
-import 'package:timetable_app/screens/event_details_screen.dart';
+import 'package:timetable_app/screens/events/event_details_screen.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
 class EventCard extends StatelessWidget {

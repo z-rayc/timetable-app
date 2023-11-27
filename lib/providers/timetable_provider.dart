@@ -82,7 +82,7 @@ Future<List<Map<String, dynamic>>> getCourseEventsForDay(
           '*, Course!courseId(*), Staff!staffid(*), Room!roomid(*)')
       .in_('courseId', courses)
       .gte('start', startOfDay.toIso8601String())
-      .lte('end', endOfDay.toIso8601String());
+      .lte('start', endOfDay.toIso8601String());
 
   return response;
 }
