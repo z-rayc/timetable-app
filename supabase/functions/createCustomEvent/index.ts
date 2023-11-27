@@ -75,7 +75,7 @@ Deno.serve(async (req: Request) => {
     );
   }
 
-  const memberIds = users.map((user: any) => user.id);
+  const memberIds: string[] = users.map((user: any) => user.id);
   memberIds.push(user.id); // Add the current user to the list of members too
 
   // Create the custom event
@@ -113,20 +113,21 @@ Deno.serve(async (req: Request) => {
   const eventId = customEvent.id;
 
   // Create the custom event members
-  const { error: memberError } = await supabaseClient
-    .from("CustomEventsMembers")
-    .insert(
-      memberIds.map((memberid: string) => ({
-        event_id: eventId,
-        user_id: memberid,
-      }))
-    );
+  // but only if the number of members is more than 0
+  let { error: memberError } =
+    memberIds.length > 0
+      ? await await supabaseClient.from("CustomEventsMember").insert(
+          memberIds.map((memberId: string) => ({
+            event_id: eventId,
+            user_id: memberId,
+          }))
+        )
+      : null;
+
   if (memberError) {
     return new Response(
       JSON.stringify({
-        error: `Error creating custom event members: ${JSON.stringify(
-          memberError
-        )}`,
+        error: `Error inviting members: ${JSON.stringify(memberError)}`,
       }),
       {
         headers: { ...corsHeaders, "content-type": "application/json" },
