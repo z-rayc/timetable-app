@@ -43,33 +43,31 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
         _formKey.currentState!.save();
 
         // Create event with Supabase Edge Function
-        _createCustomEvent();
+        _createCustomEvent().then(
+          (creationError) => {
+            // If error then show dialog, if not then exit screen
+            if (context.mounted && creationError != null)
+              showErrorDialog(context, creationError.toString())
+            else if (context.mounted && creationError == null)
+              Navigator.of(context).pop()
+          },
+        );
       }
       _setLoading(false);
     }
   }
 
-  void _createCustomEvent() async {
-    final creationError = await ref
-        .read(customEventsProvider.notifier)
-        .addCustomEvent(
-            _enteredName.trim(),
-            _enteredDescription.trim(),
-            _enteredStartTime,
-            _enteredEndTime,
-            kSupabase.auth.currentUser!.id,
-            _enteredRoomName,
-            _enteredBuildingName,
-            _enteredLink,
-            _enteredInvitees);
-    _setLoading(false);
-
-    // If error show dialog, if not then exit screen
-    if (context.mounted && creationError != null) {
-      showErrorDialog(context, creationError.toString());
-    } else if (context.mounted && creationError == null) {
-      Navigator.of(context).pop();
-    }
+  Future<CustomEventsFetchError?> _createCustomEvent() async {
+    return await ref.read(customEventsProvider.notifier).addCustomEvent(
+        _enteredName.trim(),
+        _enteredDescription.trim(),
+        _enteredStartTime,
+        _enteredEndTime,
+        kSupabase.auth.currentUser!.id,
+        _enteredRoomName.trim(),
+        _enteredBuildingName.trim(),
+        _enteredLink.trim(),
+        _enteredInvitees);
   }
 
   showErrorDialog(BuildContext ctx, String message) {
@@ -334,6 +332,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                 const SizedBox(height: 10),
                 ShadowedTextFormField(
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     decoration: AppThemes.entryFieldTheme.copyWith(
                       hintText: "E-mails separated by commas",
                     ),
