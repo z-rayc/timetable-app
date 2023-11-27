@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:timetable_app/main.dart';
@@ -133,6 +134,12 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Only allow portrait mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Select your courses"),
