@@ -198,7 +198,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: 'Description',
+                      hintText: 'Short description',
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
