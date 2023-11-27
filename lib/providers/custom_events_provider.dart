@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/custom_event.dart';
@@ -36,8 +37,8 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
           await kSupabase.functions.invoke('createCustomEvent', body: {
         'name': name,
         'description': description,
-        'start_time': startTime,
-        'end_time': endTime,
+        'start_time': startTime.toIso8601String(),
+        'end_time': endTime.toIso8601String(),
         'creatorId': creatorId,
         'room': room,
         'building': building,
@@ -49,6 +50,7 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
         maybeError = CustomEventsFetchError(response.data['error']);
       }
     } catch (e, stack) {
+      log(e.toString());
       state = AsyncValue.error(e, stack);
     }
     return maybeError;
