@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
-import 'package:timetable_app/models/custom_event.dart';
-import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
+import 'package:timetable_app/providers/custom_events_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
-class CreateEventScreen extends StatefulWidget {
+class CreateEventScreen extends ConsumerStatefulWidget {
   const CreateEventScreen({super.key});
 
   @override
-  State<CreateEventScreen> createState() {
+  ConsumerState<CreateEventScreen> createState() {
     return _CreateEventScreenState();
   }
 }
 
-class _CreateEventScreenState extends State<CreateEventScreen> {
+class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
@@ -24,15 +24,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     setState(() {
       _loading = loading;
     });
-  }
-
-  List<String> _findUsersByEmails(List<String> emails) {
-    List<String> users = [];
-
-    // TODO: Query database for users with email
-    // Return the user's id
-
-    return users;
   }
 
   /// Validate and submit the form.
@@ -50,38 +41,63 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         _setLoading(false);
       } else {
         _formKey.currentState!.save();
-        var location = (_enteredRoomName.isNotEmpty &&
-                _enteredBuildingName.isNotEmpty &&
-                _enteredLink.toString().isNotEmpty)
-            ? Location(
-                roomName: _enteredRoomName,
-                buildingName: _enteredBuildingName,
-                link: _enteredLink,
-              )
-            : null;
 
-        // Create new event
-        PartialCustomEvent newEvent = PartialCustomEvent(
-          title: _enteredTitle,
-          description: _enteredDescription,
-          startTime: _enteredStartTime,
-          endTime: _enteredEndTime,
-          location: location,
-          inviteeEmails: _findUsersByEmails(_enteredInvitees),
-          creatorId: kSupabase.auth.currentUser!.id,
-        );
-
-        // TODO: Upload to database
+        // Create event with Supabase Edge Function
+        _createCustomEvent();
       }
+      _setLoading(false);
     }
   }
 
-  String _enteredTitle = '';
+  void _createCustomEvent() async {
+    final creationError = await ref
+        .read(customEventsProvider.notifier)
+        .addCustomEvent(
+            _enteredName.trim(),
+            _enteredDescription.trim(),
+            _enteredStartTime,
+            _enteredEndTime,
+            kSupabase.auth.currentUser!.id,
+            _enteredRoomName,
+            _enteredBuildingName,
+            _enteredLink,
+            _enteredInvitees);
+    _setLoading(false);
+
+    // If error show dialog, if not then exit screen
+    if (context.mounted && creationError != null) {
+      showErrorDialog(context, creationError.toString());
+    } else if (context.mounted && creationError == null) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  showErrorDialog(BuildContext ctx, String message) {
+    showDialog(
+      context: ctx,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  String _enteredName = '';
   String _enteredDescription = '';
   String _enteredRoomName = '';
   String _enteredBuildingName = '';
-  Uri _enteredLink = Uri.parse('');
-  List<String> _enteredInvitees = [];
+  String _enteredLink = '';
+  final List<String> _enteredInvitees = [];
   DateTime _enteredStartTime = DateTime.now();
   DateTime _enteredEndTime = DateTime.now();
 
@@ -174,7 +190,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       }
                     },
                     onSaved: (newValue) {
-                      _enteredTitle = newValue!;
+                      _enteredName = newValue!;
                     },
                   ),
                 ),
@@ -308,7 +324,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     },
                     onSaved: (newValue) {
                       if (newValue != null) {
-                        _enteredLink = Uri.parse(newValue);
+                        _enteredLink = newValue;
                       }
                     },
                   ),
