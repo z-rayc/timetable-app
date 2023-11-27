@@ -4,7 +4,6 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/custom_event.dart';
 import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/time.dart';
-import 'package:timetable_app/models/user.dart' as c_user;
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
@@ -69,7 +68,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           endTime: _enteredEndTime,
           location: location,
           inviteeEmails: _findUsersByEmails(_enteredInvitees),
-          authorId: kSupabase.auth.currentUser!.id,
+          creatorId: kSupabase.auth.currentUser!.id,
         );
 
         // TODO: Upload to database
@@ -332,6 +331,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 30),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

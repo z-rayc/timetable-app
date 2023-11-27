@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/event.dart';
-import 'package:timetable_app/screens/event_details_screen.dart';
+import 'package:timetable_app/screens/events/event_details_screen.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
 class EventCard extends StatelessWidget {
@@ -43,8 +43,10 @@ class _CourseEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: CalendarItemTheme.calendarDecoration(color),
-      margin: EdgeInsets.zero,
+      decoration: CalendarItemTheme.calendarDecoration(color).copyWith(
+        boxShadow: [AppThemes.boxShadow(3.0)],
+      ),
+      margin: const EdgeInsets.all(3.0),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -62,7 +64,7 @@ class _CourseEventCard extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.start,
             runSpacing: 5,
             children: [
-              CSubtitle(event.course.nameAlias),
+              CSubtitle(event.course.nameAlias ?? event.course.name),
               const SizedBox(height: 5),
               Text(event.course.id),
               const SizedBox(width: 10),

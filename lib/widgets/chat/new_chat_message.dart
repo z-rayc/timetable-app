@@ -34,7 +34,7 @@ class _NewChatMessageState extends State<NewChatMessage> {
     String username = currentUser.email!.split('@')[0];
     try {
       await kSupabase.from('ChatMessage').insert({
-        'message': chatMessage,
+        'message': chatMessage.trim(),
         'chat_room_id': widget.chatRoom.id,
         'author_name': username,
         'sent_at': DateTime.now().toIso8601String(),
@@ -56,12 +56,15 @@ class _NewChatMessageState extends State<NewChatMessage> {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: TextField(
               controller: chatController,
               enableSuggestions: true,
               autocorrect: true,
+              minLines: 1,
+              maxLines: 5,
               decoration: AppThemes.entryFieldTheme
                   .copyWith(hintText: 'Send a message'),
             ),

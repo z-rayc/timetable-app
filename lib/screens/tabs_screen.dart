@@ -77,36 +77,11 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           pushNewScreen(context, NavState.myCourses);
         },
       ),
-      // refresh button
       IconButton(
-        icon: const Icon(Icons.refresh),
-        tooltip: 'Refresh',
+        icon: const Icon(Icons.add),
+        tooltip: 'Add custom event',
         onPressed: () {
-          // get my courses and call supabase endpoint to make it readd the events
-          var mycourses = ref
-              .read(myCoursesProvider)
-              .asData
-              ?.value
-              .userCourses
-              .map((e) => e.course.id)
-              .toList();
-
-          for (var course in mycourses ?? []) {
-            log('Calling edge function for course $course');
-            functions.invoke('getEventsByCourse', body: {
-              'id': course,
-              'sem': "23h",
-            }).then((v) {
-              log('Edge function response: ${v.data}');
-            });
-          }
-          ref.invalidate(myCoursesProvider);
-          ref.invalidate(dailyTimetableProvider);
-          //
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Refreshed'),
-            behavior: SnackBarBehavior.floating,
-          ));
+          pushNewScreen(context, NavState.createEvent);
         },
       ),
     ];
@@ -130,7 +105,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         title: Text(activeTitle),
         actions: activeActions,
       ),
-      extendBody: false,
+      extendBody: true,
       drawer: NavDrawer(onSelectedNavItem: _handleDrawerNav),
       body: activePage,
       bottomNavigationBar: isNarrow ||

@@ -11,8 +11,7 @@ void main() {
       (WidgetTester tester) async {
     // Create a mock CourseEvent
     final event = CourseEvent(
-      course: const Course(
-        nameAlias: 'Math',
+      course: Course(
         id: 'MATH101',
         name: 'Mathematics',
       ),
@@ -57,8 +56,7 @@ void main() {
       (WidgetTester tester) async {
     // Create a mock CourseEvent
     final event = CourseEvent(
-      course: const Course(
-        nameAlias: 'Math',
+      course: Course(
         id: 'MATH101',
         name: 'Mathematics',
       ),

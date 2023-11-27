@@ -4,21 +4,9 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/user_course.dart';
 
 class UserCourses {
-  List<UserCourse> userCourses = [];
-
   UserCourses({required this.userCourses});
 
-  UserCourses copyWith({
-    List<UserCourse>? courses,
-  }) {
-    return UserCourses(
-      userCourses: courses ?? userCourses,
-    );
-  }
-
-  AsyncValue<UserCourses> toAsyncValue() {
-    return AsyncValue.data(this);
-  }
+  List<UserCourse> userCourses = [];
 }
 
 class MyCoursesNotifier extends AsyncNotifier<UserCourses> {

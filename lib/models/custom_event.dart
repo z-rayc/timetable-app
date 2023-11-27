@@ -1,24 +1,33 @@
 import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/models/location.dart';
-import 'package:timetable_app/models/user.dart';
 
 class CustomEvent extends Event {
   const CustomEvent({
-    required super.id,
+    required super.id, // Is actually a number in the database
     required super.startTime,
     required super.endTime,
-    required this.title,
+    required this.name,
     required this.description,
-    required this.location,
-    required this.author,
-    required this.invitees,
+    required this.creatorId,
+    this.location,
   });
 
-  final String title;
+  final String name;
   final String description;
+  final String creatorId;
   final Location? location;
-  final User author;
-  final List<User> invitees;
+
+  static CustomEvent fromJson(dynamic json) {
+    return CustomEvent(
+      id: json['id'].toString(),
+      name: json['name'],
+      description: json['description'],
+      startTime: DateTime.parse(json['start_time']),
+      endTime: DateTime.parse(json['end_time']),
+      creatorId: (json['creator']),
+      // location: Location.fromJson(json['location']), // TODO: Add back
+    );
+  }
 }
 
 class PartialCustomEvent {
@@ -28,7 +37,7 @@ class PartialCustomEvent {
     required this.title,
     required this.description,
     required this.location,
-    required this.authorId,
+    required this.creatorId,
     required this.inviteeEmails,
   });
 
@@ -37,6 +46,6 @@ class PartialCustomEvent {
   final String title;
   final String description;
   final Location? location;
-  final String authorId;
+  final String creatorId;
   final List<String> inviteeEmails;
 }
