@@ -75,8 +75,14 @@ Deno.serve(async (req: Request) => {
     );
   }
 
-  const memberIds: string[] = users.map((user: any) => user.id);
-  memberIds.push(user.id); // Add the current user to the list of members too
+  const memberIds: string[] = [];
+  memberIds.push(user.id); // Add the current user to the list of members
+  users.forEach((user) => {
+    // Only add unique IDs
+    if (!memberIds.includes(user.id)) {
+      memberIds.push(user.id);
+    }
+  });
 
   // Create the custom event
   const { data: customEvent, error: customEventError } = await supabaseClient
