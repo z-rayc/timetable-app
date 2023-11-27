@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:timetable_app/screens/timetable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/providers/selected_day_provider.dart';
 import 'package:timetable_app/screens/timetables/single_day_timetable.dart';
