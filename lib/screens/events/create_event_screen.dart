@@ -338,6 +338,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                     ),
                     onSaved: (newValue) {
                       if (newValue != null) {
+                        _enteredInvitees.clear();
                         var emails = newValue.split(',');
                         for (var email in emails) {
                           _enteredInvitees.add(email.trim());
