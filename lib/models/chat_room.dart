@@ -1,8 +1,9 @@
 class ChatRoom {
   final String id;
-  final String name;
+  String name;
   final String ownerId;
   final bool isCourseChat;
+  final String? courseId;
   final DateTime lastRead;
 
   ChatRoom({
@@ -10,6 +11,7 @@ class ChatRoom {
     required this.name,
     required this.ownerId,
     required this.isCourseChat,
+    required this.courseId,
     required this.lastRead,
   });
 
@@ -19,6 +21,7 @@ class ChatRoom {
       name: data['name'],
       ownerId: data['owner'].toString(),
       isCourseChat: data['course_chat'],
+      courseId: data['course_id'],
       lastRead: DateTime.parse(lastRead),
     );
   }

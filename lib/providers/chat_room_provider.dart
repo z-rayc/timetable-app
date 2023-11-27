@@ -6,6 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
+import 'package:timetable_app/models/user_course.dart';
+import 'package:timetable_app/providers/courses_provider.dart';
 
 class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
   late RealtimeChannel _channel;
@@ -21,7 +23,27 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
 
   @override
   FutureOr<List<ChatRoom>> build() async {
-    return _fetchChatRooms();
+    final chatrooms = await _fetchChatRooms();
+
+    final List<UserCourse> courses =
+        ref.watch(myCoursesProvider).value?.userCourses ?? [];
+
+    for (var chatroom in chatrooms) {
+      if (chatroom.isCourseChat) {
+        UserCourse? userCourse;
+        int i = 0;
+        while (i < courses.length && userCourse == null) {
+          if (courses[i].course.id == chatroom.courseId) {
+            userCourse = courses[i];
+          }
+          i++;
+        }
+        String aliasName = userCourse?.nameAlias ?? chatroom.name;
+        chatroom.name = aliasName;
+      }
+    }
+
+    return chatrooms;
   }
 
   void _subscribeToChatRooms() {
