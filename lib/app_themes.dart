@@ -1,11 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/**
- * Examples of how to use these themes you can see in splash_screen.dart right now.
- */
+/// Examples of how to use these themes you can see in splash_screen.dart right now.
 
 const double kDefaultBorderRadius = 20.0;
 const Color kThemeSeedColor = Color.fromRGBO(140, 20, 197, 1);
@@ -204,7 +200,7 @@ class CalendarItemTheme {
 
 class TimeTableTheme {
   static double get timeTableColumnWidth {
-    return 300;
+    return 275;
   }
 
   static double get timeTableHourRowHeight {
