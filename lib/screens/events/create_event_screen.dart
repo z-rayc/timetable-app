@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/time.dart';
-import 'package:timetable_app/models/user.dart' as c_user;
+import 'package:timetable_app/providers/custom_events_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
 
-class CreateEventScreen extends StatefulWidget {
+class CreateEventScreen extends ConsumerStatefulWidget {
   const CreateEventScreen({super.key});
 
   @override
-  State<CreateEventScreen> createState() {
+  ConsumerState<CreateEventScreen> createState() {
     return _CreateEventScreenState();
   }
 }
 
-class _CreateEventScreenState extends State<CreateEventScreen> {
+class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
@@ -30,15 +32,70 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     if (_formKey.currentState!.validate()) {
       _setLoading(true);
       // Check that startdate is before enddate
+      if (_enteredEndTime.isBefore(_enteredStartTime)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('End time must be after start time.'),
+          ),
+        );
+        _setLoading(false);
+      } else {
+        _formKey.currentState!.save();
+
+        // Create event with Supabase Edge Function
+        _createCustomEvent().then(
+          (creationError) => {
+            // If error then show dialog, if not then exit screen
+            if (context.mounted && creationError != null)
+              showErrorDialog(context, creationError.toString())
+            else if (context.mounted && creationError == null)
+              Navigator.of(context).pop()
+          },
+        );
+      }
+      _setLoading(false);
     }
   }
 
-  String _enteredTitle = '';
+  Future<CustomEventsFetchError?> _createCustomEvent() async {
+    return await ref.read(customEventsProvider.notifier).addCustomEvent(
+        _enteredName.trim(),
+        _enteredDescription.trim(),
+        _enteredStartTime,
+        _enteredEndTime,
+        kSupabase.auth.currentUser!.id,
+        _enteredRoomName.trim(),
+        _enteredBuildingName.trim(),
+        _enteredLink.trim(),
+        _enteredInvitees);
+  }
+
+  showErrorDialog(BuildContext ctx, String message) {
+    showDialog(
+      context: ctx,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  String _enteredName = '';
   String _enteredDescription = '';
   String _enteredRoomName = '';
   String _enteredBuildingName = '';
-  Uri _enteredLink = Uri.parse('');
-  List<c_user.User> _enteredInvitees = [];
+  String _enteredLink = '';
+  final List<String> _enteredInvitees = [];
   DateTime _enteredStartTime = DateTime.now();
   DateTime _enteredEndTime = DateTime.now();
 
@@ -131,7 +188,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       }
                     },
                     onSaved: (newValue) {
-                      _enteredTitle = newValue!;
+                      _enteredName = newValue!;
                     },
                   ),
                 ),
@@ -141,7 +198,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: 'Description',
+                      hintText: 'Short description',
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -265,7 +322,27 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     },
                     onSaved: (newValue) {
                       if (newValue != null) {
-                        _enteredLink = Uri.parse(newValue);
+                        _enteredLink = newValue;
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 30),
+                const CSubtitle('Invitees'),
+                const SizedBox(height: 10),
+                ShadowedTextFormField(
+                  child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: AppThemes.entryFieldTheme.copyWith(
+                      hintText: "E-mails separated by commas",
+                    ),
+                    onSaved: (newValue) {
+                      if (newValue != null) {
+                        _enteredInvitees.clear();
+                        var emails = newValue.split(',');
+                        for (var email in emails) {
+                          _enteredInvitees.add(email.trim());
+                        }
                       }
                     },
                   ),

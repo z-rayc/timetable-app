@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/widgets/nav_drawer_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum NavDrawerChoice {
   timetable,
   chat,
   myCourses,
   settings,
-  devscreen, // remove this later TODO
 }
 
 class NavDrawer extends StatelessWidget {
@@ -37,10 +37,10 @@ class NavDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.calendar_month,
+                  Icon(Icons.hourglass_empty_rounded,
                       color: AppThemes.theme.colorScheme.onPrimary, size: 32),
                   const SizedBox(width: 10),
-                  Text("Chronos!",
+                  Text("Chronos",
                       style: TextStyle(
                           color: AppThemes.theme.colorScheme.onPrimary,
                           fontSize: 24)),
@@ -57,7 +57,7 @@ class NavDrawer extends StatelessWidget {
                     spacing,
                     NavDrawerItem(
                       icon: Icons.calendar_today,
-                      title: 'Timetable',
+                      title: AppLocalizations.of(context)!.timeTableTitle,
                       onTap: () {
                         onSelectedNavItem(NavDrawerChoice.timetable);
                       },
@@ -67,7 +67,7 @@ class NavDrawer extends StatelessWidget {
                     spacing,
                     NavDrawerItem(
                       icon: Icons.edit_document,
-                      title: 'My Courses',
+                      title: AppLocalizations.of(context)!.myCourses,
                       onTap: () {
                         onSelectedNavItem(NavDrawerChoice.myCourses);
                       },
@@ -75,22 +75,12 @@ class NavDrawer extends StatelessWidget {
                     spacing,
                     NavDrawerItem(
                       icon: Icons.settings,
-                      title: 'Settings',
+                      title: AppLocalizations.of(context)!.settingsTitle,
                       onTap: () {
                         onSelectedNavItem(NavDrawerChoice.settings);
                       },
                     ),
                     spacing,
-                    // TODO remove dev screen FROM HERE
-                    NavDrawerItem(
-                      icon: Icons.error,
-                      title: 'Dev screen',
-                      onTap: () {
-                        onSelectedNavItem(NavDrawerChoice.devscreen);
-                      },
-                    ),
-                    spacing
-                    // TODO remove dev screen TO HERE
                   ],
                 ),
               ),
@@ -115,7 +105,7 @@ class NavDrawerItemChat extends ConsumerWidget {
     final bool anyUnread = ref.watch(anyUndreadMessagesProvider);
     Widget content = NavDrawerItem(
       icon: Icons.chat,
-      title: 'Chats',
+      title: AppLocalizations.of(context)!.chats,
       onTap: () {
         onSelectedNavItem(NavDrawerChoice.chat);
       },
@@ -125,11 +115,11 @@ class NavDrawerItemChat extends ConsumerWidget {
         clipBehavior: Clip.none,
         children: [
           content,
-          const Positioned(
+          Positioned(
             top: -5,
             right: -8,
             child: Icon(
-              semanticLabel: 'Unread messages',
+              semanticLabel: AppLocalizations.of(context)!.unreadMessages,
               Icons.circle_notifications,
               color: Colors.red,
             ),

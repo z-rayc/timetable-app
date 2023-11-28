@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Button used for single sign on.
 /// Logo is displayed to the left of the 'Sign In' text.
@@ -30,7 +31,7 @@ class SingleSignOnButton extends StatelessWidget {
               semanticsLabel: logoSemanticLabel,
               height: 20,
             ),
-            const Text('Sign In'),
+            Text(AppLocalizations.of(context)!.signIn),
           ],
         ),
       ),

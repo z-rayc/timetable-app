@@ -5,6 +5,7 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -102,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('OK')),
+                    child: Text(AppLocalizations.of(context)!.ok)),
               ],
             ));
   }
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       : () {
                           pushNewScreen(context, NavState.loginEmail);
                         },
-                  child: const Text('Email sign in'),
+                  child: Text(AppLocalizations.of(context)!.signInWithEmail),
                 ),
               ],
             ),

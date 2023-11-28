@@ -1,68 +1,100 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
+import 'dart:developer';
 
-//language enum
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
+
+final sp = kSupabase.rest;
+
+// Language enum with short names
 enum Language {
   english,
-  german,
-  french,
+  norwegian,
+}
+
+extension LanguageExtension on Language {
+  String get shortName {
+    switch (this) {
+      case Language.english:
+        return 'en';
+      case Language.norwegian:
+        return 'nb';
+    }
+  }
 }
 
 class AppSettings {
-  bool isDarkMode;
-  bool isNotificationsEnabled;
   Language language;
 
   AppSettings({
-    required this.isDarkMode,
-    required this.isNotificationsEnabled,
     required this.language,
   });
 
   AppSettings copyWith({
-    bool? isDarkMode,
-    bool? isNotificationsEnabled,
     Language? language,
   }) {
     return AppSettings(
-      isDarkMode: isDarkMode ?? this.isDarkMode,
-      isNotificationsEnabled:
-          isNotificationsEnabled ?? this.isNotificationsEnabled,
       language: language ?? this.language,
     );
   }
 }
 
-AppSettings getSettingsFromStore() {
+Future<AppSettings> getSettingsFromSupabase() async {
+  if (kSupabase.auth.currentUser == null) {
+    return AppSettings(
+      language: Language.english,
+    );
+  }
+
+  //if the user does not have a settings row in the database, create one
+  final List<dynamic> response = await sp.from('Settings').select();
+
+// check if it is an empty array
+  if (response.isEmpty) {
+    await sp.from('Settings').insert({
+      'user_id': kSupabase.auth.currentUser!.id,
+      'Language': 'english'
+    }).select();
+  }
+  // Fetch settings from Supabase
+  // Example code using Supabase to retrieve settings (replace with your implementation)
+  final response1 = await sp.from('Settings').select().single();
+  final languageValue = response1['Language'] as String;
+
+  // Convert the retrieved language value to the Language enum
+  Language language;
+  if (languageValue == 'english') {
+    language = Language.english;
+  } else {
+    language = Language.norwegian;
+  }
+
   return AppSettings(
-    isDarkMode: true,
-    isNotificationsEnabled: false,
-    language: Language.english,
+    language: language,
   );
 }
 
-class AppSettingsNotifier extends StateNotifier<AppSettings> {
-  AppSettingsNotifier() : super(getSettingsFromStore());
-
-  // Setter for isDarkMode
-  void setIsDarkMode(bool value) {
-    final newState = state.copyWith(isDarkMode: value);
-    state = newState;
-  }
-
-  // Setter for isNotificationsEnabled
-  void setIsNotificationsEnabled(bool value) {
-    final newState = state.copyWith(isNotificationsEnabled: value);
-    state = newState;
-  }
-
+class AppSettingsNotifier extends AsyncNotifier<AppSettings> {
   // Setter for language
-  void setLanguage(Language value) {
-    final newState = state.copyWith(language: value);
-    state = newState;
+  Future<void> setLanguage(Language value) async {
+    // Update settings in Supabase here (if needed)
+    return await sp
+        .from('Settings')
+        .update({'Language': value.name})
+        .eq('user_id', kSupabase.auth.currentUser!.id)
+        .select()
+        .single();
+  }
+
+  @override
+  FutureOr<AppSettings> build() {
+    ref.watch(authProvider);
+    return getSettingsFromSupabase();
   }
 }
 
 final appSettingsProvider =
-    StateNotifierProvider<AppSettingsNotifier, AppSettings>((ref) {
+    AsyncNotifierProvider<AppSettingsNotifier, AppSettings>(() {
   return AppSettingsNotifier();
 });

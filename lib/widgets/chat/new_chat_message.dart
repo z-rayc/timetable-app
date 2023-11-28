@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
 
-class NewChatMessage extends StatefulWidget {
+class NewChatMessage extends ConsumerStatefulWidget {
   const NewChatMessage({super.key, required this.chatRoom});
 
   final ChatRoom chatRoom;
 
   @override
-  State<NewChatMessage> createState() => _NewChatMessageState();
+  ConsumerState<NewChatMessage> createState() => _NewChatMessageState();
 }
 
-class _NewChatMessageState extends State<NewChatMessage> {
+class _NewChatMessageState extends ConsumerState<NewChatMessage> {
   final chatController = TextEditingController();
 
   @override
@@ -29,14 +29,10 @@ class _NewChatMessageState extends State<NewChatMessage> {
     }
     chatController.clear();
     FocusScope.of(context).unfocus();
-
-    User currentUser = kSupabase.auth.currentUser!;
-    String username = currentUser.email!.split('@')[0];
     try {
       await kSupabase.from('ChatMessage').insert({
-        'message': chatMessage,
+        'message': chatMessage.trim(),
         'chat_room_id': widget.chatRoom.id,
-        'author_name': username,
         'sent_at': DateTime.now().toIso8601String(),
       });
     } catch (e) {
@@ -56,12 +52,15 @@ class _NewChatMessageState extends State<NewChatMessage> {
     return Padding(
       padding: const EdgeInsets.only(left: 16, bottom: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: TextField(
               controller: chatController,
               enableSuggestions: true,
               autocorrect: true,
+              minLines: 1,
+              maxLines: 5,
               decoration: AppThemes.entryFieldTheme
                   .copyWith(hintText: 'Send a message'),
             ),

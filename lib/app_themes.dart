@@ -1,26 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/**
- * Examples of how to use these themes you can see in splash_screen.dart right now.
- */
-
-/// This enum contains the gradients you can use for the calendar items.
-enum CalendarItemColour {
-  green(Color.fromRGBO(140, 255, 130, 1)),
-  lightBlue(Color.fromRGBO(130, 233, 255, 1)),
-  lightRed(Color.fromRGBO(255, 130, 160, 1)),
-  yellow(Color.fromRGBO(251, 255, 74, 1)),
-  purple(Color.fromRGBO(215, 130, 255, 1)),
-  turquoise(Color.fromRGBO(61, 255, 185, 1)),
-  orange(Color.fromRGBO(255, 166, 61, 1));
-
-  const CalendarItemColour(this.colour);
-  final Color colour;
-}
+/// Examples of how to use these themes you can see in splash_screen.dart right now.
 
 const double kDefaultBorderRadius = 20.0;
-const Color kThemeSeedColour = Color.fromRGBO(140, 20, 197, 1);
+const Color kThemeSeedColor = Color.fromRGBO(140, 20, 197, 1);
 const Color kOffWhite = Color.fromRGBO(240, 240, 240, 1);
 const double kDrawerBorderRadius = 30.0;
 const double kBottomNavBarRounding = 25;
@@ -40,7 +24,7 @@ class AppThemes {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: kThemeSeedColour,
+        seedColor: kThemeSeedColor,
       ).copyWith(
         background: kOffWhite,
         secondary: const Color.fromRGBO(156, 39, 176, 1),
@@ -58,7 +42,7 @@ class AppThemes {
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: kThemeSeedColour,
+        backgroundColor: kThemeSeedColor,
         titleTextStyle: AppBarThemes.titleTextStyle,
         foregroundColor: Colors.white,
       ),
@@ -71,14 +55,14 @@ class AppThemes {
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: kThemeSeedColour,
+        backgroundColor: kThemeSeedColor,
         selectedItemColor: Colors.white,
         unselectedItemColor: Color.fromARGB(255, 207, 207, 207),
       ),
     );
   }
 
-  static Color get accentColour {
+  static Color get accentColor {
     return const Color.fromRGBO(206, 148, 251, 1);
   }
 
@@ -92,7 +76,7 @@ class AppThemes {
         ),
       ),
       backgroundColor: MaterialStateProperty.all<Color>(
-        kThemeSeedColour,
+        kThemeSeedColor,
       ),
       foregroundColor: MaterialStateProperty.all<Color>(
         const Color.fromRGBO(255, 255, 255, 1),
@@ -196,15 +180,14 @@ class AppBarThemes {
 }
 
 /// Specific themes for the calendar.
-/// To use the gradient, choose a colour from the enum [CalendarItemColour].
 class CalendarItemTheme {
-  static BoxDecoration calendarDecoration(CalendarItemColour startColour) {
+  static BoxDecoration calendarDecoration(Color startColor) {
     return BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          startColour.colour,
+          startColor,
           const Color.fromRGBO(255, 255, 255, 0.9),
         ],
       ),
@@ -212,5 +195,20 @@ class CalendarItemTheme {
         Radius.circular(10),
       ),
     );
+  }
+}
+
+class TimeTableTheme {
+  static double get timeTableColumnWidth {
+    return 270;
+  }
+
+  static double get timeTableHourRowHeight {
+    return 50;
+  }
+
+  // Returns the width of sidebar and height of topbar
+  static List<double> get timeTableSideBarSizes {
+    return [50.0, 50.0];
   }
 }

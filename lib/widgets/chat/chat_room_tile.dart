@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatRoomTile extends ConsumerWidget {
   const ChatRoomTile({
@@ -21,14 +22,14 @@ class ChatRoomTile extends ConsumerWidget {
         ref.watch(unreadMessagesProvider);
 
     bool hasUnread = false;
-    String subtitleText = 'No messages yet...';
+    String subtitleText = AppLocalizations.of(context)!.noMessagesYet;
 
     final (ChatMessage?, bool)? lastMessageTuple = unreadMessages[chatRoom.id];
     if (lastMessageTuple != null) {
       final ChatMessage? message = lastMessageTuple.$1;
       hasUnread = lastMessageTuple.$2;
       if (message != null) {
-        subtitleText = '${message.authorName}: ${message.message}';
+        subtitleText = '${message.authorNickName}: ${message.message}';
       }
     }
 
@@ -36,10 +37,14 @@ class ChatRoomTile extends ConsumerWidget {
       child: ListTile(
           onTap: onTap,
           onLongPress: onLongPress,
-          leading: const CircleAvatar(
-            child: Icon(Icons.chat),
+          leading: CircleAvatar(
+            child: Icon(chatRoom.isCourseChat ? Icons.school : Icons.chat),
           ),
-          title: Text(chatRoom.name),
+          title: Text(
+            chatRoom.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           subtitle: Text(
             subtitleText,
             maxLines: 1,

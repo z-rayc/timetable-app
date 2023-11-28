@@ -1,17 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
-import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
-import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
 import 'package:timetable_app/screens/chat/new_chat_overlay.dart';
-import 'package:timetable_app/screens/timetable_screen.dart';
+import 'package:timetable_app/screens/timetables/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -43,8 +40,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       case NavDrawerChoice.settings:
         pushNewScreen(context, NavState.accountSettings);
         break;
-      case NavDrawerChoice.devscreen:
-        pushNewScreen(context, NavState.devScreenChoice);
     }
   }
 
@@ -67,7 +62,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String activeTitle = 'Timetable';
+    String activeTitle = AppLocalizations.of(context)!.timeTableTitle;
     Widget activePage = const TimetableScreen();
     List<Widget> activeActions = [
       IconButton(
@@ -77,42 +72,17 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           pushNewScreen(context, NavState.myCourses);
         },
       ),
-      // refresh button
       IconButton(
-        icon: const Icon(Icons.refresh),
-        tooltip: 'Refresh',
+        icon: const Icon(Icons.add),
+        tooltip: 'Add custom event',
         onPressed: () {
-          // get my courses and call supabase endpoint to make it readd the events
-          var mycourses = ref
-              .read(myCoursesProvider)
-              .asData
-              ?.value
-              .userCourses
-              .map((e) => e.course.id)
-              .toList();
-
-          for (var course in mycourses ?? []) {
-            log('Calling edge function for course $course');
-            functions.invoke('getEventsByCourse', body: {
-              'id': course,
-              'sem': "23h",
-            }).then((v) {
-              log('Edge function response: ${v.data}');
-            });
-          }
-          ref.invalidate(myCoursesProvider);
-          ref.invalidate(dailyTimetableProvider);
-          //
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Refreshed'),
-            behavior: SnackBarBehavior.floating,
-          ));
+          pushNewScreen(context, NavState.createEvent);
         },
       ),
     ];
 
     if (_selectedPageIndex == 1) {
-      activeTitle = 'Chats';
+      activeTitle = AppLocalizations.of(context)!.chats;
       activePage = const ChatsOverviewScreen();
       activeActions = [
         IconButton(
@@ -130,12 +100,14 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         title: Text(activeTitle),
         actions: activeActions,
       ),
+      extendBody: true,
       drawer: NavDrawer(onSelectedNavItem: _handleDrawerNav),
       body: activePage,
       bottomNavigationBar: isNarrow ||
               isTall // don't show navbar on wide screen with little height
           ? Container(
-              margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+              margin: const EdgeInsets.only(
+                  bottom: 10, left: 10, right: 10, top: 10),
               decoration: AppThemes.bottomNavBarBoxDecoration,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(kBottomNavBarRounding),
@@ -143,16 +115,16 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
                 child: BottomNavigationBar(
                   currentIndex: _selectedPageIndex,
                   onTap: _selectTab,
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.calendar_today_outlined),
-                      label: 'Timetable',
-                      activeIcon: Icon(Icons.calendar_today_rounded),
+                      icon: const Icon(Icons.calendar_today_outlined),
+                      label: AppLocalizations.of(context)!.timeTableTitle,
+                      activeIcon: const Icon(Icons.calendar_today_rounded),
                     ),
                     BottomNavigationBarItem(
-                      icon: ChatsTabsIcon(),
-                      label: 'Chats',
-                      activeIcon: Icon(Icons.chat),
+                      icon: const ChatsTabsIcon(),
+                      label: AppLocalizations.of(context)!.chats,
+                      activeIcon: const Icon(Icons.chat),
                     ),
                   ],
                 ),

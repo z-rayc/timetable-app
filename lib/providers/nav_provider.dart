@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/account_settings_screen.dart';
 import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
-import 'package:timetable_app/screens/course_details_screen.dart';
-import 'package:timetable_app/screens/create_event_screen.dart';
+import 'package:timetable_app/screens/events/create_event_screen.dart';
 import 'package:timetable_app/screens/dev_screen_choice.dart';
 import 'package:timetable_app/screens/auth/login_email_screen.dart';
 import 'package:timetable_app/screens/auth/login_screen.dart';
-import 'package:timetable_app/screens/my_courses_screen.dart';
+import 'package:timetable_app/screens/courses/my_courses_screen.dart';
 import 'package:timetable_app/screens/auth/register_screen.dart';
-import 'package:timetable_app/screens/select_courses_screen.dart';
-import 'package:timetable_app/screens/single_day_timetable.dart';
-import 'package:timetable_app/screens/splash_screen.dart';
+import 'package:timetable_app/screens/courses/select_courses_screen.dart';
+import 'package:timetable_app/screens/timetables/single_day_timetable.dart';
+import 'package:timetable_app/screens/auth/splash_screen.dart';
 import 'package:timetable_app/screens/tabs_screen.dart';
 
 enum NavState {
@@ -21,14 +20,8 @@ enum NavState {
   loginEmail(LoginEmailScreen()),
   register(RegisterScreen()),
   selectCourses(SelectCoursesScreen()),
-
-  // dayPlan,
-  // eventDetails(EventDetailsScreen()),
-  // courseDetails(CourseDetailsScreen()),
   createEvent(CreateEventScreen()),
-  // chat,
   chats(ChatsOverviewScreen()),
-  // accountPage,
   accountSettings(AccountSettingsScreen()),
   myCourses(MyCoursesScreen()),
   tabs(TabsScreen()),

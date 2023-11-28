@@ -7,8 +7,12 @@ import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
-import 'package:timetable_app/widgets/select_courses_screen/form_dropdown_menu.dart';
+import 'package:timetable_app/providers/week_timetable_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Displays the list of courses the user can select from.
+/// Allows the user to search for a course by name or ID.
+/// User can add or remove a course from their list.
 class SelectCoursesScreen extends ConsumerStatefulWidget {
   const SelectCoursesScreen({super.key});
 
@@ -24,19 +28,19 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   String? selectedProgram;
   String? selectedSemester;
 
-  // Placeholder semesters
-  final List<DropdownMenuEntry<String>> _semesters = [
-    const DropdownMenuEntry(label: "Autumn 2021", value: "H2021"),
-    const DropdownMenuEntry(label: "Autumn 2022", value: "H2022"),
-    const DropdownMenuEntry(label: "Autumn 2023", value: "H2023"),
-  ];
-
-  // These are placeholder courses
   final List<Course> _allCourses = [];
-  late List<Course> _preselectedCourses;
+  final List<Course> _preselectedCourses = [];
   final List<Course> _selectedCourses = [];
 
   final db = kSupabase.rest;
+
+  List<String> getCoursesAsNames(List<Course> courses) {
+    return courses.map((course) => course.name).toList();
+  }
+
+  bool listContainsCourseByName(List<Course> courses, String name) {
+    return courses.map((course) => course.name).contains(name);
+  }
 
   void saveCourses() {
     addCourses();
@@ -44,25 +48,43 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     // Force refresh data
     ref.invalidate(myCoursesProvider);
     ref.invalidate(dailyTimetableProvider);
+    ref.invalidate(weeklyTimetableProvider);
   }
 
   // Adds all the selected courses to the database
   // If the course already exists in the database, it will be ignored
-  void addCourses() {
+  void addCourses() async {
     List<Course> coursesToAdd = [];
-    for (var course in _selectedCourses) {
-      if (!_preselectedCourses.contains(course)) {
-        coursesToAdd.add(course);
+
+    // Get the selected and preselected courses' names
+    List<String> preselectedCoursesNames =
+        getCoursesAsNames(_preselectedCourses);
+    List<String> selectedCoursesNames = getCoursesAsNames(_selectedCourses);
+
+    // Only add the selected courses that are not preselected
+    for (var course in selectedCoursesNames) {
+      if (!preselectedCoursesNames.contains(course)) {
+        coursesToAdd.add(
+            _selectedCourses.firstWhere((element) => element.name == course));
       }
     }
+
+    // Add the courses to the database
     if (coursesToAdd.isNotEmpty) {
-      var coursesToAdd = _selectedCourses
+      var courses = coursesToAdd
           .map((course) => {
                 'course_id': course.id,
-                'color': '0xff555555', // A default colour: grey
+                'color': '0xff9e9e9e', // A default color: grey
+                'name_alias': course.name,
               })
           .toList();
-      db.from('UserCourses').upsert(coursesToAdd).catchError(
+      await db
+          .from('UserCourses')
+          .upsert(
+            courses,
+            ignoreDuplicates: true,
+          )
+          .catchError(
         (error) {
           log(error.toString());
         },
@@ -72,14 +94,14 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   // Remove the courses in the database that
   // have been deselected
-  void removeCourses() {
+  void removeCourses() async {
     var coursesToRemove = [];
     for (var course in _preselectedCourses) {
       if (!_selectedCourses.contains(course)) {
         coursesToRemove.add(course.id);
       }
     }
-    db
+    await db
         .from('UserCourses')
         .delete()
         .in_('course_id', coursesToRemove)
@@ -92,8 +114,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
 
   void _addAllCourses() async {
     // Get all courses from the DB and convert them to Course objects
-    final List<dynamic> response =
-        await db.from('Course').select('id, name, nameAlias');
+    final List<dynamic> response = await db.from('Course').select('id, name');
 
     final List<Course> courses =
         response.map((e) => Course.fromJson(e)).toList();
@@ -107,7 +128,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     var data =
         myCourses.asData?.value.userCourses.map((e) => e.course).toList() ?? [];
     _selectedCourses.addAll(data);
-    _preselectedCourses = data;
+    _preselectedCourses.addAll(data);
     _addAllCourses();
   }
 
@@ -117,26 +138,12 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select your courses"),
+        title: Text(AppLocalizations.of(context)!.selectYourCourses),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          LayoutBuilder(builder: (context, constraints) {
-            return FormDropdownMenu(
-              name: "Semester",
-              width: constraints.maxWidth,
-              controller: semesterController,
-              items: _semesters,
-              onSelected: (String? semester) {
-                setState(() {
-                  selectedSemester = semester;
-                });
-              },
-            );
-          }),
-          const SizedBox(height: 20),
-          const Text("Find a course"),
+          Text(AppLocalizations.of(context)!.findACourse),
           const SizedBox(height: 10),
           Autocomplete<Course>(
             displayStringForOption: (Course option) => option.name,
@@ -148,8 +155,10 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
                 (Course option) {
                   // Search by ID or name
                   // Where the course is not already selected
-                  return !_selectedCourses.contains(option) &&
-                      !_preselectedCourses.contains(option) &&
+                  return !listContainsCourseByName(
+                          _selectedCourses, option.name) &&
+                      !listContainsCourseByName(
+                          _preselectedCourses, option.name) &&
                       (option.name
                               .toLowerCase()
                               .contains(textEditingValue.text.toLowerCase()) ||
@@ -195,7 +204,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
             },
           ),
           const SizedBox(height: 20),
-          const Text("Your selected courses"),
+          Text(AppLocalizations.of(context)!.yourSelectedCourses),
           const SizedBox(height: 10),
           Container(
             padding: EdgeInsets.zero,
@@ -229,10 +238,10 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
           ElevatedButton(
             onPressed: () {
               saveCourses();
-              replaceNewScreen(context, NavState.tabs);
+              popAllScreens(context);
             },
             style: AppThemes.entryButtonTheme,
-            child: const Text("Confirm"),
+            child: Text(AppLocalizations.of(context)!.confirm),
           )
         ],
       ),

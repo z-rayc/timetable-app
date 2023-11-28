@@ -1,10 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:timetable_app/providers/setting_provider.dart';
 
 class TimeTableApp extends ConsumerStatefulWidget {
   const TimeTableApp({super.key});
@@ -34,6 +40,7 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
   }
 
   void _setScreenFromSession(Session? session) {
+    ref.read(authProvider.notifier).setSession(session);
     if (session != null) {
       ref.read(navProvider.notifier).setCurrentScreen(NavState.tabs);
     } else {
@@ -50,14 +57,36 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
   @override
   Widget build(BuildContext context) {
     final navState = ref.watch(navProvider);
+    Locale selectedLocale = getLocale(context, ref);
 
     return MaterialApp(
-      theme: AppThemes.theme,
-      home: Consumer(
-        builder: (context, ref, child) {
-          return navState.currentScreen;
-        },
-      ),
-    );
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: AppThemes.theme,
+        home: Consumer(
+          builder: (context, ref, child) {
+            return navState.currentScreen;
+          },
+        ),
+        locale: selectedLocale);
+  }
+}
+
+Locale getLocale(BuildContext context, WidgetRef ref) {
+  final session = kSupabase.auth.currentSession;
+  if (session != null) {
+    final settings = ref.watch(appSettingsProvider);
+    return settings.when(data: (AppSettings data) {
+      return Locale(data.language.shortName);
+    }, loading: () {
+      return const Locale('en');
+    }, error: (err, stack) {
+      log(err.toString());
+      return const Locale('en');
+    });
+  } else {
+    // if no settings, default to device locale
+    final String defaultLocale = Platform.localeName;
+    return Locale(defaultLocale.split('_')[0]);
   }
 }

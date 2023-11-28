@@ -2,28 +2,18 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/user_course.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
 
 class UserCourses {
-  List<UserCourse> userCourses = [];
-
   UserCourses({required this.userCourses});
 
-  UserCourses copyWith({
-    List<UserCourse>? courses,
-  }) {
-    return UserCourses(
-      userCourses: courses ?? userCourses,
-    );
-  }
-
-  AsyncValue<UserCourses> toAsyncValue() {
-    return AsyncValue.data(this);
-  }
+  List<UserCourse> userCourses = [];
 }
 
 class MyCoursesNotifier extends AsyncNotifier<UserCourses> {
   @override
   FutureOr<UserCourses> build() async {
+    ref.watch(authProvider);
     final db = kSupabase.rest;
     List<Map<String, dynamic>> courses =
         await db.from('UserCourses').select('*, Course!course_id(*)');

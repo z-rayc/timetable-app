@@ -4,15 +4,14 @@ import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/location.dart';
 import 'package:timetable_app/models/staff.dart';
-import 'package:timetable_app/widgets/course_event_card.dart';
+import 'package:timetable_app/widgets/event_card.dart';
 
 void main() {
   testWidgets('CourseEventCard displays correct information',
       (WidgetTester tester) async {
     // Create a mock CourseEvent
     final event = CourseEvent(
-      course: const Course(
-        nameAlias: 'Math',
+      course: Course(
         id: 'MATH101',
         name: 'Mathematics',
       ),
@@ -33,30 +32,30 @@ void main() {
       id: 'ujkihsdref',
       teachingSummary: 'fesfesf',
     );
+    const Color color = Colors.grey;
 
     // Build the CourseEventCard widget
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: CourseEventClass(
+          body: EventCard(
             event: event,
+            color: color,
           ),
         ),
       ),
     );
 
     // Verify that the correct information is displayed
-    expect(find.text('Math'), findsOneWidget);
-    expect(find.text('MATH101'), findsOneWidget);
-    expect(find.text('09:00 - 10:00'), findsOneWidget);
+    expect(find.text('Mathematics'), findsOneWidget);
+    expect(find.text('09:00—10:00'), findsOneWidget);
   });
 
   testWidgets('CourseEventCard navigates to EventDetailsScreen when tapped',
       (WidgetTester tester) async {
     // Create a mock CourseEvent
     final event = CourseEvent(
-      course: const Course(
-        nameAlias: 'Math',
+      course: Course(
         id: 'MATH101',
         name: 'Mathematics',
       ),
@@ -77,20 +76,22 @@ void main() {
       id: 'ujkihsdref',
       teachingSummary: 'fesfesf',
     );
+    const Color color = Colors.grey;
 
     // Build the CourseEventCard widget
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: CourseEventClass(
+          body: EventCard(
             event: event,
+            color: color,
           ),
         ),
       ),
     );
 
     // Tap the CourseEventCard
-    await tester.tap(find.byType(CourseEventClass));
+    await tester.tap(find.byType(EventCard));
 
     // Verify that the EventDetailsScreen is displayed
     await tester.pumpAndSettle();

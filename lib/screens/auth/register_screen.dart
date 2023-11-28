@@ -7,6 +7,7 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -67,8 +68,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Request timed out.'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.requestTimedOut),
         ),
       );
     }
@@ -83,7 +84,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register with email')),
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context)!.registerWithEmail)),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 70, right: 70, top: 20),
@@ -93,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                const Text('Email'),
+                Text(AppLocalizations.of(context)!.email),
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme,
@@ -102,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textCapitalization: TextCapitalization.none,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your email';
+                        return AppLocalizations.of(context)!.plsEnterEmail;
                       } else {
                         return null;
                       }
@@ -113,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text('Password'),
+                Text(AppLocalizations.of(context)!.password),
                 ShadowedTextFormField(
                   child: TextFormField(
                     controller: _passwordController,
@@ -121,9 +123,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a password';
+                        return AppLocalizations.of(context)!.plsEnterPassword;
                       } else if (value.trim().length < 6) {
-                        return 'Password too short';
+                        return AppLocalizations.of(context)!.passwordTooShort;
                       } else {
                         return null;
                       }
@@ -134,16 +136,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text('Confirm Password'),
+                Text(AppLocalizations.of(context)!.confirmPassword),
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme,
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please confirm password';
+                        return AppLocalizations.of(context)!.plsConfirmPassword;
                       } else if (value != _passwordController.text) {
-                        return 'Passwords do not match!';
+                        return AppLocalizations.of(context)!.passwordsDontMatch;
                       } else {
                         return null;
                       }
@@ -162,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: AppThemes.entryButtonTheme,
                         child: _loading
                             ? const PrimaryElevatedButtonLoadingChild()
-                            : const Text('Register'),
+                            : Text(AppLocalizations.of(context)!.register),
                       ),
                     ),
                   ],

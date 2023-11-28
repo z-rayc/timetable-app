@@ -18,6 +18,7 @@ class CLabel extends StatelessWidget {
         style: style.copyWith(
           //if null set to 16
           fontSize: overrideFontSize ?? 16,
+          fontWeight: FontWeight.w400,
         ));
   }
 }
