@@ -39,6 +39,10 @@ class SingleDayTimetable extends ConsumerWidget {
                     event: key,
                     color: data.courseEvents[key]!,
                   ));
+
+          // sort the cards by start time
+          cards = cards.toList()
+            ..sort((a, b) => a.event.startTime.compareTo(b.event.startTime));
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: timetable.asData!.value.courseEvents.length,
