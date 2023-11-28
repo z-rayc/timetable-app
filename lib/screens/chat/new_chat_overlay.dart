@@ -139,9 +139,8 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Chatroom'),
-          content: const Text(
-              'Are you sure you want to delete this chatroom? This action cannot be undone.'),
+          title: Text(AppLocalizations.of(context)!.deleteChat),
+          content: Text(AppLocalizations.of(context)!.deleteChatConfirmation),
           actions: [
             TextButton(
               onPressed: () {

@@ -7,6 +7,7 @@ import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/screens/chat/new_chat_overlay.dart';
 import 'package:timetable_app/widgets/chat/chat_messages.dart';
 import 'package:timetable_app/widgets/chat/new_chat_message.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key, required this.chatRoom});
@@ -63,7 +64,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           Icons.logout,
                           color: AppThemes.theme.colorScheme.onBackground,
                         ),
-                        const Text('Leave Chat'),
+                        Text(AppLocalizations.of(context)!.leaveChat),
                       ],
                     ),
                   ),
