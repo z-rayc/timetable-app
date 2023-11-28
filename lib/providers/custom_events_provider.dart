@@ -45,7 +45,6 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
       events = convertToCustomEvents(eventsData);
     } catch (e, stack) {
       log(e.toString());
-      log(stack.toString());
       state = AsyncValue.error(e, stack);
     }
 

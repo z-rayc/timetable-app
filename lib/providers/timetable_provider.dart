@@ -68,8 +68,6 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
         .read(customEventsProvider.notifier)
         .getEventsForDay(selectedDay.date);
 
-    log(customEvents.toString());
-
     for (var event in customEvents) {
       eventsWithColor[event] = Colors.grey;
     }
