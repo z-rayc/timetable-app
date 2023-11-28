@@ -43,11 +43,11 @@ class WeeklyTimetableNotifier extends AsyncNotifier<WeeklyTimetable> {
     }
 
     // Get all of a user's course events for the selected day
-    List<CourseEvent> events = await convertToCourseEvents(
+    List<CourseEvent> courseEvents = await convertToCourseEvents(
         getCourseEventsForWeek(selectedDay.date, courseIds));
 
     Map<Event, Color> eventsWithColor = {};
-    for (var event in events) {
+    for (var event in courseEvents) {
       // Add the name alias to the course
       event.course.setNameAlias(userCourses.firstWhere(
           (course) => course['course_id'] == event.course.id)['name_alias']);
@@ -65,7 +65,7 @@ class WeeklyTimetableNotifier extends AsyncNotifier<WeeklyTimetable> {
     // Get all of a user's custom events for the selected day
     var customEvents = await ref
         .read(customEventsProvider.notifier)
-        .getEventsForDay(selectedDay.date);
+        .getEventsForWeek(selectedDay.date);
 
     for (var event in customEvents) {
       eventsWithColor[event] = Colors.grey;
@@ -89,6 +89,12 @@ Future<List<Map<String, dynamic>>> getCourseEventsForWeek(
   DateTime startOfDay = now.subtract(Duration(days: dayOfWeek - 1));
   //End day is sunday of the current week
   DateTime endOfDay = now.add(Duration(days: 7 - dayOfWeek));
+
+  // set the time to 00:00:00
+  startOfDay = DateTime(startOfDay.year, startOfDay.month, startOfDay.day);
+  // set the time to 23:59:59
+  endOfDay = DateTime(endOfDay.year, endOfDay.month, endOfDay.day, 23, 59);
+
   final db = kSupabase.rest;
   final response = await db
       .from('CourseEvents')

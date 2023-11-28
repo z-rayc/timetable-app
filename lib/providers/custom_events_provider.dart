@@ -43,7 +43,25 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
 
       events = convertToCustomEvents(eventsData);
     } catch (e, stack) {
-      log(e.toString());
+      log("Error getting events for day: ${e.toString()}");
+      state = AsyncValue.error(e, stack);
+    }
+
+    return events;
+  }
+
+  FutureOr<List<CustomEvent>> getEventsForWeek(DateTime date) async {
+    state = const AsyncValue.loading();
+
+    List<CustomEvent> events = [];
+
+    try {
+      List<int> eventIds = await getEventIdsForUser();
+      var eventsData = await getCustomEventsForWeek(date, eventIds);
+
+      events = convertToCustomEvents(eventsData);
+    } catch (e, stack) {
+      log("Error getting events for week: ${e.toString()}");
       state = AsyncValue.error(e, stack);
     }
 
@@ -80,7 +98,7 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
         maybeError = CustomEventsFetchError(response.data['error']);
       }
     } catch (e, stack) {
-      log(e.toString());
+      log("Error adding event: ${e.toString()}");
       state = AsyncValue.error(e, stack);
     }
     return maybeError;
@@ -96,7 +114,7 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
     List<dynamic> events =
         await db.from('CustomEvents').select('*').in_('id', eventIds);
 
-    return CustomEvents(customEvents: await convertToCustomEvents(events));
+    return CustomEvents(customEvents: convertToCustomEvents(events));
   }
 }
 
@@ -128,6 +146,31 @@ FutureOr<dynamic> getCustomEventsForDay(DateTime day, List eventIds) async {
       .in_('id', eventIds)
       .gte('start_time', startOfDay.toIso8601String())
       .lte('start_time', endOfDay.toIso8601String());
+
+  return response;
+}
+
+Future<dynamic> getCustomEventsForWeek(DateTime day, List courses) async {
+  DateTime now = day;
+  //Get which day of week it is
+  int dayOfWeek = now.weekday;
+  //Start of day is monday of the current week
+  DateTime startOfWeek = now.subtract(Duration(days: dayOfWeek - 1));
+  //End day is sunday of the current week
+  DateTime endOfWeek = now.add(Duration(days: 7 - dayOfWeek));
+
+  // set the time to 00:00:00
+  startOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+  // set the time to 23:59:59
+  endOfWeek = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59);
+
+  final db = kSupabase.rest;
+  final response = await db
+      .from('CustomEvents')
+      .select('*')
+      .in_('id', courses)
+      .gte('start_time', startOfWeek.toIso8601String())
+      .lte('start_time', endOfWeek.toIso8601String());
 
   return response;
 }
