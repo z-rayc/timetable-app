@@ -1,0 +1,8 @@
+{
+    "helloWorld": "Hello Verden!",
+    "timeTableTitle": "Timeplan",
+    "settingsTitle": "Instillinger",
+    "settingsLanguage": "Språk",
+    "logout": "Logg ut",
+    "languageChanged": "Språk endret"
+}

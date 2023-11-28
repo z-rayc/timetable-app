@@ -1,0 +1,11 @@
+{
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "timeTableTitle": "Timetable",
+  "settingsTitle": "Settings",
+  "settingsLanguage": "Language",
+  "logout": "Logout",
+  "languageChanged": "language changed"
+}

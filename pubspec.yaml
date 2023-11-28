@@ -42,6 +42,9 @@ dependencies:
   url_launcher: ^6.2.1
   linked_scroll_controller: ^0.2.0
   flutter_colorpicker: ^0.5.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +66,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # needed for localisation support
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:

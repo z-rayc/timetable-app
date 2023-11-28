@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:timetable_app/providers/setting_provider.dart';
 
 class TimeTableApp extends ConsumerStatefulWidget {
   const TimeTableApp({super.key});
@@ -50,14 +54,26 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
   @override
   Widget build(BuildContext context) {
     final navState = ref.watch(navProvider);
+    final settings = ref.watch(appSettingsProvider);
 
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: AppThemes.theme,
       home: Consumer(
         builder: (context, ref, child) {
           return navState.currentScreen;
         },
       ),
+      locale: settings.when(data: (AppSettings data) {
+        log(data.language.shortName);
+        return Locale(data.language.shortName);
+      }, loading: () {
+        return const Locale('en');
+      }, error: (err, stack) {
+        log(err.toString());
+        return const Locale('en');
+      }),
     );
   }
 }
