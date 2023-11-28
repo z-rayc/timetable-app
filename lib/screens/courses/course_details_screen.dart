@@ -7,6 +7,7 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/user_course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
+import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:timetable_app/widgets/color_picker_button.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
@@ -88,6 +89,7 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
         // Force refresh data
         ref.invalidate(myCoursesProvider);
         ref.invalidate(dailyTimetableProvider);
+        ref.invalidate(weeklyTimetableProvider);
 
         _setLoading(false);
         if (context.mounted) {

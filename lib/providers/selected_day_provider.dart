@@ -25,12 +25,12 @@ class DateSelectedNotifier extends StateNotifier<DateSelected> {
     state = state.copyWith(date: newDate);
   }
 
-  void goForward() {
-    state = state.copyWith(date: state.date.add(const Duration(days: 1)));
+  void goForward(int days) {
+    state = state.copyWith(date: state.date.add(Duration(days: days)));
   }
 
-  void goBackward() {
-    state = state.copyWith(date: state.date.subtract(const Duration(days: 1)));
+  void goBackward(int days) {
+    state = state.copyWith(date: state.date.subtract(Duration(days: days)));
   }
 }
 
