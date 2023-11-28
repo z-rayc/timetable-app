@@ -86,16 +86,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
 
     Widget verticalHourItem(String hour) {
-      return Container(
+      return SizedBox(
         height: TimeTableTheme.timeTableHourRowHeight,
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Color.fromARGB(255, 64, 64, 64),
-              width: 1,
-            ),
-          ),
-        ),
         child: Center(
           child: Text(hour, style: const TextStyle(fontSize: 10)),
         ),
@@ -165,7 +157,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
       var hours = [
         for (var i = 0; earliestTime.hour + i <= latestTime.hour; i++)
-          "${earliestTime.hour + i}:00".padLeft(5, '0')
+          "${"${earliestTime.hour + i}:00".padLeft(5, '0')}—"
       ];
 
       //Make a hashmap of events with the Datetime weekday as the key
