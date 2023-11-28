@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/setting_provider.dart';
+import 'package:timetable_app/widgets/settings/signout_button.dart';
+import 'package:timetable_app/widgets/settings/username_edit.dart';
 
 class AccountSettingsScreen extends ConsumerWidget {
   const AccountSettingsScreen({super.key});
@@ -23,6 +25,7 @@ class AccountSettingsScreen extends ConsumerWidget {
               // Use the settings provider to get the current settings
 
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SwitchListTile(
                     title: const Text("Dark Mode?"),
@@ -62,13 +65,10 @@ class AccountSettingsScreen extends ConsumerWidget {
                           .toList(),
                     ),
                   ),
-                  TextButton.icon(
-                      onPressed: () {
-                        kSupabase.auth.signOut();
-                        popAllScreens(context);
-                      },
-                      icon: const Icon(Icons.logout),
-                      label: const Text('Logout'))
+                  const Divider(),
+                  const Text("Account Settings"),
+                  const UsernameEdit(),
+                  const SignOutButton(),
                 ],
               )
             ],
