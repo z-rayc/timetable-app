@@ -10,6 +10,7 @@ import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
 import 'package:timetable_app/widgets/timetable_modules/weekly_module.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //
 class TimeTable extends ConsumerStatefulWidget {
@@ -64,13 +65,13 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     var timetable = ref.watch(weeklyTimetableProvider);
 
     var days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday'
+      AppLocalizations.of(context)!.monday,
+      AppLocalizations.of(context)!.tuesday,
+      AppLocalizations.of(context)!.wednesday,
+      AppLocalizations.of(context)!.thursday,
+      AppLocalizations.of(context)!.friday,
+      AppLocalizations.of(context)!.saturday,
+      AppLocalizations.of(context)!.sunday,
     ];
 
     Widget horizontalDayItem(String day) {
@@ -204,7 +205,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("No events today or no courses added"),
+                  Text(AppLocalizations.of(context)!
+                      .noEventsTodayOrNoCoursesAdded),
                   const SizedBox(
                     height: 20,
                   ),
@@ -214,11 +216,12 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                         ref.invalidate(dailyTimetableProvider);
                         ref.invalidate(weeklyTimetableProvider);
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Refreshed")));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text(AppLocalizations.of(context)!.refresh)));
                       },
                       icon: const Icon(Icons.refresh),
-                      label: const Text("Refresh"))
+                      label: Text(AppLocalizations.of(context)!.refresh))
                 ],
               ),
               const Spacer(),
@@ -380,7 +383,9 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         ],
       );
     }, error: (Object error, StackTrace stackTrace) {
-      return SingleChildScrollView(child: Text("Error: $error, $stackTrace"));
+      return SingleChildScrollView(
+          child: Text(
+              "${AppLocalizations.of(context)!.error}: $error, $stackTrace"));
     }, loading: () {
       return const Center(child: CircularProgressIndicator());
     });
