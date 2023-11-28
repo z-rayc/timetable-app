@@ -39,8 +39,7 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
 
     try {
       List<int> eventIds = await getEventIdsForUser();
-      List<Map<String, dynamic>> eventsData =
-          await getCustomEventsForDay(date, eventIds);
+      var eventsData = await getCustomEventsForDay(date, eventIds);
 
       events = convertToCustomEvents(eventsData);
     } catch (e, stack) {
@@ -118,8 +117,7 @@ List<CustomEvent> convertToCustomEvents(List<dynamic> events) {
   return customEvents;
 }
 
-Future<List<Map<String, dynamic>>> getCustomEventsForDay(
-    DateTime day, List eventIds) async {
+FutureOr<dynamic> getCustomEventsForDay(DateTime day, List eventIds) async {
   DateTime now = day;
   DateTime startOfDay = DateTime(now.year, now.month, now.day);
   DateTime endOfDay = startOfDay.add(const Duration(days: 1));
