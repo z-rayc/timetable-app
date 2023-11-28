@@ -2,7 +2,7 @@
 
 ## About
 
-This is a timetable app meant for NTNU students, but can be expanded to include other universities that rely on TP. The purpose of the app is for students to plan their classes and coordinate events with other students.
+This is a timetable app meant for NTNU students, but can be expanded to include other universities that rely on TP. The purpose of the app is for students to plan their classes and coordinate events with other students. The app is available in both Norwegian and English.
 
 ## Features
 
