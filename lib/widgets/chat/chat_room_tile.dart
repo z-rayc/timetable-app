@@ -28,7 +28,7 @@ class ChatRoomTile extends ConsumerWidget {
       final ChatMessage? message = lastMessageTuple.$1;
       hasUnread = lastMessageTuple.$2;
       if (message != null) {
-        subtitleText = '${message.authorName}: ${message.message}';
+        subtitleText = '${message.authorDisplayName}: ${message.message}';
       }
     }
 

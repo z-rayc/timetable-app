@@ -33,9 +33,9 @@ class _NewChatMessageState extends ConsumerState<NewChatMessage> {
     FocusScope.of(context).unfocus();
 
     User currentUser = kSupabase.auth.currentUser!;
-    // String username = currentUser.email!.split('@')[0];
-    final String username = ref.read(userProfileProvider).value?.nickname ??
-        currentUser.email!.split('@')[0];
+    String username = currentUser.email!.split('@')[0];
+    // final String username = ref.read(userProfileProvider).value?.nickname ??
+    //     currentUser.email!.split('@')[0];
     try {
       await kSupabase.from('ChatMessage').insert({
         'message': chatMessage.trim(),
