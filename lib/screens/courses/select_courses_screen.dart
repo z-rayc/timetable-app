@@ -71,7 +71,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
       var courses = coursesToAdd
           .map((course) => {
                 'course_id': course.id,
-                'color': '0xff555555', // A default color: grey
+                'color': '0xff9e9e9e', // A default color: grey
                 'name_alias': course.name,
               })
           .toList();
