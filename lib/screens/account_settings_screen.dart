@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/setting_provider.dart';
+import 'package:timetable_app/widgets/settings/signout_button.dart';
+import 'package:timetable_app/widgets/settings/username_edit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountSettingsScreen extends ConsumerWidget {
