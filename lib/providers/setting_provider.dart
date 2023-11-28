@@ -41,10 +41,14 @@ class AppSettings {
 
 Future<AppSettings> getSettingsFromSupabase() async {
   //if the user does not have a settings row in the database, create one
-  final response = await sp.from('Settings').select().single();
-  if (await response == null) {
-    await sp.from('Settings').insert(
-        {'user_id': kSupabase.auth.currentUser!.id, 'Language': 'english'});
+  final List<dynamic> response = await sp.from('Settings').select();
+
+// check if it is an empty array
+  if (response.isEmpty) {
+    await sp.from('Settings').insert({
+      'user_id': kSupabase.auth.currentUser!.id,
+      'Language': 'english'
+    }).select();
   }
   // Fetch settings from Supabase
   // Example code using Supabase to retrieve settings (replace with your implementation)
