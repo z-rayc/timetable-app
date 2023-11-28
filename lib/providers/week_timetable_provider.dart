@@ -5,19 +5,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/models/event.dart';
+import 'package:timetable_app/providers/custom_events_provider.dart';
 import 'package:timetable_app/providers/selected_day_provider.dart';
 
 class WeeklyTimetable {
-  Map<CourseEvent, Color> courseEvents = {};
+  Map<Event, Color> events = {};
   WeeklyTimetable({
-    required this.courseEvents,
+    required this.events,
   });
 
   WeeklyTimetable copyWith({
-    Map<CourseEvent, Color>? courseEvents,
+    Map<Event, Color>? events,
   }) {
     return WeeklyTimetable(
-      courseEvents: courseEvents ?? this.courseEvents,
+      events: events ?? this.events,
     );
   }
 
@@ -44,7 +46,7 @@ class WeeklyTimetableNotifier extends AsyncNotifier<WeeklyTimetable> {
     List<CourseEvent> events = await convertToCourseEvents(
         getCourseEventsForWeek(selectedDay.date, courseIds));
 
-    Map<CourseEvent, Color> eventsWithColor = {};
+    Map<Event, Color> eventsWithColor = {};
     for (var event in events) {
       // Add the name alias to the course
       event.course.setNameAlias(userCourses.firstWhere(
@@ -60,7 +62,16 @@ class WeeklyTimetableNotifier extends AsyncNotifier<WeeklyTimetable> {
       }
     }
 
-    return WeeklyTimetable(courseEvents: eventsWithColor);
+    // Get all of a user's custom events for the selected day
+    var customEvents = await ref
+        .read(customEventsProvider.notifier)
+        .getEventsForDay(selectedDay.date);
+
+    for (var event in customEvents) {
+      eventsWithColor[event] = Colors.grey;
+    }
+
+    return WeeklyTimetable(events: eventsWithColor);
   }
 }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/selected_day_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
@@ -108,7 +107,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
 
     return timetable.when(data: (WeeklyTimetable data) {
-      if (data.courseEvents.isEmpty) {
+      if (data.events.isEmpty) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
