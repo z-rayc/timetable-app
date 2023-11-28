@@ -43,11 +43,11 @@ class EventDetailsScreen extends StatelessWidget {
       ),
       const SizedBox(height: 30),
       Text(
-          "${AppLocalizations.of(context)!.date}: ${Time(event.startTime).dayMonthYear}"),
+          "${AppLocalizations.of(context)!.date}: ${Time(time: event.startTime, context: context).dayMonthYear}"),
       Text(
-          "${AppLocalizations.of(context)!.start}: ${Time(event.startTime).hourMinutes}"),
+          "${AppLocalizations.of(context)!.start}: ${Time(time: event.startTime, context: context).hourMinutes}"),
       Text(
-          "${AppLocalizations.of(context)!.end}: ${Time(event.endTime).hourMinutes}"),
+          "${AppLocalizations.of(context)!.end}: ${Time(time: event.endTime, context: context).hourMinutes}"),
     ];
   }
 
@@ -88,11 +88,11 @@ class EventDetailsScreen extends StatelessWidget {
         ),
       const SizedBox(height: 30),
       Text(
-          "${AppLocalizations.of(context)!.date}: ${Time(event.startTime).dayMonthYear}"),
+          "${AppLocalizations.of(context)!.date}: ${Time(time: event.startTime, context: context).dayMonthYear}"),
       Text(
-          "${AppLocalizations.of(context)!.start}: ${Time(event.startTime).hourMinutes}"),
+          "${AppLocalizations.of(context)!.start}: ${Time(time: event.startTime, context: context).hourMinutes}"),
       Text(
-          "${AppLocalizations.of(context)!.end}: ${Time(event.endTime).hourMinutes}"),
+          "${AppLocalizations.of(context)!.end}: ${Time(time: event.endTime, context: context).hourMinutes}"),
     ];
   }
 

@@ -240,7 +240,8 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(Time(_enteredStartTime).dayMonthYearHourMinute)
+                    Text(Time(time: _enteredStartTime, context: context)
+                        .dayMonthYearHourMinute)
                   ],
                 ),
                 const SizedBox(height: 30),
@@ -269,7 +270,8 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(Time(_enteredEndTime).dayMonthYearHourMinute)
+                    Text(Time(time: _enteredEndTime, context: context)
+                        .dayMonthYearHourMinute)
                   ],
                 ),
                 const SizedBox(height: 30),

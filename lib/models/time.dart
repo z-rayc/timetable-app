@@ -1,6 +1,10 @@
-class Time {
-  const Time(this.time);
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+class Time {
+  const Time({required this.time, required this.context});
+
+  final BuildContext context;
   final DateTime time;
 
   String _dateToHourMinute() {
@@ -10,31 +14,31 @@ class Time {
   String _month(int month) {
     switch (month) {
       case 1:
-        return "January";
+        return AppLocalizations.of(context)!.january;
       case 2:
-        return "February";
+        return AppLocalizations.of(context)!.february;
       case 3:
-        return "March";
+        return AppLocalizations.of(context)!.march;
       case 4:
-        return "April";
+        return AppLocalizations.of(context)!.april;
       case 5:
-        return "May";
+        return AppLocalizations.of(context)!.may;
       case 6:
-        return "June";
+        return AppLocalizations.of(context)!.june;
       case 7:
-        return "July";
+        return AppLocalizations.of(context)!.july;
       case 8:
-        return "August";
+        return AppLocalizations.of(context)!.august;
       case 9:
-        return "September";
+        return AppLocalizations.of(context)!.september;
       case 10:
-        return "October";
+        return AppLocalizations.of(context)!.october;
       case 11:
-        return "November";
+        return AppLocalizations.of(context)!.november;
       case 12:
-        return "December";
+        return AppLocalizations.of(context)!.december;
       default:
-        throw Exception("Invalid month");
+        throw Exception(AppLocalizations.of(context)!.invalidMonthError);
     }
   }
 
