@@ -4,14 +4,17 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
+import 'package:timetable_app/providers/selected_day_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
+import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
 import 'package:timetable_app/widgets/timetable_modules/weekly_module.dart';
 
 //
 class TimeTable extends ConsumerStatefulWidget {
-  const TimeTable({super.key, required this.tableDate});
-  final DateTime tableDate;
+  const TimeTable({
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -54,7 +57,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
   @override
   Widget build(BuildContext context) {
-    var timetable = ref.watch(dailyTimetableProvider);
+    var timetable = ref.watch(weeklyTimetableProvider);
 
     var days = [
       'Monday',
@@ -104,7 +107,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       return time.hour * 60 + time.minute;
     }
 
-    return timetable.when(data: (DailyTimetable data) {
+    return timetable.when(data: (WeeklyTimetable data) {
       if (data.courseEvents.isEmpty) {
         return Center(
           child: Column(
@@ -116,6 +119,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                   onPressed: () {
                     ref.invalidate(myCoursesProvider);
                     ref.invalidate(dailyTimetableProvider);
+                    ref.invalidate( weeklyTimetableProvider);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Refreshed")));
@@ -130,11 +134,13 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       var colourMap = timetable.asData!.value.courseEvents;
       var weekEvents = colourMap.keys.toList();
 
+      var selectedDate = ref.watch(dateSelectedProvider).date;
+
       var todayEvents = weekEvents
           .where((element) =>
-              element.startTime.day == widget.tableDate.day &&
-              element.startTime.month == widget.tableDate.month &&
-              element.startTime.year == widget.tableDate.year)
+              element.startTime.day == selectedDate.day &&
+              element.startTime.month == selectedDate.month &&
+              element.startTime.year == selectedDate.year)
           .toList();
       var events = isHorizontal ? weekEvents : todayEvents;
       DateTime earliestTime;

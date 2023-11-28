@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
+import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:timetable_app/widgets/event_card.dart';
 
 class SingleDayTimetable extends ConsumerWidget {
@@ -24,6 +25,7 @@ class SingleDayTimetable extends ConsumerWidget {
                     onPressed: () {
                       ref.invalidate(myCoursesProvider);
                       ref.invalidate(dailyTimetableProvider);
+                      ref.invalidate(weeklyTimetableProvider);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Refreshed")));

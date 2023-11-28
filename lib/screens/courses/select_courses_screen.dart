@@ -7,6 +7,7 @@ import 'package:timetable_app/models/course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
+import 'package:timetable_app/providers/week_timetable_provider.dart';
 
 /// Displays the list of courses the user can select from.
 /// Allows the user to search for a course by name or ID.
@@ -46,6 +47,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
     // Force refresh data
     ref.invalidate(myCoursesProvider);
     ref.invalidate(dailyTimetableProvider);
+    ref.invalidate(weeklyTimetableProvider);
   }
 
   // Adds all the selected courses to the database
