@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/setting_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountSettingsScreen extends ConsumerWidget {
   const AccountSettingsScreen({super.key});
@@ -15,7 +16,7 @@ class AccountSettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text(AppLocalizations.of(context)!.settingsTitle),
       ),
       body: settings.when(data: (AppSettings data) {
         return SingleChildScrollView(
@@ -29,7 +30,8 @@ class AccountSettingsScreen extends ConsumerWidget {
                   children: [
                     // Language selector
                     ListTile(
-                      title: const Text("Language"),
+                      title:
+                          Text(AppLocalizations.of(context)!.settingsLanguage),
                       trailing: DropdownButton<Language>(
                         value: settings.asData!.value.language,
                         onChanged: (Language? newValue) {
@@ -37,9 +39,9 @@ class AccountSettingsScreen extends ConsumerWidget {
                               .read(appSettingsProvider.notifier)
                               .setLanguage(newValue!)
                               .whenComplete(() {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Language changed")));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .languageChanged)));
 
                             ref.invalidate(appSettingsProvider);
                           });
@@ -59,7 +61,7 @@ class AccountSettingsScreen extends ConsumerWidget {
                           popAllScreens(context);
                         },
                         icon: const Icon(Icons.logout),
-                        label: const Text('Logout'))
+                        label: Text(AppLocalizations.of(context)!.logout))
                   ],
                 )
               ],
