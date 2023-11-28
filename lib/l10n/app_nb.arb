@@ -4,5 +4,43 @@
     "settingsTitle": "Instillinger",
     "settingsLanguage": "Språk",
     "logout": "Logg ut",
-    "languageChanged": "Språk endret"
+    "languageChanged": "Språk endret",
+
+    "signIn": "Logg inn",
+    "requestTimedOut": "Forespørsel tidsavbrutt",
+    "email": "E-post",
+    "password": "Passord",
+    "plsEnterEmail": "Vennligst skriv inn e-post",
+    "plsEnterValidEmail": "Vennligst skriv inn en gyldig e-post",
+    "plsEnterPassword": "Vennligst skriv inn passord",
+    "noAccount": "Ingen konto?",
+    "register": "Registrer",
+    "signInWithEmail": "Logg inn med e-post",
+    "passwordTooShort": "Passordet er for kort",
+    "confirmPassword": "Bekreft passord",
+    "plsConfirmPassword": "Vennligst bekreft passord",
+    "passwordsDontMatch": "Passordene er ikke like",
+    "registerWithEmail": "Registrer med e-post",
+
+
+    "noAccessTokenFound": "Fant ikke tilgangstoken",
+    "noIdTokenFound": "Fant ikke id-token",
+    "ok": "OK",
+    "changesSaved": "Endringer lagret",
+    "courseDetails": "Kursdetaljer",
+    "myCourses": "Mine kurs",
+    "edit": "Rediger",
+
+
+    "selectYourCourses": "Velg dine kurs",
+    "findACourse": "Finn et kurs",
+    "yourSelectedCourses": "Dine valgte kurs",
+    "confirm": "Bekreft",
+
+    "noEventsTodayOrNoCoursesAdded": "Ingen hendelser i dag eller ingen kurs lagt til",
+    "refresh": "Oppdater",
+    "today": "I dag",
+
+    "chats": "Samtaler",
+    "unreadMessages": "Uleste meldinger"
 }

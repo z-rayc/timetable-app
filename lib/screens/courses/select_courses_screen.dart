@@ -8,6 +8,7 @@ import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/providers/week_timetable_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Displays the list of courses the user can select from.
 /// Allows the user to search for a course by name or ID.
@@ -137,12 +138,12 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select your courses"),
+        title: Text(AppLocalizations.of(context)!.selectYourCourses),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const Text("Find a course"),
+          Text(AppLocalizations.of(context)!.findACourse),
           const SizedBox(height: 10),
           Autocomplete<Course>(
             displayStringForOption: (Course option) => option.name,
@@ -203,7 +204,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
             },
           ),
           const SizedBox(height: 20),
-          const Text("Your selected courses"),
+          Text(AppLocalizations.of(context)!.yourSelectedCourses),
           const SizedBox(height: 10),
           Container(
             padding: EdgeInsets.zero,
@@ -240,7 +241,7 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
               popAllScreens(context);
             },
             style: AppThemes.entryButtonTheme,
-            child: const Text("Confirm"),
+            child: Text(AppLocalizations.of(context)!.confirm),
           )
         ],
       ),

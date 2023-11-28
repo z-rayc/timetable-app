@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -54,26 +55,36 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
   @override
   Widget build(BuildContext context) {
     final navState = ref.watch(navProvider);
-    final settings = ref.watch(appSettingsProvider);
+    Locale selectedLocale = getLocale(context, ref);
 
     return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: AppThemes.theme,
-      home: Consumer(
-        builder: (context, ref, child) {
-          return navState.currentScreen;
-        },
-      ),
-      locale: settings.when(data: (AppSettings data) {
-        log(data.language.shortName);
-        return Locale(data.language.shortName);
-      }, loading: () {
-        return const Locale('en');
-      }, error: (err, stack) {
-        log(err.toString());
-        return const Locale('en');
-      }),
-    );
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: AppThemes.theme,
+        home: Consumer(
+          builder: (context, ref, child) {
+            return navState.currentScreen;
+          },
+        ),
+        locale: selectedLocale);
+  }
+}
+
+Locale getLocale(BuildContext context, WidgetRef ref) {
+  final session = kSupabase.auth.currentSession;
+  if (session != null) {
+    final settings = ref.watch(appSettingsProvider);
+    return settings.when(data: (AppSettings data) {
+      return Locale(data.language.shortName);
+    }, loading: () {
+      return const Locale('en');
+    }, error: (err, stack) {
+      log(err.toString());
+      return const Locale('en');
+    });
+  } else {
+    // if no settings, default to device locale
+    final String defaultLocale = Platform.localeName;
+    return Locale(defaultLocale.split('_')[0]);
   }
 }
