@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatRoomTile extends ConsumerWidget {
   const ChatRoomTile({
@@ -21,7 +22,7 @@ class ChatRoomTile extends ConsumerWidget {
         ref.watch(unreadMessagesProvider);
 
     bool hasUnread = false;
-    String subtitleText = 'No messages yet...';
+    String subtitleText = AppLocalizations.of(context)!.noMessagesYet;
 
     final (ChatMessage?, bool)? lastMessageTuple = unreadMessages[chatRoom.id];
     if (lastMessageTuple != null) {

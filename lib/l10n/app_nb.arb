@@ -42,5 +42,28 @@
     "today": "I dag",
 
     "chats": "Samtaler",
-    "unreadMessages": "Uleste meldinger"
+    "unreadMessages": "Uleste meldinger",
+    "noMessagesYet": "Ingen meldinger enda...",
+
+    "noEmailsAdded": "Ingen e-poster lagt til",
+    "pleaseAddAtLeastOneEmail": "Vennligst legg til minst en e-post",
+    "invitePeopleToChat": "Inviter folk til en samtale",
+
+
+
+
+
+    "cannotAddYourself": "Du kan ikke legge til deg selv",
+    "emailAlreadyAdded": "E-post allerede lagt til",
+    "clear": "Tøm",
+    "add": "Legg til",
+    "noEmailsAddedYet": "Ingen e-poster lagt til enda",
+    "delete": "Slett",
+    "cancel": "Avbryt",
+    "create": "Opprett",
+    "save": "Lagre",
+    "newChat": "Ny samtale",
+    "editChat": "Rediger samtale",
+    "chatRoomName": "Samtalenavn",
+    "chatRoomNameTooShort": "Samtalenavnet er for kort"
 }
