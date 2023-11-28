@@ -8,6 +8,7 @@ import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
 import 'package:timetable_app/screens/chat/new_chat_overlay.dart';
 import 'package:timetable_app/screens/timetables/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -63,7 +64,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String activeTitle = 'Timetable';
+    String activeTitle = AppLocalizations.of(context)!.timeTableTitle;
     Widget activePage = const TimetableScreen();
     List<Widget> activeActions = [
       IconButton(
