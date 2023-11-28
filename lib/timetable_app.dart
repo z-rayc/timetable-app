@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class TimeTableApp extends ConsumerStatefulWidget {
   const TimeTableApp({super.key});
@@ -52,6 +53,15 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
     final navState = ref.watch(navProvider);
 
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('nb'), // Norwegian Bokmål
+      ],
       theme: AppThemes.theme,
       home: Consumer(
         builder: (context, ref, child) {
