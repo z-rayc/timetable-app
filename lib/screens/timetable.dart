@@ -227,6 +227,18 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
       return Stack(
         children: [
+          //Generate a grey line every 50 pixel
+          for (var i = 0; i < hours.length; i++)
+            Positioned(
+              top: 75 + i * 50,
+              left: TimeTableTheme.timeTableSideBarSizes[1].toDouble() + 50,
+              right: 0,
+              child: Container(
+                height: 1,
+                color: Colors.grey,
+              ),
+            ),
+
           Positioned(
             width: 50,
             top: 0,
