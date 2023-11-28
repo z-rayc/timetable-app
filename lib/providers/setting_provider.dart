@@ -40,10 +40,16 @@ class AppSettings {
 }
 
 Future<AppSettings> getSettingsFromSupabase() async {
+  //if the user does not have a settings row in the database, create one
+  final response = await sp.from('Settings').select().single();
+  if (response == null) {
+    await sp.from('Settings').insert(
+        {'user_id': kSupabase.auth.currentUser!.id, 'Language': 'english'});
+  }
   // Fetch settings from Supabase
   // Example code using Supabase to retrieve settings (replace with your implementation)
-  final response = await sp.from('Settings').select().single();
-  final languageValue = response['Language'] as String;
+  final response1 = await sp.from('Settings').select().single();
+  final languageValue = response1['Language'] as String;
 
   // Convert the retrieved language value to the Language enum
   Language language;
