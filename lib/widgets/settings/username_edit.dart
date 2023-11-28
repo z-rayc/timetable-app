@@ -5,6 +5,7 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/user_profile_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UsernameEdit extends ConsumerStatefulWidget {
   const UsernameEdit({super.key});
@@ -59,7 +60,7 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CLabel('Username'),
+          CLabel(AppLocalizations.of(context)!.nickname),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,11 +72,11 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
                     maxLength: 25,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a username';
+                        return AppLocalizations.of(context)!.pelaseEnterNickname;
                       } else if (value.trim().contains(' ')) {
-                        return 'Username cannot contain spaces';
+                        return AppLocalizations.of(context)!.nicknameCannotContainSpaces;
                       } else if (value.trim().length < 3) {
-                        return 'Username must be at least 3 characters';
+                        return AppLocalizations.of(context)!.nichnameMustBe3Chars;
                       }
                       return null;
                     },
@@ -88,7 +89,7 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
               const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: loadingProfile || _loading ? null : _submitUsername,
-                child: const Text('Save'),
+                child: Text(AppLocalizations.of(context)!.save),
               )
             ],
           ),

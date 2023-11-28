@@ -56,5 +56,11 @@
   "newChat": "New Chat",
   "editChat": "Edit Chat",
   "chatRoomName": "Chat Room Name",
-  "chatRoomNameTooShort": "Chat room name too short"
+  "chatRoomNameTooShort": "Chat room name too short",
+  "appSettings": "App Settings",
+  "accountSettings": "Account Settings",
+  "nickname": "Nickname",
+  "pelaseEnterNickname": "Please enter a nickname",
+  "nicknameCannotContainSpaces": "Cannot contain spaces",
+  "nichnameMustBe3Chars": "Must be at least 3 characters"
 }

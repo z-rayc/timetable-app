@@ -24,7 +24,7 @@ class AccountSettingsScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CTitle('App Settings'),
+              CTitle(AppLocalizations.of(context)!.appSettings),
               const SizedBox(height: 12),
               settings.when(data: (AppSettings data) {
                 return SingleChildScrollView(
@@ -74,7 +74,7 @@ class AccountSettingsScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               const Divider(),
               const SizedBox(height: 12),
-              const CTitle('Account Settings'),
+              CTitle(AppLocalizations.of(context)!.accountSettings),
               const SizedBox(height: 12),
               const UsernameEdit(),
               const SignOutButton(),

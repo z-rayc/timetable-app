@@ -53,5 +53,11 @@
   "newChat": "Ny samtale",
   "editChat": "Rediger samtale",
   "chatRoomName": "Samtalenavn",
-  "chatRoomNameTooShort": "Samtalenavnet er for kort"
+  "chatRoomNameTooShort": "Samtalenavnet er for kort",
+  "appSettings": "App Instillinger",
+  "accountSettings": "Konto Instillinger",
+  "nickname": "Kallenavn",
+  "pelaseEnterNickname": "Vennligst skriv inn kallenavn",
+  "nicknameCannotContainSpaces": "Kan ikke inneholde mellomrom",
+  "nichnameMustBe3Chars": "Må ha minst 3 tegn"
 }
