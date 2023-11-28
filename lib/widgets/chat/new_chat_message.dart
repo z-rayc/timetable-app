@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
-import 'package:timetable_app/providers/user_profile_provider.dart';
 
 class NewChatMessage extends ConsumerStatefulWidget {
   const NewChatMessage({super.key, required this.chatRoom});
@@ -31,16 +29,10 @@ class _NewChatMessageState extends ConsumerState<NewChatMessage> {
     }
     chatController.clear();
     FocusScope.of(context).unfocus();
-
-    User currentUser = kSupabase.auth.currentUser!;
-    String username = currentUser.email!.split('@')[0];
-    // final String username = ref.read(userProfileProvider).value?.nickname ??
-    //     currentUser.email!.split('@')[0];
     try {
       await kSupabase.from('ChatMessage').insert({
         'message': chatMessage.trim(),
         'chat_room_id': widget.chatRoom.id,
-        'author_name': username,
         'sent_at': DateTime.now().toIso8601String(),
       });
     } catch (e) {

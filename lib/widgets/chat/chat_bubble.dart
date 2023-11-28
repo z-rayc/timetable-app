@@ -69,7 +69,7 @@ class ChatBubble extends StatelessWidget {
                 right: 8,
                 bottom: 1,
               ),
-              child: Text(message.authorDisplayName),
+              child: Text(message.authorNickName),
             ),
           Row(
             mainAxisAlignment:

@@ -9,6 +9,7 @@ import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/models/user_course.dart';
 import 'package:timetable_app/providers/auth_provider.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
+import 'package:timetable_app/providers/user_profile_provider.dart';
 
 class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
   late RealtimeChannel _channel;
@@ -25,6 +26,7 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
   @override
   FutureOr<List<ChatRoom>> build() async {
     ref.watch(authProvider);
+    ref.watch(userProfileProvider);
     final chatrooms = await _fetchChatRooms();
 
     final List<UserCourse> courses =
