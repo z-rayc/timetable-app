@@ -10,7 +10,6 @@ enum NavDrawerChoice {
   chat,
   myCourses,
   settings,
-  devscreen, // remove this later TODO
 }
 
 class NavDrawer extends StatelessWidget {
@@ -82,16 +81,6 @@ class NavDrawer extends StatelessWidget {
                       },
                     ),
                     spacing,
-                    // TODO remove dev screen FROM HERE
-                    NavDrawerItem(
-                      icon: Icons.error,
-                      title: 'Dev screen',
-                      onTap: () {
-                        onSelectedNavItem(NavDrawerChoice.devscreen);
-                      },
-                    ),
-                    spacing
-                    // TODO remove dev screen TO HERE
                   ],
                 ),
               ),
