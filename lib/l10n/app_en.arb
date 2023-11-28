@@ -62,5 +62,6 @@
   "nickname": "Nickname",
   "pelaseEnterNickname": "Please enter a nickname",
   "nicknameCannotContainSpaces": "Cannot contain spaces",
-  "nichnameMustBe3Chars": "Must be at least 3 characters"
+  "nichnameMustBe3Chars": "Must be at least 3 characters",
+  "nicknameTakenError": "Nickname already taken!"
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/user_profile_provider.dart';
+import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,12 +34,21 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
       setState(() {
         _loading = true;
       });
-      await ref
-          .read(userProfileProvider.notifier)
-          .setNickname(_enteredUsername);
-      setState(() {
-        _loading = false;
-      });
+      try {
+        await ref
+            .read(userProfileProvider.notifier)
+            .setNickname(_enteredUsername);
+      } on UserProfileProviderException catch (_) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.nicknameTakenError)));
+        }
+      } finally {
+        setState(() {
+          _loading = false;
+        });
+      }
     }
   }
 
@@ -67,16 +77,20 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
               Expanded(
                 child: ShadowedTextFormField(
                   child: TextFormField(
+                    enabled: !loadingProfile && !_loading,
                     controller: _usernameController,
                     decoration: AppThemes.entryFieldTheme,
                     maxLength: 25,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return AppLocalizations.of(context)!.pelaseEnterNickname;
+                        return AppLocalizations.of(context)!
+                            .pelaseEnterNickname;
                       } else if (value.trim().contains(' ')) {
-                        return AppLocalizations.of(context)!.nicknameCannotContainSpaces;
+                        return AppLocalizations.of(context)!
+                            .nicknameCannotContainSpaces;
                       } else if (value.trim().length < 3) {
-                        return AppLocalizations.of(context)!.nichnameMustBe3Chars;
+                        return AppLocalizations.of(context)!
+                            .nichnameMustBe3Chars;
                       }
                       return null;
                     },
@@ -89,7 +103,9 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
               const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: loadingProfile || _loading ? null : _submitUsername,
-                child: Text(AppLocalizations.of(context)!.save),
+                child: loadingProfile || _loading
+                    ? const PrimaryElevatedButtonLoadingChild()
+                    : Text(AppLocalizations.of(context)!.save),
               )
             ],
           ),
