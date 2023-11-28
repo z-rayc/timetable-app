@@ -13,7 +13,7 @@ class SingleDayTimetable extends ConsumerWidget {
 
     return Expanded(
       child: timetable.when(data: (DailyTimetable data) {
-        if (data.courseEvents.isEmpty) {
+        if (data.events.isEmpty) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -34,14 +34,13 @@ class SingleDayTimetable extends ConsumerWidget {
             ),
           );
         } else {
-          Iterable<EventCard> cards =
-              data.courseEvents.keys.map((key) => EventCard(
-                    event: key,
-                    color: data.courseEvents[key]!,
-                  ));
+          Iterable<EventCard> cards = data.events.keys.map((key) => EventCard(
+                event: key,
+                color: data.events[key]!,
+              ));
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            itemCount: timetable.asData!.value.courseEvents.length,
+            itemCount: timetable.asData!.value.events.length,
             itemBuilder: (context, index) {
               return cards.elementAt(index);
             },

@@ -105,7 +105,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
 
     return timetable.when(data: (DailyTimetable data) {
-      if (data.courseEvents.isEmpty) {
+      if (data.events.isEmpty) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +127,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         );
       }
       var isHorizontal = MediaQuery.of(context).size.width > 600;
-      var colourMap = timetable.asData!.value.courseEvents;
+      var colourMap = timetable.asData!.value.events;
       var weekEvents = colourMap.keys.toList();
 
       var todayEvents = weekEvents

@@ -5,19 +5,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/models/event.dart';
+import 'package:timetable_app/providers/custom_events_provider.dart';
 import 'package:timetable_app/providers/selected_day_provider.dart';
 
 class DailyTimetable {
-  Map<CourseEvent, Color> courseEvents = {};
+  Map<Event, Color> events = {};
   DailyTimetable({
-    required this.courseEvents,
+    required this.events,
   });
 
   DailyTimetable copyWith({
-    Map<CourseEvent, Color>? courseEvents,
+    Map<Event, Color>? events,
   }) {
     return DailyTimetable(
-      courseEvents: courseEvents ?? this.courseEvents,
+      events: events ?? this.events,
     );
   }
 
@@ -41,11 +43,13 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
     }
 
     // Get all of a user's course events for the selected day
-    List<CourseEvent> events = await convertToCourseEvents(
+    List<CourseEvent> courseEvents = await convertToCourseEvents(
         getCourseEventsForDay(selectedDay.date, courseIds));
 
-    Map<CourseEvent, Color> eventsWithColor = {};
-    for (var event in events) {
+    Map<Event, Color> eventsWithColor = {};
+
+    // Add the couse events (classes) to the events map
+    for (var event in courseEvents) {
       // Add the name alias to the course
       event.course.setNameAlias(userCourses.firstWhere(
           (course) => course['course_id'] == event.course.id)['name_alias']);
@@ -60,7 +64,17 @@ class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
       }
     }
 
-    return DailyTimetable(courseEvents: eventsWithColor);
+    var customEvents = await ref
+        .read(customEventsProvider.notifier)
+        .getEventsForDay(selectedDay.date);
+
+    log(customEvents.toString());
+
+    for (var event in customEvents) {
+      eventsWithColor[event] = Colors.grey;
+    }
+
+    return DailyTimetable(events: eventsWithColor);
   }
 }
 
@@ -73,9 +87,9 @@ Future<List<Map<String, dynamic>>> getCourseEventsForDay(
     DateTime day, List courses) async {
   DateTime now = day;
   DateTime startOfDay = DateTime(now.year, now.month, now.day);
-  // setting end of day to 54 days from now to test
   DateTime endOfDay = startOfDay.add(const Duration(days: 1));
   final db = kSupabase.rest;
+
   final response = await db
       .from('CourseEvents')
       .select<PostgrestList>(

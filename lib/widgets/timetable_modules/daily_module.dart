@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/widgets/event_card.dart';
 
 class DailyModule extends StatelessWidget {
@@ -14,10 +14,10 @@ class DailyModule extends StatelessWidget {
   });
 
   final List<String> days;
-  final List<CourseEvent> sortedEvents;
+  final List<Event> sortedEvents;
   final List<String> hours;
   final bool showEmptyText;
-  final Map<CourseEvent, Color> eventColours;
+  final Map<Event, Color> eventColours;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class DailyModule extends StatelessWidget {
       return overlapping;
     }).toList();
 
-    bool checkIfOverlapping(CourseEvent event, List<CourseEvent> events) {
+    bool checkIfOverlapping(Event event, List<Event> events) {
       var overlapping = false;
       for (var event2 in events) {
         if (event == event2) {
@@ -51,8 +51,8 @@ class DailyModule extends StatelessWidget {
       return overlapping;
     }
 
-    List<CourseEvent> decideWhichOverlappingEventToMoveToTheRight(
-        List<CourseEvent> overlappingEvents) {
+    List<Event> decideWhichOverlappingEventToMoveToTheRight(
+        List<Event> overlappingEvents) {
       //Check if any of the events are overlapping two or more events
       var doubleOverlappingEvents = overlappingEvents.where((element) {
         var overlapping = false;
@@ -78,7 +78,7 @@ class DailyModule extends StatelessWidget {
 
       //Check if any of the remaining events are overlapping one event.
 
-      List<CourseEvent> singleOverlappingEvents = [];
+      List<Event> singleOverlappingEvents = [];
       for (var event in overlappingEvents) {
         var overlapping = false;
         for (var event2 in overlappingEvents) {
@@ -107,7 +107,7 @@ class DailyModule extends StatelessWidget {
     }
 
     List<Widget> buildEventWidgets(double topOffset, double leftOffset,
-        List<CourseEvent> events, List<CourseEvent> overlappingEvents) {
+        List<Event> events, List<Event> overlappingEvents) {
       List<Widget> eventWidgets = [];
       var calendarEarliest = 7.0;
       for (var event in events) {

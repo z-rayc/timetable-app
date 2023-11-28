@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/models/course_event.dart';
+import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
 
 class WeeklyModule extends StatefulWidget {
@@ -13,9 +13,9 @@ class WeeklyModule extends StatefulWidget {
   });
 
   final List<String> days;
-  final List<CourseEvent> events;
+  final List<Event> events;
   final List<String> hours;
-  final Map<CourseEvent, Color> eventColours;
+  final Map<Event, Color> eventColours;
 
   @override
   State<WeeklyModule> createState() => _WeeklyModuleState();

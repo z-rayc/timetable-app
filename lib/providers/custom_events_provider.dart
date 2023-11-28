@@ -20,6 +20,38 @@ class CustomEvents {
 }
 
 class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
+  Future<List<int>> getEventIdsForUser() async {
+    // Get all the IDs of events that the user has access to.
+    List<Map<String, dynamic>> eventsWithAccess =
+        await kSupabase.from('CustomEventsMember').select('*');
+    List<int> eventIds = [];
+    for (var event in eventsWithAccess) {
+      eventIds.add(event['event_id']);
+    }
+
+    return eventIds;
+  }
+
+  FutureOr<List<CustomEvent>> getEventsForDay(DateTime date) async {
+    state = const AsyncValue.loading();
+
+    List<CustomEvent> events = [];
+
+    try {
+      List<int> eventIds = await getEventIdsForUser();
+      List<Map<String, dynamic>> eventsData =
+          await getCustomEventsForDay(date, eventIds);
+
+      events = convertToCustomEvents(eventsData);
+    } catch (e, stack) {
+      log(e.toString());
+      log(stack.toString());
+      state = AsyncValue.error(e, stack);
+    }
+
+    return events;
+  }
+
   Future<CustomEventsFetchError?> addCustomEvent(
       String name,
       String description,
@@ -57,20 +89,14 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
   }
 
   @override
-  FutureOr<CustomEvents> build() async {
+  Future<CustomEvents> build() async {
     final db = kSupabase.rest;
 
-    // Get all the IDs of events that the user has access to.
-    List<Map<String, dynamic>> eventsWithAccess =
-        await db.from('CustomEventsMember').select('*');
-    List<int> eventIdsList = [];
-    for (var event in eventsWithAccess) {
-      eventIdsList.add(event['event_id']);
-    }
+    List<int> eventIds = await getEventIdsForUser();
 
     // Get all the events that the user has access to.
     List<dynamic> events =
-        await db.from('CustomEvents').select('*').in_('id', eventIdsList);
+        await db.from('CustomEvents').select('*').in_('id', eventIds);
 
     return CustomEvents(customEvents: await convertToCustomEvents(events));
   }
@@ -81,7 +107,7 @@ final customEventsProvider =
   return CustomEventsNotifier();
 });
 
-Future<List<CustomEvent>> convertToCustomEvents(List<dynamic> events) async {
+List<CustomEvent> convertToCustomEvents(List<dynamic> events) {
   List<CustomEvent> customEvents = [];
 
   for (var event in events) {
@@ -91,4 +117,20 @@ Future<List<CustomEvent>> convertToCustomEvents(List<dynamic> events) async {
   }
 
   return customEvents;
+}
+
+Future<List<Map<String, dynamic>>> getCustomEventsForDay(
+    DateTime day, List eventIds) async {
+  DateTime now = day;
+  DateTime startOfDay = DateTime(now.year, now.month, now.day);
+  DateTime endOfDay = startOfDay.add(const Duration(days: 1));
+  final db = kSupabase.rest;
+  final response = await db
+      .from('CustomEvents')
+      .select('*')
+      .in_('id', eventIds)
+      .gte('start_time', startOfDay.toIso8601String())
+      .lte('start_time', endOfDay.toIso8601String());
+
+  return response;
 }
