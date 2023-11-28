@@ -78,5 +78,18 @@
   "date": "Date",
   "start": "Start",
   "end": "End",
-  "description": "Description"
+  "unknownEventTypeError": "Unknown event type",
+  "description": "Description",
+  "createCustomEvent": "Create Custom Event",
+  "shortDescription": "Short Description",
+  "room": "Room",
+  "building": "Building",
+  "invitees": "Invitees",
+  "emailsCsv": "E-mails separated by commas",
+  "startBeforeEndError": "Start time must be before end time",
+  "error": "Error",
+  "name": "Name",
+  "selectNameError": "Please select a name",
+  "selectDescriptionError": "Please select a description",
+  "selectValidLinkError": "Please select a valid link"
 }

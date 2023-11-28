@@ -111,7 +111,7 @@ class EventDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Event details"),
+        title: Text(AppLocalizations.of(context)!.eventDetails),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
       ),

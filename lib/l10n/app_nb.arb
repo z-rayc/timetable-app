@@ -75,5 +75,18 @@
   "date": "Dato",
   "start": "Start",
   "end": "Slutt",
-  "description": "Beskrivelse"
+  "unknownEventTypeError": "Ukjent hendelse type",
+  "description": "Beskrivelse",
+  "createCustomEvent": "Lag egen hendelse",
+  "shortDescription": "Kort beskrivelse",
+  "room": "Rom",
+  "building": "Bygning",
+  "invitees": "Inviterte",
+  "emailsCsv": "E-post separert med komma",
+  "startBeforeEndError": "Start tiden må være før slutt tiden",
+  "error": "Feil",
+  "name": "Navn",
+  "selectNameError": "Vennligst velg et navn",
+  "selectDescriptionError": "Vennligst velg en beskrivelse",
+  "selectValidLinkError": "Vennligst velg en gyldig link"
 }
