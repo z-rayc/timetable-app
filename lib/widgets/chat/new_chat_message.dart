@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
+import 'package:timetable_app/providers/user_profile_provider.dart';
 
-class NewChatMessage extends StatefulWidget {
+class NewChatMessage extends ConsumerStatefulWidget {
   const NewChatMessage({super.key, required this.chatRoom});
 
   final ChatRoom chatRoom;
 
   @override
-  State<NewChatMessage> createState() => _NewChatMessageState();
+  ConsumerState<NewChatMessage> createState() => _NewChatMessageState();
 }
 
-class _NewChatMessageState extends State<NewChatMessage> {
+class _NewChatMessageState extends ConsumerState<NewChatMessage> {
   final chatController = TextEditingController();
 
   @override
@@ -31,7 +33,9 @@ class _NewChatMessageState extends State<NewChatMessage> {
     FocusScope.of(context).unfocus();
 
     User currentUser = kSupabase.auth.currentUser!;
-    String username = currentUser.email!.split('@')[0];
+    // String username = currentUser.email!.split('@')[0];
+    final String username = ref.read(userProfileProvider).value?.nickname ??
+        currentUser.email!.split('@')[0];
     try {
       await kSupabase.from('ChatMessage').insert({
         'message': chatMessage.trim(),
