@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/auth_provider.dart';

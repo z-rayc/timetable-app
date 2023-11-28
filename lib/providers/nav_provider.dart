@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/screens/account_settings_screen.dart';
 import 'package:timetable_app/screens/chat/chats_overview_screen.dart';
 import 'package:timetable_app/screens/events/create_event_screen.dart';
-import 'package:timetable_app/screens/dev_screen_choice.dart';
 import 'package:timetable_app/screens/auth/login_email_screen.dart';
 import 'package:timetable_app/screens/auth/login_screen.dart';
 import 'package:timetable_app/screens/courses/my_courses_screen.dart';
@@ -24,8 +23,7 @@ enum NavState {
   chats(ChatsOverviewScreen()),
   accountSettings(AccountSettingsScreen()),
   myCourses(MyCoursesScreen()),
-  tabs(TabsScreen()),
-  devScreenChoice(DevScreenChoice());
+  tabs(TabsScreen());
 
   const NavState(this.screen);
   final Widget screen;
