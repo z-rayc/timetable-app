@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/user_profile_provider.dart';
+import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
+import 'package:timetable_app/widgets/texts/label.dart';
 
 class UsernameEdit extends ConsumerStatefulWidget {
   const UsernameEdit({super.key});
@@ -57,29 +59,33 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Username'),
+          const CLabel('Username'),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: TextFormField(
-                  controller: _usernameController,
-                  decoration: AppThemes.entryFieldTheme,
-                  maxLength: 25,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a username';
-                    } else if (value.trim().contains(' ')) {
-                      return 'Username cannot contain spaces';
-                    } else if (value.trim().length < 3) {
-                      return 'Username must be at least 3 characters';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    _enteredUsername = newValue!.trim();
-                  },
+                child: ShadowedTextFormField(
+                  child: TextFormField(
+                    controller: _usernameController,
+                    decoration: AppThemes.entryFieldTheme,
+                    maxLength: 25,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter a username';
+                      } else if (value.trim().contains(' ')) {
+                        return 'Username cannot contain spaces';
+                      } else if (value.trim().length < 3) {
+                        return 'Username must be at least 3 characters';
+                      }
+                      return null;
+                    },
+                    onSaved: (newValue) {
+                      _enteredUsername = newValue!.trim();
+                    },
+                  ),
                 ),
               ),
+              const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: loadingProfile || _loading ? null : _submitUsername,
                 child: const Text('Save'),

@@ -6,6 +6,8 @@ import 'package:timetable_app/providers/setting_provider.dart';
 import 'package:timetable_app/widgets/settings/signout_button.dart';
 import 'package:timetable_app/widgets/settings/username_edit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:timetable_app/widgets/texts/ctexts.dart';
+import 'package:timetable_app/widgets/texts/title.dart';
 
 class AccountSettingsScreen extends ConsumerWidget {
   const AccountSettingsScreen({super.key});
@@ -19,51 +21,47 @@ class AccountSettingsScreen extends ConsumerWidget {
           title: Text(AppLocalizations.of(context)!.settingsTitle),
         ),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const CTitle('App Settings'),
+              const SizedBox(height: 12),
               settings.when(data: (AppSettings data) {
                 return SingleChildScrollView(
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Use the settings provider to get the current settings
+                        ListTile(
+                          title: Text(
+                              AppLocalizations.of(context)!.settingsLanguage),
+                          trailing: DropdownButton<Language>(
+                            value: settings.asData!.value.language,
+                            onChanged: (Language? newValue) {
+                              ref
+                                  .read(appSettingsProvider.notifier)
+                                  .setLanguage(newValue!)
+                                  .whenComplete(() {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .languageChanged)));
 
-                        Column(
-                          children: [
-                            // Language selector
-                            ListTile(
-                              title: Text(AppLocalizations.of(context)!
-                                  .settingsLanguage),
-                              trailing: DropdownButton<Language>(
-                                value: settings.asData!.value.language,
-                                onChanged: (Language? newValue) {
-                                  ref
-                                      .read(appSettingsProvider.notifier)
-                                      .setLanguage(newValue!)
-                                      .whenComplete(() {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                AppLocalizations.of(context)!
-                                                    .languageChanged)));
-
-                                    ref.invalidate(appSettingsProvider);
-                                  });
-                                },
-                                items: Language.values
-                                    .map<DropdownMenuItem<Language>>(
-                                        (Language value) =>
-                                            DropdownMenuItem<Language>(
-                                              value: value,
-                                              child: Text(value.name),
-                                            ))
-                                    .toList(),
-                              ),
-                            ),
-                          ],
-                        )
+                                ref.invalidate(appSettingsProvider);
+                              });
+                            },
+                            items: Language.values
+                                .map<DropdownMenuItem<Language>>(
+                                    (Language value) =>
+                                        DropdownMenuItem<Language>(
+                                          value: value,
+                                          child: Text(value.name),
+                                        ))
+                                .toList(),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -74,8 +72,11 @@ class AccountSettingsScreen extends ConsumerWidget {
                 log("Error: $error, $stackTrace");
                 return const Center(child: Text("Error loading settingsS"));
               }),
+              const SizedBox(height: 12),
               const Divider(),
-              const Text("Account Settings"),
+              const SizedBox(height: 12),
+              const CTitle('Account Settings'),
+              const SizedBox(height: 12),
               const UsernameEdit(),
               const SignOutButton(),
             ],
