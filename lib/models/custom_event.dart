@@ -25,7 +25,11 @@ class CustomEvent extends Event {
       startTime: DateTime.parse(json['start_time']),
       endTime: DateTime.parse(json['end_time']),
       creatorId: (json['creator']),
-      // location: Location.fromJson(json['location']), // TODO: Add back
+      location: Location(
+        roomName: json['room'],
+        buildingName: json['building'],
+        link: Uri.parse(json['link']),
+      ),
     );
   }
 }

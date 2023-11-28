@@ -22,6 +22,7 @@ class _DevScreenChoiceState extends State<DevScreenChoice> {
     final auth = kSupabase.auth;
     final edge = kSupabase.functions;
     final db = kSupabase.rest;
+
     return Scaffold(
       appBar: AppBar(
         title: const CTitle("Dev Screen Choice"),
@@ -43,8 +44,7 @@ class _DevScreenChoiceState extends State<DevScreenChoice> {
                       },
                       child: CLabel(screenIdentifier.name),
                     ),
-                  )
-                  .toList(),
+                  ),
               const SizedBox(height: 100),
               ElevatedButton(
                 style: AppThemes.entrySecondaryButtonTheme,

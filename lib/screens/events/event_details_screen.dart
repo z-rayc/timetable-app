@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/custom_event.dart';
@@ -52,29 +54,35 @@ class EventDetailsScreen extends StatelessWidget {
       CTitle(event.name),
       const SizedBox(height: 10),
       Text("Description: ${event.description}"),
-      const SizedBox(height: 30),
-      if (event.location != null)
+      if (event.location != null &&
+          event.location!.roomName.isNotEmpty &&
+          event.location!.buildingName.isNotEmpty)
+        const SizedBox(height: 30),
+      if (event.location != null &&
+          event.location!.roomName.isNotEmpty &&
+          event.location!.buildingName.isNotEmpty)
         Text(
             "Location: ${event.location!.roomName}, ${event.location!.buildingName}"),
-      Row(
-        children: [
-          const Text("Link: "),
-          Flexible(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              splashColor: Colors.blue,
-              child: Text(
-                style: const TextStyle(
-                  color: Colors.blue,
+      if (event.location != null)
+        Row(
+          children: [
+            const Text("Link: "),
+            Flexible(
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                splashColor: Colors.blue,
+                child: Text(
+                  style: const TextStyle(
+                    color: Colors.blue,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  "${event.location!.link}",
                 ),
-                overflow: TextOverflow.ellipsis,
-                "${event.location!.link}",
+                onTap: () => launchUrl(event.location!.link),
               ),
-              onTap: () => launchUrl(event.location!.link),
-            ),
-          )
-        ],
-      ),
+            )
+          ],
+        ),
       const SizedBox(height: 30),
       Text("Date: ${Time(event.startTime).dayMonthYear}"),
       Text("Start: ${Time(event.startTime).hourMinutes}"),

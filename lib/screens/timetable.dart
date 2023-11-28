@@ -31,6 +31,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   late ScrollController _horizontalTableController;
   late ScrollController _verticalHourController;
   late ScrollController _verticalTableController;
+  late ScrollController _verticalLineController;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
     _verticalHourController = _verticalControllers.addAndGet();
     _verticalTableController = _verticalControllers.addAndGet();
+    _verticalLineController = _verticalControllers.addAndGet();
 
     super.initState();
   }
@@ -52,6 +54,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     _horizontalTableController.dispose();
     _verticalHourController.dispose();
     _verticalTableController.dispose();
+    _verticalLineController.dispose();
 
     super.dispose();
   }
@@ -90,10 +93,12 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     Widget verticalHourItem(String hour) {
       return Container(
         height: TimeTableTheme.timeTableHourRowHeight,
-        decoration: const BoxDecoration(
-          border: Border(
+        decoration: BoxDecoration(
+          border: const Border(
             left: BorderSide(color: Colors.grey),
           ),
+          //COlour is equal to default background colour
+          color: Theme.of(context).colorScheme.background,
         ),
         child: Center(
           child: Text(hour, style: const TextStyle(fontSize: 10)),
@@ -227,6 +232,44 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
       return Stack(
         children: [
+          //Generate a grey line every 50 pixel inside a single child view
+          Positioned(
+            top: topOffset,
+            left: 50,
+            right: 0,
+            bottom: 0,
+            child: SingleChildScrollView(
+              controller: _verticalLineController,
+              child: Column(
+                children: [
+                  Container(
+                    height: 25,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                  for (var i = 0; i < hours.length; i++)
+                    Container(
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+
           Positioned(
             width: 50,
             top: 0,
