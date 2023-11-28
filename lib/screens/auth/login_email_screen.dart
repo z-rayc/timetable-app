@@ -7,6 +7,7 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginEmailScreen extends StatefulWidget {
   const LoginEmailScreen({super.key});
@@ -15,7 +16,6 @@ class LoginEmailScreen extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _LoginEmailScreenState();
   }
-
 }
 
 class _LoginEmailScreenState extends State<LoginEmailScreen> {
@@ -68,8 +68,8 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Request timed out.'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.requestTimedOut),
         ),
       );
     }
@@ -85,7 +85,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20),
-          const Text('Email'),
+          Text(AppLocalizations.of(context)!.email),
           ShadowedTextFormField(
             child: TextFormField(
               decoration: AppThemes.entryFieldTheme,
@@ -94,9 +94,9 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
               textCapitalization: TextCapitalization.none,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter your email address';
+                  return AppLocalizations.of(context)!.plsEnterEmail;
                 } else if (!value.contains('@')) {
-                  return 'Please enter a valid email address';
+                  return AppLocalizations.of(context)!.plsEnterValidEmail;
                 } else {
                   return null;
                 }
@@ -107,14 +107,14 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          const Text('Password'),
+          Text(AppLocalizations.of(context)!.password),
           ShadowedTextFormField(
             child: TextFormField(
               decoration: AppThemes.entryFieldTheme,
               obscureText: true,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter your password';
+                  return AppLocalizations.of(context)!.plsEnterPassword;
                 } else {
                   return null;
                 }
@@ -133,7 +133,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                   style: AppThemes.entryButtonTheme,
                   child: _loading
                       ? const PrimaryElevatedButtonLoadingChild()
-                      : const Text('Sign in'),
+                      : Text(AppLocalizations.of(context)!.signIn),
                 ),
               ),
             ],
@@ -143,20 +143,20 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
     );
     var noAccountButton = Column(
       children: [
-        const Text('No account?'),
+        Text(AppLocalizations.of(context)!.noAccount),
         ElevatedButton(
           onPressed: () {
             pushNewScreen(context, NavState.register);
           },
           style: AppThemes.entrySecondaryButtonTheme,
-          child: const Text('Register'),
+          child: Text(AppLocalizations.of(context)!.register),
         ),
       ],
     );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Sign in with email"),
+        title: Text(AppLocalizations.of(context)!.signInWithEmail),
       ),
       body: !isWideScreen
           ? Padding(

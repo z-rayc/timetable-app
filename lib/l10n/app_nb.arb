@@ -4,5 +4,16 @@
     "settingsTitle": "Instillinger",
     "settingsLanguage": "Språk",
     "logout": "Logg ut",
-    "languageChanged": "Språk endret"
+    "languageChanged": "Språk endret",
+
+    "signIn": "Logg inn",
+    "requestTimedOut": "Forespørsel tidsavbrutt",
+    "email": "E-post",
+    "password": "Passord",
+    "plsEnterEmail": "Vennligst skriv inn e-post",
+    "plsEnterValidEmail": "Vennligst skriv inn en gyldig e-post",
+    "plsEnterPassword": "Vennligst skriv inn passord",
+    "noAccount": "Ingen konto?",
+    "register": "Registrer",
+    "signInWithEmail": "Logg inn med e-post"
 }

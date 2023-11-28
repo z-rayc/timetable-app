@@ -6,6 +6,24 @@
   "timeTableTitle": "Timetable",
   "settingsTitle": "Settings",
   "settingsLanguage": "Language",
+
   "logout": "Logout",
+  
   "languageChanged": "language changed"
+  
+  
+  
+  ,
+  "signIn" : "Sign In",
+  "requestTimedOut": "Request timed out",
+  "email": "Email",
+  "password": "Password",
+  "plsEnterEmail": "Please enter your email address",
+  "plsEnterValidEmail": "Please enter a valid email address",
+  "plsEnterPassword": "Please enter your password",
+
+  "noAccount": "No Account?",
+  "register": "Register",
+
+  "signInWithEmail": "Sign In with Email"
 }
