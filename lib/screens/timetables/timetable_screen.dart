@@ -56,7 +56,7 @@ class TimetableScreen extends ConsumerWidget {
               onPressed: () => _selectDate(context, ref),
               child: Text(
                 isWide
-                    ? "Week $weeks"
+                    ? "${AppLocalizations.of(context)!.week} $weeks"
                     : "${ref.watch(dateSelectedProvider).date.day}/${ref.watch(dateSelectedProvider).date.month}/${ref.watch(dateSelectedProvider).date.year}",
                 style: const TextStyle(fontSize: 20),
               ),
@@ -86,8 +86,5 @@ class TimetableScreen extends ConsumerWidget {
         ),
       ],
     );
-    /* !isWide
-        ? const SingleDayTimetable()
-        : const WeekTimeTable(); */
   }
 }
