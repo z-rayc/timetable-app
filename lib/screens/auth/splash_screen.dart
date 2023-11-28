@@ -18,8 +18,12 @@ class SplashScreen extends ConsumerWidget {
               children: [
                 Icon(
                   Icons.hourglass_empty_rounded,
-                  size: 150,
+                  size: 200,
                   color: Colors.white,
+                ),
+                Text(
+                  "Chronos",
+                  style: TextStyle(fontSize: 36, color: Colors.white),
                 ),
               ],
             ),
