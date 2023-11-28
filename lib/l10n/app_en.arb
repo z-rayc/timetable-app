@@ -69,5 +69,14 @@
   "pelaseEnterNickname": "Please enter a nickname",
   "nicknameCannotContainSpaces": "Cannot contain spaces",
   "nichnameMustBe3Chars": "Must be at least 3 characters",
-  "nicknameTakenError": "Nickname already taken!"
+  "nicknameTakenError": "Nickname already taken!",
+  "eventDetails": "Event Details",
+  "type": "Type",
+  "staff": "Staff",
+  "location": "Location",
+  "link": "Link",
+  "date": "Date",
+  "start": "Start",
+  "end": "End",
+  "description": "Description"
 }

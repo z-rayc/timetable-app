@@ -5,25 +5,26 @@ import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventDetailsScreen extends StatelessWidget {
   const EventDetailsScreen({super.key, required this.event});
   final Event event;
 
-  List<Widget> getCourseEvent(CourseEvent event) {
+  List<Widget> getCourseEvent(BuildContext context, CourseEvent event) {
     return [
       CTitle(event.course.nameAlias ?? event.course.name),
       const SizedBox(height: 10),
-      Text("Code: ${event.course.id}"),
-      Text("Type: ${event.teachingSummary}"),
-      const Text("Staff: "),
+      Text("${AppLocalizations.of(context)!.code}: ${event.course.id}"),
+      Text("${AppLocalizations.of(context)!.type}: ${event.teachingSummary}"),
+      Text("${AppLocalizations.of(context)!.staff}: "),
       for (var staff in event.staff) Text("• ${staff.shortname}"),
       const SizedBox(height: 30),
       Text(
-          "Location: ${event.location.roomName}, ${event.location.buildingName}"),
+          "${AppLocalizations.of(context)!.location}: ${event.location.roomName}, ${event.location.buildingName}"),
       Row(
         children: [
-          const Text("Link: "),
+          Text("${AppLocalizations.of(context)!.link}: "),
           Flexible(
             child: InkWell(
               borderRadius: BorderRadius.circular(10),
@@ -41,17 +42,21 @@ class EventDetailsScreen extends StatelessWidget {
         ],
       ),
       const SizedBox(height: 30),
-      Text("Date: ${Time(event.startTime).dayMonthYear}"),
-      Text("Start: ${Time(event.startTime).hourMinutes}"),
-      Text("End: ${Time(event.endTime).hourMinutes}"),
+      Text(
+          "${AppLocalizations.of(context)!.date}: ${Time(event.startTime).dayMonthYear}"),
+      Text(
+          "${AppLocalizations.of(context)!.start}: ${Time(event.startTime).hourMinutes}"),
+      Text(
+          "${AppLocalizations.of(context)!.end}: ${Time(event.endTime).hourMinutes}"),
     ];
   }
 
-  List<Widget> getCustomEvent(CustomEvent event) {
+  List<Widget> getCustomEvent(BuildContext context, CustomEvent event) {
     return [
       CTitle(event.name),
       const SizedBox(height: 10),
-      Text("Description: ${event.description}"),
+      Text(
+          "${AppLocalizations.of(context)!.description}: ${event.description}"),
       if (event.location != null &&
           event.location!.roomName.isNotEmpty &&
           event.location!.buildingName.isNotEmpty)
@@ -60,11 +65,11 @@ class EventDetailsScreen extends StatelessWidget {
           event.location!.roomName.isNotEmpty &&
           event.location!.buildingName.isNotEmpty)
         Text(
-            "Location: ${event.location!.roomName}, ${event.location!.buildingName}"),
+            "${AppLocalizations.of(context)!.location}: ${event.location!.roomName}, ${event.location!.buildingName}"),
       if (event.location != null)
         Row(
           children: [
-            const Text("Link: "),
+            Text("${AppLocalizations.of(context)!.link}: "),
             Flexible(
               child: InkWell(
                 borderRadius: BorderRadius.circular(10),
@@ -82,9 +87,12 @@ class EventDetailsScreen extends StatelessWidget {
           ],
         ),
       const SizedBox(height: 30),
-      Text("Date: ${Time(event.startTime).dayMonthYear}"),
-      Text("Start: ${Time(event.startTime).hourMinutes}"),
-      Text("End: ${Time(event.endTime).hourMinutes}"),
+      Text(
+          "${AppLocalizations.of(context)!.date}: ${Time(event.startTime).dayMonthYear}"),
+      Text(
+          "${AppLocalizations.of(context)!.start}: ${Time(event.startTime).hourMinutes}"),
+      Text(
+          "${AppLocalizations.of(context)!.end}: ${Time(event.endTime).hourMinutes}"),
     ];
   }
 
@@ -94,9 +102,9 @@ class EventDetailsScreen extends StatelessWidget {
 
     // Check type of event
     if (event is CourseEvent) {
-      content = getCourseEvent(event as CourseEvent);
+      content = getCourseEvent(context, event as CourseEvent);
     } else if (event is CustomEvent) {
-      content = getCustomEvent(event as CustomEvent);
+      content = getCustomEvent(context, event as CustomEvent);
     } else {
       content = [const Text("Error: Unknown event type")];
     }

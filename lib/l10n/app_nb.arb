@@ -66,5 +66,14 @@
   "pelaseEnterNickname": "Vennligst skriv inn kallenavn",
   "nicknameCannotContainSpaces": "Kan ikke inneholde mellomrom",
   "nichnameMustBe3Chars": "Må ha minst 3 tegn",
-  "nicknameTakenError": "Kallenavn allerede i bruk!"
+  "nicknameTakenError": "Kallenavn allerede i bruk!",
+  "eventDetails": "Hendelse detaljer",
+  "type": "Type",
+  "staff": "Ansatte",
+  "location": "Sted",
+  "link": "Link",
+  "date": "Dato",
+  "start": "Start",
+  "end": "Slutt",
+  "description": "Beskrivelse"
 }
