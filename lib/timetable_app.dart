@@ -69,10 +69,10 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
         log(data.language.shortName);
         return Locale(data.language.shortName);
       }, loading: () {
-        return const Locale('nb');
+        return const Locale('en');
       }, error: (err, stack) {
         log(err.toString());
-        return const Locale('nb');
+        return const Locale('en');
       }),
     );
   }
