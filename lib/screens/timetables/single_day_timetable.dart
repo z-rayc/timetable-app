@@ -4,6 +4,7 @@ import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:timetable_app/widgets/event_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SingleDayTimetable extends ConsumerWidget {
   const SingleDayTimetable({super.key});
@@ -19,7 +20,8 @@ class SingleDayTimetable extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("No events today or no courses added"),
+                Text(AppLocalizations.of(context)!
+                    .noEventsTodayOrNoCoursesAdded),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                     onPressed: () {
@@ -27,11 +29,12 @@ class SingleDayTimetable extends ConsumerWidget {
                       ref.invalidate(dailyTimetableProvider);
                       ref.invalidate(weeklyTimetableProvider);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Refreshed")));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              Text(AppLocalizations.of(context)!.refresh)));
                     },
                     icon: const Icon(Icons.refresh),
-                    label: const Text("Refresh"))
+                    label: Text(AppLocalizations.of(context)!.refresh))
               ],
             ),
           );

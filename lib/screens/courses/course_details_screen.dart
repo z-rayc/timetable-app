@@ -11,6 +11,7 @@ import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:timetable_app/widgets/color_picker_button.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Displays the details of a course.
 /// Allows the user to change the course's alias and color.
@@ -95,8 +96,8 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Changes saved.'),
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.changesSaved),
             ),
           );
         }
@@ -108,8 +109,8 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Request timed out.'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.requestTimedOut),
         ),
       );
     }
@@ -119,7 +120,7 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Course details"),
+        title: Text(AppLocalizations.of(context)!.courseDetails),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
       ),

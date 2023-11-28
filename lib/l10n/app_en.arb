@@ -21,9 +21,45 @@
   "plsEnterEmail": "Please enter your email address",
   "plsEnterValidEmail": "Please enter a valid email address",
   "plsEnterPassword": "Please enter your password",
+  "passwordTooShort": "Password too short",
+
+  "confirmPassword": "Confirm Password",
+  "plsConfirmPassword": "Please confirm your password",
+  "passwordsDontMatch": "Passwords don't match",
 
   "noAccount": "No Account?",
   "register": "Register",
+  "registerWithEmail": "Register with Email",
 
-  "signInWithEmail": "Sign In with Email"
+  "signInWithEmail": "Sign In with Email",
+
+
+  "noAccessTokenFound": "No access token found",
+  "noIdTokenFound": "No id token found",
+
+  "ok": "OK",
+
+
+  "changesSaved": "Changes saved",
+  
+  "courseDetails": "Course Details",
+
+  "myCourses": "My Courses",
+  "edit": "Edit",
+
+
+  "selectYourCourses": "Select your courses",
+  "findACourse": "Find a course",
+
+  "yourSelectedCourses": "Your selected courses",
+  "confirm": "Confirm",
+
+  "noEventsTodayOrNoCoursesAdded": "No events today or no courses added",
+  "refresh": "Refresh",
+
+  "today": "Today",
+
+  "chats": "Chats",
+  "unreadMessages": "Unread Messages"
+
 }

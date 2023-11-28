@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/widgets/nav_drawer_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum NavDrawerChoice {
   timetable,
@@ -57,7 +58,7 @@ class NavDrawer extends StatelessWidget {
                     spacing,
                     NavDrawerItem(
                       icon: Icons.calendar_today,
-                      title: 'Timetable',
+                      title: AppLocalizations.of(context)!.timeTableTitle,
                       onTap: () {
                         onSelectedNavItem(NavDrawerChoice.timetable);
                       },
@@ -67,7 +68,7 @@ class NavDrawer extends StatelessWidget {
                     spacing,
                     NavDrawerItem(
                       icon: Icons.edit_document,
-                      title: 'My Courses',
+                      title: AppLocalizations.of(context)!.myCourses,
                       onTap: () {
                         onSelectedNavItem(NavDrawerChoice.myCourses);
                       },
@@ -75,7 +76,7 @@ class NavDrawer extends StatelessWidget {
                     spacing,
                     NavDrawerItem(
                       icon: Icons.settings,
-                      title: 'Settings',
+                      title: AppLocalizations.of(context)!.settingsTitle,
                       onTap: () {
                         onSelectedNavItem(NavDrawerChoice.settings);
                       },
@@ -115,7 +116,7 @@ class NavDrawerItemChat extends ConsumerWidget {
     final bool anyUnread = ref.watch(anyUndreadMessagesProvider);
     Widget content = NavDrawerItem(
       icon: Icons.chat,
-      title: 'Chats',
+      title: AppLocalizations.of(context)!.chats,
       onTap: () {
         onSelectedNavItem(NavDrawerChoice.chat);
       },
@@ -125,11 +126,11 @@ class NavDrawerItemChat extends ConsumerWidget {
         clipBehavior: Clip.none,
         children: [
           content,
-          const Positioned(
+          Positioned(
             top: -5,
             right: -8,
             child: Icon(
-              semanticLabel: 'Unread messages',
+              semanticLabel: AppLocalizations.of(context)!.unreadMessages,
               Icons.circle_notifications,
               color: Colors.red,
             ),
