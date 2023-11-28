@@ -10,6 +10,7 @@ import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/widgets/chat/email_list_tile.dart';
 import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewChatOverlay extends ConsumerStatefulWidget {
   const NewChatOverlay({super.key, this.chatRoom})
@@ -75,14 +76,15 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('No emails added'),
-              content: const Text('Please add at least one email'),
+              title: Text(AppLocalizations.of(context)!.noEmailsAdded),
+              content:
+                  Text(AppLocalizations.of(context)!.pleaseAddAtLeastOneEmail),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Ok'))
+                    child: Text(AppLocalizations.of(context)!.ok))
               ],
             );
           },
@@ -145,14 +147,14 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
                 _deleteChatRoom();
               },
-              child: const Text('Delete'),
+              child: Text(AppLocalizations.of(context)!.delete),
             ),
           ],
         );
@@ -206,12 +208,12 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Invite people to chat with you'),
+          Text(AppLocalizations.of(context)!.invitePeopleToChat),
           ShadowedTextFormField(
             child: TextFormField(
               controller: _emailController,
               decoration: AppThemes.entryFieldTheme.copyWith(
-                hintText: 'Email',
+                hintText: AppLocalizations.of(context)!.email,
               ),
               keyboardType: TextInputType.emailAddress,
               autocorrect: false,
@@ -220,11 +222,11 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
                 if (value == null ||
                     value.trim().isEmpty ||
                     !value.contains('@')) {
-                  return 'Please enter an email';
+                  return AppLocalizations.of(context)!.plsEnterEmail;
                 } else if (value == kSupabase.auth.currentUser!.email) {
-                  return 'Cannot add yourself';
+                  return AppLocalizations.of(context)!.cannotAddYourself;
                 } else if (_emails.contains(value)) {
-                  return 'Email already added';
+                  return AppLocalizations.of(context)!.emailAlreadyAdded;
                 } else {
                   return null;
                 }
@@ -244,13 +246,13 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
                   _emailController.clear();
                 },
                 icon: const Icon(Icons.clear),
-                label: const Text('Clear'),
+                label: Text(AppLocalizations.of(context)!.clear),
               ),
               ElevatedButton.icon(
                 style: AppThemes.entryButtonTheme,
                 onPressed: _submitAddEmail,
                 icon: const Icon(Icons.add_circle),
-                label: const Text('Add'),
+                label: Text(AppLocalizations.of(context)!.add),
               ),
             ],
           ),
@@ -259,7 +261,7 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
     );
 
     var emailListContainerChild = _emails.isEmpty
-        ? const Center(child: Text('No emails added yet'))
+        ? Center(child: Text(AppLocalizations.of(context)!.noEmailsAdded))
         : ListView(
             children: _emails.map(
               (email) {
@@ -289,16 +291,17 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
       children: [
         if (!widget.isNewMode)
           TextButton.icon(
-              onPressed:
-                  (!_isLoading && !_loadingEditing) ? _onDeleteChatRoomTapped : null,
+              onPressed: (!_isLoading && !_loadingEditing)
+                  ? _onDeleteChatRoomTapped
+                  : null,
               icon: const Icon(Icons.delete_forever),
-              label: const Text('Delete')),
+              label: Text(AppLocalizations.of(context)!.delete)),
         const Spacer(),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         ElevatedButton(
           onPressed:
@@ -307,7 +310,9 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
           child: _isLoading && !_loadingEditing
               ? const PrimaryElevatedButtonLoadingChild()
               : Text(
-                  widget.isNewMode ? 'Create' : 'Save',
+                  widget.isNewMode
+                      ? AppLocalizations.of(context)!.create
+                      : AppLocalizations.of(context)!.save,
                 ),
         ),
       ],
@@ -324,7 +329,9 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.isNewMode ? 'New Chat' : 'Edit Chat',
+                    widget.isNewMode
+                        ? AppLocalizations.of(context)!.newChat
+                        : AppLocalizations.of(context)!.editChat,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -332,14 +339,15 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
                       child: TextFormField(
                     controller: _chatNameController,
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: 'Chatroom name',
+                      hintText: AppLocalizations.of(context)!.chatRoomName,
                       enabled: (!_isLoading && !_loadingEditing),
                     ),
                     validator: (value) {
                       if (value == null ||
                           value.trim().isEmpty ||
                           value.trim().length < 5) {
-                        return 'Chatroom name too short';
+                        return AppLocalizations.of(context)!
+                            .chatRoomNameTooShort;
                       } else {
                         return null;
                       }
@@ -374,7 +382,7 @@ showErrorDialog(BuildContext ctx, String message) {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Ok'))
+              child: Text(AppLocalizations.of(context)!.ok))
         ],
       );
     },

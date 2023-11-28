@@ -60,6 +60,29 @@
   "today": "Today",
 
   "chats": "Chats",
-  "unreadMessages": "Unread Messages"
+  "unreadMessages": "Unread Messages",
+  "noMessagesYet": "No messages yet...",
+  "noEmailsAdded": "No emails added",
+  "pleaseAddAtLeastOneEmail": "Please add at least one email",
 
+  "invitePeopleToChat": "Invite people to chat with you",
+
+  "cannotAddYourself": "You cannot add yourself",
+  "emailAlreadyAdded": "Email already added",
+
+  "clear": "Clear",
+  "add": "Add",
+
+  "noEmailsAddedYet": "No emails added yet",
+  "delete": "Delete",
+  "cancel": "Cancel",
+
+  "create": "Create",
+  "save": "Save",
+
+  "newChat": "New Chat",
+  "editChat": "Edit Chat",
+
+  "chatRoomName": "Chat Room Name",
+  "chatRoomNameTooShort": "Chat room name too short"
 }
