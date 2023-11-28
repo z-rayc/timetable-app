@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/custom_event.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
 
 class CustomEventsFetchError {
   final String message;
@@ -106,6 +107,7 @@ class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
 
   @override
   Future<CustomEvents> build() async {
+    ref.watch(authProvider);
     final db = kSupabase.rest;
 
     List<int> eventIds = await getEventIdsForUser();

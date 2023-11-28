@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
 
 final sp = kSupabase.rest;
 
@@ -40,6 +41,12 @@ class AppSettings {
 }
 
 Future<AppSettings> getSettingsFromSupabase() async {
+  if (kSupabase.auth.currentUser == null) {
+    return AppSettings(
+      language: Language.english,
+    );
+  }
+
   //if the user does not have a settings row in the database, create one
   final List<dynamic> response = await sp.from('Settings').select();
 
@@ -82,6 +89,7 @@ class AppSettingsNotifier extends AsyncNotifier<AppSettings> {
 
   @override
   FutureOr<AppSettings> build() {
+    ref.watch(authProvider);
     return getSettingsFromSupabase();
   }
 }

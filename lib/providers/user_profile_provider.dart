@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/user_profile.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
 
 class UserProfileProvider extends AsyncNotifier<UserProfile> {
   @override
   FutureOr<UserProfile> build() async {
+    ref.watch(authProvider);
     final userProfile = await _fetchUserProfile();
     return userProfile;
   }

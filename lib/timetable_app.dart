@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,6 +40,7 @@ class _TimeTableAppState extends ConsumerState<TimeTableApp> {
   }
 
   void _setScreenFromSession(Session? session) {
+    ref.read(authProvider.notifier).setSession(session);
     if (session != null) {
       ref.read(navProvider.notifier).setCurrentScreen(NavState.tabs);
     } else {

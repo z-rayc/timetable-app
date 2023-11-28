@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/event.dart';
+import 'package:timetable_app/providers/auth_provider.dart';
 import 'package:timetable_app/providers/custom_events_provider.dart';
 import 'package:timetable_app/providers/selected_day_provider.dart';
 
@@ -31,6 +32,7 @@ class DailyTimetable {
 class DailyTimetableNotifier extends AsyncNotifier<DailyTimetable> {
   @override
   FutureOr<DailyTimetable> build() async {
+    ref.watch(authProvider);
     final db = kSupabase.rest;
     final selectedDay = ref.watch(dateSelectedProvider);
 
