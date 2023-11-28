@@ -4,7 +4,7 @@ import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/custom_event.dart';
 import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/screens/events/event_details_screen.dart';
-import 'package:timetable_app/widgets/texts/subtitle.dart';
+import 'package:timetable_app/widgets/texts/label.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
@@ -51,7 +51,7 @@ class EventCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CSubtitle(title),
+              CLabel(title),
               const SizedBox(height: 5),
               hourMinute(event.startTime, event.endTime),
             ],
