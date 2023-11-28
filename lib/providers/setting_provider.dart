@@ -42,7 +42,7 @@ class AppSettings {
 Future<AppSettings> getSettingsFromSupabase() async {
   //if the user does not have a settings row in the database, create one
   final response = await sp.from('Settings').select().single();
-  if (response == null) {
+  if (await response == null) {
     await sp.from('Settings').insert(
         {'user_id': kSupabase.auth.currentUser!.id, 'Language': 'english'});
   }
