@@ -5,6 +5,7 @@ import 'package:timetable_app/models/user_course.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/screens/courses/course_details_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyCoursesScreen extends ConsumerWidget {
   const MyCoursesScreen({super.key});
@@ -17,7 +18,7 @@ class MyCoursesScreen extends ConsumerWidget {
       data: (UserCourses data) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('My courses'),
+            title: Text(AppLocalizations.of(context)!.myCourses),
           ),
           body: ListView(
             padding: const EdgeInsets.all(20),
@@ -33,7 +34,7 @@ class MyCoursesScreen extends ConsumerWidget {
                   pushNewScreen(context, NavState.selectCourses);
                 },
                 style: AppThemes.entryButtonTheme,
-                child: const Text('Edit'),
+                child: Text(AppLocalizations.of(context)!.edit),
               ),
             ],
           ),

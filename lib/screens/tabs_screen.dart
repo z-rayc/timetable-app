@@ -84,7 +84,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     ];
 
     if (_selectedPageIndex == 1) {
-      activeTitle = 'Chats';
+      activeTitle = AppLocalizations.of(context)!.chats;
       activePage = const ChatsOverviewScreen();
       activeActions = [
         IconButton(
@@ -117,16 +117,16 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
                 child: BottomNavigationBar(
                   currentIndex: _selectedPageIndex,
                   onTap: _selectTab,
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.calendar_today_outlined),
-                      label: 'Timetable',
-                      activeIcon: Icon(Icons.calendar_today_rounded),
+                      icon: const Icon(Icons.calendar_today_outlined),
+                      label: AppLocalizations.of(context)!.timeTableTitle,
+                      activeIcon: const Icon(Icons.calendar_today_rounded),
                     ),
                     BottomNavigationBarItem(
-                      icon: ChatsTabsIcon(),
-                      label: 'Chats',
-                      activeIcon: Icon(Icons.chat),
+                      icon: const ChatsTabsIcon(),
+                      label: AppLocalizations.of(context)!.chats,
+                      activeIcon: const Icon(Icons.chat),
                     ),
                   ],
                 ),
