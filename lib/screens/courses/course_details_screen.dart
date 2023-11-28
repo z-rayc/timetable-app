@@ -129,25 +129,27 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
         children: [
           CTitle(widget.uc.course.name),
           const SizedBox(height: 5),
-          Text("Code: ${widget.uc.course.id}"),
+          Text("${AppLocalizations.of(context)!.code}: ${widget.uc.course.id}"),
           const SizedBox(height: 50),
-          const CTitle("Custom"),
+          CTitle(AppLocalizations.of(context)!.custom),
           const SizedBox(height: 5),
           Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CLabel("Alias"),
+                CLabel(
+                  AppLocalizations.of(context)!.alias,
+                ),
                 const SizedBox(height: 10),
                 TextFormField(
                   initialValue: _enteredAlias,
                   decoration: AppThemes.entryFieldTheme.copyWith(
-                    hintText: 'Alias',
+                    hintText: AppLocalizations.of(context)!.alias,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter an alias for the course';
+                      return AppLocalizations.of(context)!.selectAliasError;
                     }
                     return null;
                   },
@@ -156,7 +158,9 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-                const CLabel("Color"),
+                CLabel(
+                  AppLocalizations.of(context)!.color,
+                ),
                 const SizedBox(height: 10),
                 ColorPickerButton(
                   initialColor: _enteredColor,
@@ -175,7 +179,7 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text('Save Changes'),
+                  : Text(AppLocalizations.of(context)!.save),
             ),
           ),
         ],
