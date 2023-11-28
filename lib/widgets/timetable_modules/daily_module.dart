@@ -111,10 +111,6 @@ class DailyModule extends StatelessWidget {
       List<Widget> eventWidgets = [];
       var calendarEarliest = 7.0;
       for (var event in events) {
-        var height = (event.endTime.difference(event.startTime).inMinutes) /
-            60 *
-            TimeTableTheme.timeTableHourRowHeight;
-
         eventWidgets.add(
           Positioned(
             top: (event.startTime.hour +
@@ -127,11 +123,7 @@ class DailyModule extends StatelessWidget {
               height: (event.endTime.difference(event.startTime).inMinutes) /
                   60 *
                   TimeTableTheme.timeTableHourRowHeight,
-              width: (checkIfOverlapping(event, overlappingEvents)
-                  ? 135
-                  : 270) /* TimeTableTheme.timeTableColumnWidth *
-                  (overlappingEvents.isEmpty ? 1 : 2 / 3) */
-              ,
+              width: (checkIfOverlapping(event, overlappingEvents) ? 135 : 270),
               child: EventCard(
                 event: event,
                 color: eventColours[event]!,

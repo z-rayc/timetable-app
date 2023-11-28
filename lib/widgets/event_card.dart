@@ -69,5 +69,10 @@ Text hourMinute(DateTime startTime, DateTime endTime) {
   var endHourWithPadding = endTime.hour.toString().padLeft(2, '0');
   var endMinuteWithPadding = endTime.minute.toString().padLeft(2, '0');
   return Text(
-      "$startHourWithPadding:$startMinuteWithPadding - $endHourWithPadding:$endMinuteWithPadding");
+    "$startHourWithPadding:$startMinuteWithPadding—$endHourWithPadding:$endMinuteWithPadding",
+    style: const TextStyle(
+      color: Color.fromRGBO(0, 0, 0, 0.8),
+      fontSize: 12,
+    ),
+  );
 }

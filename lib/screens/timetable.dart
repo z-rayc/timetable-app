@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
@@ -90,10 +92,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         height: TimeTableTheme.timeTableHourRowHeight,
         decoration: const BoxDecoration(
           border: Border(
-            top: BorderSide(
-              color: Color.fromARGB(255, 64, 64, 64),
-              width: 1,
-            ),
+            left: BorderSide(color: Colors.grey),
           ),
         ),
         child: Center(
@@ -107,28 +106,6 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
 
     return timetable.when(data: (WeeklyTimetable data) {
-      if (data.events.isEmpty) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("No events today or no courses added - Week View"),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                  onPressed: () {
-                    ref.invalidate(myCoursesProvider);
-                    ref.invalidate(dailyTimetableProvider);
-                    ref.invalidate(weeklyTimetableProvider);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Refreshed")));
-                  },
-                  icon: const Icon(Icons.refresh),
-                  label: const Text("Refresh"))
-            ],
-          ),
-        );
-      }
       var isHorizontal = MediaQuery.of(context).size.width > 600;
       var colourMap = timetable.asData!.value.events;
       var weekEvents = colourMap.keys.toList();
@@ -173,11 +150,113 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       var topOffset =
           isHorizontal ? TimeTableTheme.timeTableSideBarSizes[0] : 0.0;
 
+      final date = ref.watch(dateSelectedProvider).date;
+      final startOfYear = DateTime(date.year, 1, 1, 0, 0);
+      final firstMonday = startOfYear.weekday;
+      final daysInFirstWeek = 8 - firstMonday;
+      final diff = date.difference(startOfYear);
+      var weeks = ((diff.inDays - daysInFirstWeek) / 7).ceil();
+      if (daysInFirstWeek > 3) {
+        weeks += 1;
+      }
+
+      Widget weekChooser() {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                ref.read(dateSelectedProvider.notifier).goBackward(7);
+              },
+              icon: Transform.rotate(
+                  angle: 90 * pi / 180,
+                  child: const Icon(Icons.arrow_back_ios_new_outlined)),
+            ),
+            Text(
+              weeks.toString(),
+            ),
+            IconButton(
+              onPressed: () {
+                ref.read(dateSelectedProvider.notifier).goForward(7);
+              },
+              icon: Transform.rotate(
+                  angle: -90 * pi / 180,
+                  child: const Icon(Icons.arrow_back_ios_new_outlined)),
+            ),
+          ],
+        );
+      }
+
+      if (data.events.isEmpty) {
+        return Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              weekChooser(),
+              const Spacer(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text("No events today or no courses added"),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton.icon(
+                      onPressed: () {
+                        ref.invalidate(myCoursesProvider);
+                        ref.invalidate(dailyTimetableProvider);
+                        ref.invalidate(weeklyTimetableProvider);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Refreshed")));
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: const Text("Refresh"))
+                ],
+              ),
+              const Spacer(),
+              const SizedBox(
+                width: 50,
+              )
+            ],
+          ),
+        );
+      }
+
       return Stack(
         children: [
           Positioned(
+            width: 50,
+            top: 0,
+            left: 0,
+            bottom: 0,
+            child: weekChooser(),
+          ),
+          const Positioned(
+            left: 50,
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Color.fromARGB(255, 64, 64, 64),
+                    ),
+                    right: BorderSide(
+                      color: Color.fromARGB(255, 64, 64, 64),
+                    ),
+                    left: BorderSide(color: Colors.grey),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
             top: topOffset,
-            left: TimeTableTheme.timeTableSideBarSizes[1].toDouble(),
+            left: TimeTableTheme.timeTableSideBarSizes[1].toDouble() + 50,
             right: 0,
             bottom: 0,
             child: SingleChildScrollView(
@@ -204,7 +283,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           ),
           Positioned(
             top: topOffset,
-            left: 0,
+            left: 50,
             bottom: 0,
             child: Container(
               width: 50,
@@ -230,7 +309,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           ),
           isHorizontal
               ? Positioned(
-                  left: TimeTableTheme.timeTableSideBarSizes[1],
+                  left: TimeTableTheme.timeTableSideBarSizes[1] + 50,
                   top: 0,
                   right: 0,
                   child: Container(

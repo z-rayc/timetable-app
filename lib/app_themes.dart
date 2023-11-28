@@ -200,7 +200,7 @@ class CalendarItemTheme {
 
 class TimeTableTheme {
   static double get timeTableColumnWidth {
-    return 275;
+    return 270;
   }
 
   static double get timeTableHourRowHeight {

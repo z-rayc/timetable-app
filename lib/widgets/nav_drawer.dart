@@ -38,10 +38,10 @@ class NavDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.calendar_month,
+                  Icon(Icons.hourglass_empty_rounded,
                       color: AppThemes.theme.colorScheme.onPrimary, size: 32),
                   const SizedBox(width: 10),
-                  Text("Chronos!",
+                  Text("Chronos",
                       style: TextStyle(
                           color: AppThemes.theme.colorScheme.onPrimary,
                           fontSize: 24)),
