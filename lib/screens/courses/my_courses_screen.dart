@@ -20,24 +20,41 @@ class MyCoursesScreen extends ConsumerWidget {
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.myCourses),
           ),
-          body: ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              for (var course in data.userCourses)
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: courseTile(course, context),
+          body: data.userCourses.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(AppLocalizations.of(context)!.noCoursesSelected),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          pushNewScreen(context, NavState.selectCourses);
+                        },
+                        style: AppThemes.entryButtonTheme,
+                        child: Text(AppLocalizations.of(context)!.edit),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    for (var course in data.userCourses)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: courseTile(course, context),
+                      ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        pushNewScreen(context, NavState.selectCourses);
+                      },
+                      style: AppThemes.entryButtonTheme,
+                      child: Text(AppLocalizations.of(context)!.edit),
+                    ),
+                  ],
                 ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  pushNewScreen(context, NavState.selectCourses);
-                },
-                style: AppThemes.entryButtonTheme,
-                child: Text(AppLocalizations.of(context)!.edit),
-              ),
-            ],
-          ),
         );
       },
       error: (Object error, StackTrace stackTrace) {

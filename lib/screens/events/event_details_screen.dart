@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course_event.dart';
 import 'package:timetable_app/models/custom_event.dart';
@@ -70,7 +68,7 @@ class EventDetailsScreen extends StatelessWidget {
             Flexible(
               child: InkWell(
                 borderRadius: BorderRadius.circular(10),
-                splashColor: Colors.blue,
+                splashColor: Colors.lightBlue,
                 child: Text(
                   style: const TextStyle(
                     color: Colors.blue,
