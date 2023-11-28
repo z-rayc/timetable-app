@@ -40,11 +40,6 @@ class SingleDayTimetable extends ConsumerWidget {
                 event: key,
                 color: data.events[key]!,
               ));
-          Iterable<EventCard> cards =
-              data.courseEvents.keys.map((key) => EventCard(
-                    event: key,
-                    color: data.courseEvents[key]!,
-                  ));
 
           // sort the cards by start time
           cards = cards.toList()
