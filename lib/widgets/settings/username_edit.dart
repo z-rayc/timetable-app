@@ -19,7 +19,6 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
   final _key = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   String _enteredUsername = '';
-  bool _loading = false;
 
   @override
   void dispose() {
@@ -31,23 +30,26 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
     if (_key.currentState!.validate()) {
       FocusScope.of(context).unfocus();
       _key.currentState!.save();
-      setState(() {
-        _loading = true;
-      });
+
+      String currentNickname = ref.read(userProfileProvider).value!.nickname;
+      if (currentNickname == _enteredUsername) {
+        return;
+      }
       try {
         await ref
             .read(userProfileProvider.notifier)
             .setNickname(_enteredUsername);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.changesSaved)));
+        }
       } on UserProfileProviderException catch (_) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(AppLocalizations.of(context)!.nicknameTakenError)));
         }
-      } finally {
-        setState(() {
-          _loading = false;
-        });
       }
     }
   }
@@ -58,7 +60,7 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
 
     bool loadingProfile = userProfile.when(
       data: (value) {
-        _usernameController.text = value.nickname ?? '';
+        _usernameController.text = value.nickname;
         return false;
       },
       loading: () => true,
@@ -77,7 +79,7 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
               Expanded(
                 child: ShadowedTextFormField(
                   child: TextFormField(
-                    enabled: !loadingProfile && !_loading,
+                    enabled: !loadingProfile,
                     controller: _usernameController,
                     decoration: AppThemes.entryFieldTheme,
                     maxLength: 25,
@@ -102,8 +104,8 @@ class _UsernameEditState extends ConsumerState<UsernameEdit> {
               ),
               const SizedBox(width: 8),
               ElevatedButton(
-                onPressed: loadingProfile || _loading ? null : _submitUsername,
-                child: loadingProfile || _loading
+                onPressed: loadingProfile ? null : _submitUsername,
+                child: loadingProfile
                     ? const PrimaryElevatedButtonLoadingChild()
                     : Text(AppLocalizations.of(context)!.save),
               )
