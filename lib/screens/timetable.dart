@@ -316,6 +316,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                         hours: hours,
                         days: days,
                         eventColours: colourMap,
+                        earliestTime: earliestTime,
                       ),
                     )
                   : DailyModule(
@@ -324,6 +325,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                       hours: hours,
                       showEmptyText: true,
                       eventColours: colourMap,
+                      earliestTime: earliestTime,
                     ),
             ),
           ),

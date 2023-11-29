@@ -9,13 +9,14 @@ class WeeklyModule extends StatefulWidget {
     required this.days,
     required this.events,
     required this.hours,
-    required this.eventColours,
+    required this.eventColours, required this.earliestTime,
   });
 
   final List<String> days;
   final List<Event> events;
   final List<String> hours;
   final Map<Event, Color> eventColours;
+  final DateTime earliestTime;
 
   @override
   State<WeeklyModule> createState() => _WeeklyModuleState();
@@ -42,6 +43,7 @@ class _WeeklyModuleState extends State<WeeklyModule> {
               hours: widget.hours,
               showEmptyText: false,
               eventColours: widget.eventColours,
+              earliestTime: widget.earliestTime,
             )
         ],
       ),
