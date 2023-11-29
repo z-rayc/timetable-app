@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// A list tile for displaying an email.
+/// Displays the email and a delete icon button.
 class EmailListTile extends StatelessWidget {
   const EmailListTile({
     required this.email,

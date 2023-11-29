@@ -1,3 +1,4 @@
+/// Model class for user profile
 class UserProfile {
   const UserProfile({
     required this.id,
@@ -9,6 +10,7 @@ class UserProfile {
   final String nickname;
   final String email;
 
+  /// Convert from json to UserProfile
   static UserProfile fromJson(Map<String, dynamic> json) {
     return UserProfile(
       id: json['id'] as String,

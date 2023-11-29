@@ -12,6 +12,9 @@ import 'package:timetable_app/screens/timetables/single_day_timetable.dart';
 import 'package:timetable_app/screens/auth/splash_screen.dart';
 import 'package:timetable_app/screens/tabs_screen.dart';
 
+/// This file has navigation provider as well as some helper functions for navigation.
+
+/// Enum for all screens in the app. Screens requiring a parameter cannot be included here.
 enum NavState {
   splash(SplashScreen()),
   singleDayTimetable(SingleDayTimetable()),

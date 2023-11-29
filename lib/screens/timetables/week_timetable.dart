@@ -12,7 +12,8 @@ import 'package:timetable_app/widgets/timetable_modules/daily_module.dart';
 import 'package:timetable_app/widgets/timetable_modules/weekly_module.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-//
+/// Manages the week view of the timetable.
+/// This widget is responsible for displaying and updating the timetable in a week view format.
 class WeekViewManager extends ConsumerStatefulWidget {
   const WeekViewManager({
     super.key,
@@ -20,11 +21,11 @@ class WeekViewManager extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
-    return _TimeTableState();
+    return _WeekViewManagerState();
   }
 }
 
-class _TimeTableState extends ConsumerState<WeekViewManager> {
+class _WeekViewManagerState extends ConsumerState<WeekViewManager> {
   late LinkedScrollControllerGroup _horizontalControllers;
   late LinkedScrollControllerGroup _verticalControllers;
 
@@ -36,6 +37,7 @@ class _TimeTableState extends ConsumerState<WeekViewManager> {
 
   @override
   void initState() {
+    //Initialise the scroll controllers
     _horizontalControllers = LinkedScrollControllerGroup();
     _verticalControllers = LinkedScrollControllerGroup();
 
@@ -51,6 +53,7 @@ class _TimeTableState extends ConsumerState<WeekViewManager> {
 
   @override
   void dispose() {
+    //Dispose the scroll controllers
     _horizontalDayController.dispose();
     _horizontalTableController.dispose();
     _verticalHourController.dispose();
@@ -74,6 +77,12 @@ class _TimeTableState extends ConsumerState<WeekViewManager> {
       AppLocalizations.of(context)!.sunday,
     ];
 
+    /// Create a widget for displaying a day in the week view.
+    ///
+    /// The [day] parameter specifies the day to be displayed.
+    /// The widget has a fixed width defined by [TimeTableTheme.timeTableColumnWidth].
+    /// It has a border on the right side with a color of Color.fromARGB(255, 64, 64, 64) and a width of 1.
+    /// The [day] is displayed at the center of the widget.
     Widget horizontalDayItem(String day) {
       return Container(
         width: TimeTableTheme.timeTableColumnWidth,
@@ -91,6 +100,13 @@ class _TimeTableState extends ConsumerState<WeekViewManager> {
       );
     }
 
+    /// Creates a vertical hour item widget for the week timetable.
+    ///
+    /// This widget displays a single hour in the week timetable.
+    /// It takes an [hour] parameter which represents the hour to be displayed.
+    /// The widget has a fixed height defined by [TimeTableTheme.timeTableHourRowHeight].
+    /// It has a left border with a grey color and a background color that matches the default background color of the app's theme.
+    /// The hour is displayed at the center of the widget with a font size of 10.
     Widget verticalHourItem(String hour) {
       return Container(
         height: TimeTableTheme.timeTableHourRowHeight,
@@ -98,7 +114,6 @@ class _TimeTableState extends ConsumerState<WeekViewManager> {
           border: const Border(
             left: BorderSide(color: Colors.grey),
           ),
-          // Color is equal to default background colour
           color: Theme.of(context).colorScheme.background,
         ),
         child: Center(
@@ -107,6 +122,8 @@ class _TimeTableState extends ConsumerState<WeekViewManager> {
       );
     }
 
+    /// Converts a [DateTime] object to minutes.
+    /// Only the hour and minute fields are used.
     int turnTimeToMinutes(DateTime time) {
       return time.hour * 60 + time.minute;
     }
@@ -166,6 +183,14 @@ class _TimeTableState extends ConsumerState<WeekViewManager> {
         weeks += 1;
       }
 
+      /// Widget for displaying the week selector.
+      ///
+      /// This widget displays a column with an arrow button to navigate to the previous week,
+      /// the current week number, and an arrow button to navigate to the next week.
+      /// Tapping on the previous week button calls the `goBackward` method of the `dateSelectedProvider` notifier,
+      /// going back a week.
+      /// Tapping on the next week button calls the `goForward` method of the `dateSelectedProvider` notifier,
+      /// going forward a week.
       Widget weekChooser() {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,

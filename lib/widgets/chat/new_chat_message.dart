@@ -5,6 +5,7 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Text field with a button to send a new message to a chat room.
 class NewChatMessage extends ConsumerStatefulWidget {
   const NewChatMessage({super.key, required this.chatRoom});
 

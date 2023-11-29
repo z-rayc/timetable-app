@@ -8,6 +8,10 @@ import 'package:timetable_app/widgets/settings/username_edit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
 
+/// Account settings screen widget.
+/// Displays a section for app settings, and a section for account settings.
+/// App settings include language selection.
+/// Account settings include username editing and sign out.
 class AccountSettingsScreen extends ConsumerWidget {
   const AccountSettingsScreen({super.key});
 

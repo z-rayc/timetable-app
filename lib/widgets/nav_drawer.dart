@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
-import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/widgets/nav_drawer_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Choices for the navigation drawer.
+/// Makes matching the selected item safer.
 enum NavDrawerChoice {
   timetable,
   chat,
@@ -12,6 +12,8 @@ enum NavDrawerChoice {
   settings,
 }
 
+/// Navigation drawer widget. Displays a list of navigation options in a drawer.
+/// Calls [onSelectedNavItem] when an item is selected.
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key, required this.onSelectedNavItem});
   final void Function(NavDrawerChoice) onSelectedNavItem;
@@ -89,44 +91,5 @@ class NavDrawer extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class NavDrawerItemChat extends ConsumerWidget {
-  const NavDrawerItemChat({
-    super.key,
-    required this.onSelectedNavItem,
-  });
-
-  final void Function(NavDrawerChoice p1) onSelectedNavItem;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bool anyUnread = ref.watch(anyUndreadMessagesProvider);
-    Widget content = NavDrawerItem(
-      icon: Icons.chat,
-      title: AppLocalizations.of(context)!.chats,
-      onTap: () {
-        onSelectedNavItem(NavDrawerChoice.chat);
-      },
-    );
-    if (anyUnread) {
-      content = Stack(
-        clipBehavior: Clip.none,
-        children: [
-          content,
-          Positioned(
-            top: -5,
-            right: -8,
-            child: Icon(
-              semanticLabel: AppLocalizations.of(context)!.unreadMessages,
-              Icons.circle_notifications,
-              color: Colors.red,
-            ),
-          ),
-        ],
-      );
-    }
-    return content;
   }
 }

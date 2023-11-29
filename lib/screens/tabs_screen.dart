@@ -10,11 +10,12 @@ import 'package:timetable_app/screens/timetables/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// A screen widget that displays tabs.
+/// The root widget when the user is signed in.
+/// Provides a bottom navigation bar to switch between the [TimetableScreen] and [ChatsOverviewScreen].
+/// Also provides a drawer to navigate to other screens. (drawer provides redundant navigation to [MyCoursesScreen] and [AccountSettingsScreen])
+/// If there isn't enough space to display the bottom navigation bar, it is hidden and user must use the drawer to navigate.
 ///
-/// This widget is responsible for rendering a screen with multiple tabs.
-/// It extends the [ConsumerStatefulWidget] class and overrides the [createState] method
-/// to return an instance of [_TabsScreenState].
+/// The top app bar has dynamic title and actions depending on the selected tab.
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
@@ -29,6 +30,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   final functions = kSupabase.functions;
   int _selectedPageIndex = 0;
 
+  /// Reacts to drawer navigation events.
+  /// Pops the drawer, and switches between available tabs or pushes a new screen.
   void _handleDrawerNav(NavDrawerChoice choice) {
     Navigator.of(context).pop();
 
@@ -48,12 +51,14 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     }
   }
 
+  /// set state of the selected tab
   void _selectTab(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
   }
 
+  /// Shows the new chat overlay.
   void showNewChatOverlay() {
     showModalBottomSheet(
       useSafeArea: true,
@@ -140,6 +145,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   }
 }
 
+/// Icon for the chats tab.
+/// Displays a notification icon if there are any unread messages.
 class ChatsTabsIcon extends ConsumerWidget {
   const ChatsTabsIcon({
     super.key,

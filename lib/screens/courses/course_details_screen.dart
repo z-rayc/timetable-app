@@ -57,6 +57,12 @@ class _CourseDetailsScreenState extends ConsumerState<CourseDetailsScreen> {
     _enteredColor = widget.uc.color;
   }
 
+  @override
+  void dispose() {
+    colorController.dispose();
+    super.dispose();
+  }
+
   // Updates the course's alias and color in the database
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {

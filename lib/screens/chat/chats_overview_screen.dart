@@ -3,7 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/screens/chat/chat_screen.dart';
 import 'package:timetable_app/widgets/chat/chat_room_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Chats overview screen widget.
+/// Displays a list of all chat rooms the user is a member of.
+/// Chatrooms are displayed in form of [ChatRoomTile]s.
 class ChatsOverviewScreen extends ConsumerWidget {
   const ChatsOverviewScreen({super.key});
 
@@ -37,20 +41,32 @@ class ChatsOverviewScreen extends ConsumerWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('No chats yet! Create one!'),
+                          Text(AppLocalizations.of(context)!.noChatsYet),
                           TextButton.icon(
                             onPressed: () {
                               ref.invalidate(chatRoomProvider);
                             },
                             icon: const Icon(Icons.refresh),
-                            label: const Text('Refresh'),
+                            label: Text(AppLocalizations.of(context)!.refresh),
                           )
                         ],
                       ),
                     ),
         ),
-      AsyncError() => const Center(
-          child: Text('Error fetching chats. Please try again later.'),
+      AsyncError() => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(AppLocalizations.of(context)!.errorFetchingChats),
+              TextButton.icon(
+                onPressed: () {
+                  ref.invalidate(chatRoomProvider);
+                },
+                icon: const Icon(Icons.refresh),
+                label: Text(AppLocalizations.of(context)!.refresh),
+              )
+            ],
+          ),
         ),
       _ => const Center(child: CircularProgressIndicator()),
     };

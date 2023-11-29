@@ -5,6 +5,9 @@ import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Chat room tile to display in a list of chat rooms.
+/// Displays the chat room's name, the last message sent in the chat room, and a notification icon if there are unread messages.
+/// Icon used depends on whether the chat room is a course chat room or a user-defined chat room.
 class ChatRoomTile extends ConsumerWidget {
   const ChatRoomTile({
     super.key,

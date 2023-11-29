@@ -12,10 +12,10 @@ import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/user_profile_provider.dart';
 
 /// Provider for the chat rooms of the current user.
-class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
+class ChatRoomProvider extends AsyncNotifier<List<ChatRoom>> {
   late RealtimeChannel _channel;
 
-  ChatRoomProvicer() : super() {
+  ChatRoomProvider() : super() {
     _channel = kSupabase.channel('new-chatrooms');
     _initialize(); // call _initialize in the constructor rather than build to avoid calling it multiple times
   }
@@ -193,9 +193,9 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
 /// Provider for the chat rooms of the current user.
 /// Notifier provides API for chat creation, deletion, updating, and leaving.
 final chatRoomProvider =
-    AsyncNotifierProvider<ChatRoomProvicer, List<ChatRoom>>(
+    AsyncNotifierProvider<ChatRoomProvider, List<ChatRoom>>(
   () {
-    return ChatRoomProvicer();
+    return ChatRoomProvider();
   },
 );
 
@@ -261,6 +261,7 @@ class ChatRoomLastReadProvider extends AsyncNotifier<Map<String, DateTime>> {
     return lastReadMap;
   }
 }
+
 /// Provider for map of chatroomid to last read time on the given chatroom.
 /// Notifier provides API for updating the last read time of a chat room.
 final chatRoomLastReadProvider =
@@ -333,6 +334,7 @@ class ChatMessagesProvider
     return messagesMap;
   }
 }
+
 /// Provider for map of chatroomid to list of chat messages in the given chatroom.
 final chatMessagesProvider =
     AsyncNotifierProvider<ChatMessagesProvider, Map<String, List<ChatMessage>>>(
@@ -343,7 +345,7 @@ final chatMessagesProvider =
 
 /// Returns a map of chat room ids to a tuple of the last message and a bool
 /// indicating if the last message is unread or not.
-/// 
+///
 /// Map: chatRoomId -> (lastMessage?, hasUnread)
 final unreadMessagesProvider =
     rp.Provider<Map<String, (ChatMessage?, bool)>>((ref) {
