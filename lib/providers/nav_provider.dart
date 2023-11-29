@@ -29,6 +29,7 @@ enum NavState {
   final Widget screen;
 }
 
+/// A provider that switches screens based with the [NavState] enum.
 class NavProviderNotifier extends ChangeNotifier {
   late Widget _currentScreen = const SplashScreen();
   Widget get currentScreen => _currentScreen;

@@ -10,6 +10,8 @@ class UserCourses {
   List<UserCourse> userCourses = [];
 }
 
+/// A notifier that fetches the user's courses from the database
+/// and converts them to [UserCourse] objects.
 class MyCoursesNotifier extends AsyncNotifier<UserCourses> {
   @override
   FutureOr<UserCourses> build() async {
