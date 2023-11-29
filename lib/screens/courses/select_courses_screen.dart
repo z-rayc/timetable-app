@@ -135,6 +135,14 @@ class _SelectCoursesScreenState extends ConsumerState<SelectCoursesScreen> {
   late TextEditingController textEditingController;
 
   @override
+  void dispose() {
+    programController.dispose();
+    semesterController.dispose();
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
