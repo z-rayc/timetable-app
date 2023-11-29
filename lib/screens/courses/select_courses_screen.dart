@@ -10,8 +10,8 @@ import 'package:timetable_app/providers/timetable_provider.dart';
 import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// Displays the list of courses the user can select from.
-/// Allows the user to search for a course by name or ID.
+/// Display the list of courses the user can select from.
+/// Allow the user to search for a course by name or ID.
 /// User can add or remove a course from their list.
 class SelectCoursesScreen extends ConsumerStatefulWidget {
   const SelectCoursesScreen({super.key});

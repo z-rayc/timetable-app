@@ -13,8 +13,8 @@ import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:timetable_app/widgets/texts/title.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// Displays the details of a course.
-/// Allows the user to change the course's alias and color.
+/// Display the details of a course.
+/// Allow the user to change the course's alias and color.
 class CourseDetailsScreen extends ConsumerStatefulWidget {
   const CourseDetailsScreen({
     super.key,

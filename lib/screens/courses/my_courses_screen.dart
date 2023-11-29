@@ -7,6 +7,9 @@ import 'package:timetable_app/providers/nav_provider.dart';
 import 'package:timetable_app/screens/courses/course_details_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Show the user's courses.
+/// Allow the user to edit their courses; the course itself or the selected courses.
+/// If the user has no courses they are prompted to add some.
 class MyCoursesScreen extends ConsumerWidget {
   const MyCoursesScreen({super.key});
 
