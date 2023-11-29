@@ -5,6 +5,7 @@ import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/user_profile.dart';
 import 'package:timetable_app/providers/auth_provider.dart';
 
+/// Provider for the user profile of the currently logged in user.
 class UserProfileProvider extends AsyncNotifier<UserProfile> {
   @override
   FutureOr<UserProfile> build() async {
@@ -13,6 +14,7 @@ class UserProfileProvider extends AsyncNotifier<UserProfile> {
     return userProfile;
   }
 
+  /// Set the nickname of the currently logged in user.
   Future<void> setNickname(String nickname) async {
     final userId = kSupabase.auth.currentUser!.id;
     final userProfile = state.value;
@@ -60,6 +62,8 @@ class UserProfileProviderException implements Exception {
   UserProfileProviderException(this.message);
 }
 
+/// Provider for profile of the currently logged in user.
+/// Provides API to update the user's nickname.
 final userProfileProvider =
     AsyncNotifierProvider<UserProfileProvider, UserProfile>(
   () {

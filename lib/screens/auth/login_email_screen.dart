@@ -9,6 +9,8 @@ import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Email login screen widget. Displays a form to sign in with email.
+/// Also displays a button to register a new account.
 class LoginEmailScreen extends StatefulWidget {
   const LoginEmailScreen({super.key});
 
@@ -20,11 +22,8 @@ class LoginEmailScreen extends StatefulWidget {
 
 class _LoginEmailScreenState extends State<LoginEmailScreen> {
   final _formKey = GlobalKey<FormState>();
-
   String _enteredEmail = '';
-
   String _enteredPassword = '';
-
   bool _loading = false;
 
   void _setLoading(bool loading) {

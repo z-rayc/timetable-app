@@ -6,6 +6,7 @@ import 'package:timetable_app/models/time.dart';
 import 'package:timetable_app/providers/custom_events_provider.dart';
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/subtitle.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateEventScreen extends ConsumerStatefulWidget {
   const CreateEventScreen({super.key});
@@ -16,6 +17,8 @@ class CreateEventScreen extends ConsumerStatefulWidget {
   }
 }
 
+/// Create a custom event.
+/// Has a form with text fields and date pickers.
 class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
@@ -34,8 +37,8 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
       // Check that startdate is before enddate
       if (_enteredEndTime.isBefore(_enteredStartTime)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('End time must be after start time.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.startBeforeEndError),
           ),
         );
         _setLoading(false);
@@ -75,14 +78,14 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
       context: ctx,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Error'),
+          title: Text(AppLocalizations.of(context)!.error),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Ok'),
+              child: Text(AppLocalizations.of(context)!.ok),
             )
           ],
         );
@@ -163,7 +166,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create custom event'),
+        title: Text(AppLocalizations.of(context)!.createCustomEvent),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -173,16 +176,16 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CSubtitle('Title'),
+                CSubtitle(AppLocalizations.of(context)!.name),
                 const SizedBox(height: 10),
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: 'Title',
+                      hintText: AppLocalizations.of(context)!.name,
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a title.';
+                        return AppLocalizations.of(context)!.selectNameError;
                       } else {
                         return null;
                       }
@@ -193,16 +196,17 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const CSubtitle('Description'),
+                CSubtitle(AppLocalizations.of(context)!.description),
                 const SizedBox(height: 10),
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: 'Short description',
+                      hintText: AppLocalizations.of(context)!.shortDescription,
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a description.';
+                        return AppLocalizations.of(context)!
+                            .selectDescriptionError;
                       } else {
                         return null;
                       }
@@ -213,7 +217,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const CSubtitle('Start time'),
+                CSubtitle(AppLocalizations.of(context)!.start),
                 const SizedBox(height: 10),
                 Row(
                   children: [
@@ -238,11 +242,12 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(Time(_enteredStartTime).dayMonthYearHourMinute)
+                    Text(Time(time: _enteredStartTime, context: context)
+                        .dayMonthYearHourMinute)
                   ],
                 ),
                 const SizedBox(height: 30),
-                const CSubtitle('End time'),
+                CSubtitle(AppLocalizations.of(context)!.end),
                 const SizedBox(height: 10),
                 Row(
                   children: [
@@ -267,16 +272,17 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(Time(_enteredEndTime).dayMonthYearHourMinute)
+                    Text(Time(time: _enteredEndTime, context: context)
+                        .dayMonthYearHourMinute)
                   ],
                 ),
                 const SizedBox(height: 30),
-                const CSubtitle('Room'),
+                CSubtitle(AppLocalizations.of(context)!.room),
                 const SizedBox(height: 10),
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: 'Room name',
+                      hintText: AppLocalizations.of(context)!.room,
                     ),
                     onSaved: (newValue) {
                       if (newValue != null) {
@@ -286,12 +292,12 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const CSubtitle('Building'),
+                CSubtitle(AppLocalizations.of(context)!.building),
                 const SizedBox(height: 10),
                 ShadowedTextFormField(
                   child: TextFormField(
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: 'Building',
+                      hintText: AppLocalizations.of(context)!.building,
                     ),
                     onSaved: (newValue) {
                       if (newValue != null) {
@@ -301,7 +307,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const CSubtitle('Link'),
+                CSubtitle(AppLocalizations.of(context)!.link),
                 const SizedBox(height: 10),
                 ShadowedTextFormField(
                   child: TextFormField(
@@ -315,7 +321,8 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                       if (value != null &&
                           value.trim().isNotEmpty &&
                           !match.hasMatch(value)) {
-                        return 'Please enter a valid link.';
+                        return AppLocalizations.of(context)!
+                            .selectValidLinkError;
                       } else {
                         return null;
                       }
@@ -328,13 +335,13 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const CSubtitle('Invitees'),
+                CSubtitle(AppLocalizations.of(context)!.invitees),
                 const SizedBox(height: 10),
                 ShadowedTextFormField(
                   child: TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     decoration: AppThemes.entryFieldTheme.copyWith(
-                      hintText: "E-mails separated by commas",
+                      hintText: AppLocalizations.of(context)!.emailsCsv,
                     ),
                     onSaved: (newValue) {
                       if (newValue != null) {
@@ -357,7 +364,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                         ? const CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : const Text('Confirm'),
+                        : Text(AppLocalizations.of(context)!.confirm),
                   ),
                 ),
               ],

@@ -9,6 +9,7 @@ import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Register with email screen widget. Displays a form to register a new account with email.
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 

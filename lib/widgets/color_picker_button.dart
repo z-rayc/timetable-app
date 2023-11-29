@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// A button that opens a color picker dialog.
+/// Calls [setColor] when a color is selected.
 class ColorPickerButton extends StatefulWidget {
   const ColorPickerButton({
     super.key,
@@ -31,7 +34,7 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select a color'),
+          title: Text(AppLocalizations.of(context)!.selectColor),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: selectedColor,
@@ -51,7 +54,7 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
                 Navigator.of(context)
                     .pop(selectedColor); // Return the selected color
               },
-              child: const Text('Got it!'),
+              child: Text(AppLocalizations.of(context)!.confirm),
             ),
           ],
         );

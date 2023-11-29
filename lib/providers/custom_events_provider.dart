@@ -20,6 +20,8 @@ class CustomEvents {
   List<CustomEvent> customEvents = [];
 }
 
+/// A notifier that fetches the user's custom events from the database
+/// and converts them to [CustomEvent] objects.
 class CustomEventsNotifier extends AsyncNotifier<CustomEvents> {
   Future<List<int>> getEventIdsForUser() async {
     // Get all the IDs of events that the user has access to.

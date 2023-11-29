@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Child used for the loading indicator on a primary elevated button.
 class PrimaryElevatedButtonLoadingChild extends StatelessWidget {
   const PrimaryElevatedButtonLoadingChild({
     super.key,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 
 /// Wrapper for [TextFormField] that adds a drop shadow.
+/// Internally uses a stack to place the 'shadow' behind the text field.
+/// The shadow will not appear correctly if font size is changed, it is a tradeoff for the design.
 class ShadowedTextFormField extends StatelessWidget {
   const ShadowedTextFormField({
     super.key,

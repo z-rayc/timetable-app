@@ -22,8 +22,8 @@ class CourseEvent extends Event {
   static CourseEvent fromJson(Map<String, dynamic> json) {
     return CourseEvent(
       id: json['id'],
-      startTime: DateTime.parse(json['start']),
-      endTime: DateTime.parse(json['end']),
+      startTime: DateTime.parse(json['start']).toLocal(),
+      endTime: DateTime.parse(json['end']).toLocal(),
       course: Course.fromJson(json['Course']),
       staff: [
         Staff.fromJson(json['Staff']),

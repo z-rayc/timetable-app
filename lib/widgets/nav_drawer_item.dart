@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
+import 'package:timetable_app/providers/chat_room_provider.dart';
+import 'package:timetable_app/widgets/nav_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Item in the navigation drawer. Displays an icon and a title.
 class NavDrawerItem extends StatelessWidget {
   const NavDrawerItem({
     super.key,
@@ -33,5 +38,46 @@ class NavDrawerItem extends StatelessWidget {
         onTap: onTap,
       ),
     );
+  }
+}
+
+/// Special navigation drawer item for the chat item.
+/// Displays a notification icon if there are unread messages.
+class NavDrawerItemChat extends ConsumerWidget {
+  const NavDrawerItemChat({
+    super.key,
+    required this.onSelectedNavItem,
+  });
+
+  final void Function(NavDrawerChoice p1) onSelectedNavItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool anyUnread = ref.watch(anyUndreadMessagesProvider);
+    Widget content = NavDrawerItem(
+      icon: Icons.chat,
+      title: AppLocalizations.of(context)!.chats,
+      onTap: () {
+        onSelectedNavItem(NavDrawerChoice.chat);
+      },
+    );
+    if (anyUnread) {
+      content = Stack(
+        clipBehavior: Clip.none,
+        children: [
+          content,
+          Positioned(
+            top: -5,
+            right: -8,
+            child: Icon(
+              semanticLabel: AppLocalizations.of(context)!.unreadMessages,
+              Icons.circle_notifications,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      );
+    }
+    return content;
   }
 }

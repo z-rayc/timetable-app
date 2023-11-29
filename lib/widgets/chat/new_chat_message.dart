@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_room.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Text field with a button to send a new message to a chat room.
 class NewChatMessage extends ConsumerStatefulWidget {
   const NewChatMessage({super.key, required this.chatRoom});
 
@@ -39,8 +41,8 @@ class _NewChatMessageState extends ConsumerState<NewChatMessage> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Error sending message'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.sendMessageError),
           ),
         );
       }
@@ -61,8 +63,8 @@ class _NewChatMessageState extends ConsumerState<NewChatMessage> {
               autocorrect: true,
               minLines: 1,
               maxLines: 5,
-              decoration: AppThemes.entryFieldTheme
-                  .copyWith(hintText: 'Send a message'),
+              decoration: AppThemes.entryFieldTheme.copyWith(
+                  hintText: AppLocalizations.of(context)!.sendMessage),
             ),
           ),
           IconButton(

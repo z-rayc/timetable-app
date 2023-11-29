@@ -11,18 +11,20 @@ import 'package:timetable_app/providers/auth_provider.dart';
 import 'package:timetable_app/providers/courses_provider.dart';
 import 'package:timetable_app/providers/user_profile_provider.dart';
 
-class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
+/// Provider for the chat rooms of the current user.
+class ChatRoomProvider extends AsyncNotifier<List<ChatRoom>> {
   late RealtimeChannel _channel;
 
-  ChatRoomProvicer() : super() {
+  ChatRoomProvider() : super() {
     _channel = kSupabase.channel('new-chatrooms');
-    _initialize();
+    _initialize(); // call _initialize in the constructor rather than build to avoid calling it multiple times
   }
 
   void _initialize() {
     _subscribeToChatRooms();
   }
 
+  /// Builds the chat rooms provider.
   @override
   FutureOr<List<ChatRoom>> build() async {
     ref.watch(authProvider);
@@ -32,6 +34,7 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     final List<UserCourse> courses =
         ref.watch(myCoursesProvider).value?.userCourses ?? [];
 
+    // if chatroom is a course chat, set the name to the course name alias
     for (var chatroom in chatrooms) {
       if (chatroom.isCourseChat) {
         UserCourse? userCourse;
@@ -50,6 +53,8 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return chatrooms;
   }
 
+  /// Subscribes to changes in the chat room member table.
+  /// used to update the chat room list when the user is added or removed from a chat room in real time.
   void _subscribeToChatRooms() {
     final String filter = 'user_id=eq.${kSupabase.auth.currentUser!.id}';
     _channel
@@ -76,10 +81,13 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
         .subscribe();
   }
 
+  /// Handle new chat room member events.
   void _onChatRoomChange(dynamic payload, [dynamic reference]) {
-    ref.invalidateSelf();
+    ref.invalidateSelf(); // trigger a rebuild
   }
 
+  /// Adds a new chat room to the database.
+  /// Returns a [ChatRoomFetchError] if the chat room could not be added. Returns null if the chat room was added successfully.
   Future<ChatRoomFetchError?> addChatRoom(
       String chatName, List<String> emails) async {
     ChatRoomFetchError? maybeError;
@@ -99,6 +107,11 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return maybeError;
   }
 
+  /// Updates a chat room in the database.
+  /// Returns a [ChatRoomFetchError] if the chat room could not be updated. Returns null if the chat room was updated successfully.
+  /// [chatRoomId] is the id of the chat room to update.
+  /// [newChatName] is the new name of the chat room.
+  /// [emails] is a list of emails of the users to be in the chat room.
   Future<ChatRoomFetchError?> updateChatRoom(
     String chatRoomId,
     String newChatName,
@@ -123,6 +136,9 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return maybeError;
   }
 
+  /// Deletes a chat room from the database.
+  /// Returns a [ChatRoomFetchError] if the chat room could not be deleted. Returns null if the chat room was deleted successfully.
+  /// [id] is the id of the chat room to delete.
   Future<ChatRoomFetchError?> deleteChatRoom(String id) async {
     ChatRoomFetchError? maybeError;
     try {
@@ -141,6 +157,7 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return maybeError;
   }
 
+  /// Fetches the chat rooms of the current user from the database.
   Future<List<ChatRoom>> _fetchChatRooms() async {
     List<dynamic> chatRoomsDynamic = await kSupabase
         .from('ChatRoomMember')
@@ -158,6 +175,8 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
     return tempChatRooms;
   }
 
+  /// Leaves a chat room.
+  /// Only user defined chatrooms can be left and only non-owner members can leave.
   void leaveChat(String id) async {
     state = const AsyncValue.loading();
     await kSupabase
@@ -171,13 +190,17 @@ class ChatRoomProvicer extends AsyncNotifier<List<ChatRoom>> {
   }
 }
 
+/// Provider for the chat rooms of the current user.
+/// Notifier provides API for chat creation, deletion, updating, and leaving.
 final chatRoomProvider =
-    AsyncNotifierProvider<ChatRoomProvicer, List<ChatRoom>>(
+    AsyncNotifierProvider<ChatRoomProvider, List<ChatRoom>>(
   () {
-    return ChatRoomProvicer();
+    return ChatRoomProvider();
   },
 );
 
+/// Error class for chat room fetch errors. Contains a message describing the error.
+/// Should be replaced with an exception throw...
 class ChatRoomFetchError {
   final String message;
   ChatRoomFetchError(this.message);
@@ -187,7 +210,10 @@ class ChatRoomFetchError {
   }
 }
 
+/// Provider for map of chatroomid to last read time on the given chatroom.
 class ChatRoomLastReadProvider extends AsyncNotifier<Map<String, DateTime>> {
+  /// Updates the last read time of the given chat room.
+  /// [chatRoomId] is the id of the chat room to update.
   void updateLastRead(String chatRoomId) async {
     try {
       final updatedRow = await kSupabase
@@ -236,6 +262,8 @@ class ChatRoomLastReadProvider extends AsyncNotifier<Map<String, DateTime>> {
   }
 }
 
+/// Provider for map of chatroomid to last read time on the given chatroom.
+/// Notifier provides API for updating the last read time of a chat room.
 final chatRoomLastReadProvider =
     AsyncNotifierProvider<ChatRoomLastReadProvider, Map<String, DateTime>>(
   () {
@@ -243,10 +271,12 @@ final chatRoomLastReadProvider =
   },
 );
 
+/// Provider for map of chatroomid to list of chat messages in the given chatroom.
 class ChatMessagesProvider
     extends AsyncNotifier<Map<String, List<ChatMessage>>> {
   List<String> _chatRoomIds = [];
 
+  // subscribe to all chats the user is a member of
   void _subscribeToAllChats() {
     final String filter = 'chat_room_id=in.(${_chatRoomIds.join(',')})';
     kSupabase
@@ -305,6 +335,7 @@ class ChatMessagesProvider
   }
 }
 
+/// Provider for map of chatroomid to list of chat messages in the given chatroom.
 final chatMessagesProvider =
     AsyncNotifierProvider<ChatMessagesProvider, Map<String, List<ChatMessage>>>(
   () {
@@ -314,6 +345,8 @@ final chatMessagesProvider =
 
 /// Returns a map of chat room ids to a tuple of the last message and a bool
 /// indicating if the last message is unread or not.
+///
+/// Map: chatRoomId -> (lastMessage?, hasUnread)
 final unreadMessagesProvider =
     rp.Provider<Map<String, (ChatMessage?, bool)>>((ref) {
   final List<ChatRoom> chatRooms = ref.watch(chatRoomProvider).value ?? [];
@@ -344,6 +377,8 @@ final unreadMessagesProvider =
   return unreadMessages;
 });
 
+/// Returns true if any chat room has an unread message.
+/// Useful for displaying a unread message indicator anywhere in the app.
 final anyUndreadMessagesProvider = rp.Provider<bool>((ref) {
   final Map<String, (ChatMessage?, bool)> unreadMessages =
       ref.watch(unreadMessagesProvider);

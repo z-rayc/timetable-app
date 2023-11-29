@@ -8,10 +8,13 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/providers/auth_provider.dart';
 import 'package:timetable_app/providers/nav_provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:timetable_app/providers/setting_provider.dart';
 
+/// Root widget for the application.
+/// 
+/// Displays the correct screen based on the current authentification state,
+/// If the user is not signed in, the login screen is displayed. If the suer is signed in, the tabs screen is displayed.
 class TimeTableApp extends ConsumerStatefulWidget {
   const TimeTableApp({super.key});
   @override

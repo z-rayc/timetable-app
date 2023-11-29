@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable_app/app_themes.dart';
 
+/// A dropdown menu that is used in a form.
 class FormDropdownMenu extends StatelessWidget {
   const FormDropdownMenu({
     super.key,

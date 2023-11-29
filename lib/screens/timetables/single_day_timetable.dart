@@ -6,6 +6,12 @@ import 'package:timetable_app/providers/week_timetable_provider.dart';
 import 'package:timetable_app/widgets/event_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// A widget that displays a timetable for a single day.
+///
+/// This widget is responsible for rendering the timetable for a single day.
+/// It uses the [dailyTimetableProvider] to fetch the daily timetable data.
+/// If there are no events for the day, it displays a message with an option to refresh the timetable.
+/// If there are events, it displays them in a sorted list.
 class SingleDayTimetable extends ConsumerWidget {
   const SingleDayTimetable({super.key});
 
@@ -31,7 +37,7 @@ class SingleDayTimetable extends ConsumerWidget {
 
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content:
-                              Text(AppLocalizations.of(context)!.refresh)));
+                              Text(AppLocalizations.of(context)!.refreshed)));
                     },
                     icon: const Icon(Icons.refresh),
                     label: Text(AppLocalizations.of(context)!.refresh))

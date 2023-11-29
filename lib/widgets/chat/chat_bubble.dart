@@ -5,6 +5,11 @@ import 'package:timetable_app/models/chat_message.dart';
 const double kSmallRadius = 5;
 const double kBigRadius = 20;
 
+/// A chat bubble widget.
+/// Displays a message in a bubble with rounded corners.
+/// The bubble is colored differently depending on whether the message was sent by the user or not.
+/// The bubble is also rounded differently depending on whether it is the first, middle or last message in a sequence.
+/// First bubble also displays the author's nickname.
 class ChatBubble extends StatelessWidget {
   const ChatBubble({
     super.key,
@@ -106,6 +111,8 @@ class ChatBubble extends StatelessWidget {
   }
 }
 
+/// Which in the sequence of messages is this bubble.
+/// Rounding of the bubble and nickname display depends on this.
 enum ChatBubbleOrder {
   first,
   middle,

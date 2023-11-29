@@ -6,6 +6,10 @@ import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/screens/events/event_details_screen.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
 
+/// A card that displays an event.
+/// When tapped, it opens the event details screen.
+/// The card's color is based on the event's color.
+/// Custom events are displayed with a grey color.
 class EventCard extends StatelessWidget {
   const EventCard({
     super.key,

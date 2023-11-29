@@ -1,3 +1,4 @@
+/// Model for chat room
 class ChatRoom {
   final String id;
   String name;
@@ -15,6 +16,7 @@ class ChatRoom {
     required this.lastRead,
   });
 
+  /// Convert from json to ChatRoom
   static ChatRoom fromJson(dynamic data, {required dynamic lastRead}) {
     return ChatRoom(
       id: data['id'].toString(),

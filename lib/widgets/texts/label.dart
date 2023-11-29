@@ -19,6 +19,7 @@ class CLabel extends StatelessWidget {
           //if null set to 16
           fontSize: overrideFontSize ?? 16,
           fontWeight: FontWeight.w400,
-        ));
+        ),
+        overflow: TextOverflow.ellipsis);
   }
 }
