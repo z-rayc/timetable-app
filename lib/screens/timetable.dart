@@ -98,7 +98,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           border: const Border(
             left: BorderSide(color: Colors.grey),
           ),
-          //COlour is equal to default background colour
+          // Color is equal to default background colour
           color: Theme.of(context).colorScheme.background,
         ),
         child: Center(
