@@ -10,6 +10,11 @@ import 'package:timetable_app/screens/timetables/timetable_screen.dart';
 import 'package:timetable_app/widgets/nav_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// A screen widget that displays tabs.
+///
+/// This widget is responsible for rendering a screen with multiple tabs.
+/// It extends the [ConsumerStatefulWidget] class and overrides the [createState] method
+/// to return an instance of [_TabsScreenState].
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
