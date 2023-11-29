@@ -13,8 +13,8 @@ import 'package:timetable_app/widgets/timetable_modules/weekly_module.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //
-class TimeTable extends ConsumerStatefulWidget {
-  const TimeTable({
+class WeekViewManager extends ConsumerStatefulWidget {
+  const WeekViewManager({
     super.key,
   });
 
@@ -24,7 +24,7 @@ class TimeTable extends ConsumerStatefulWidget {
   }
 }
 
-class _TimeTableState extends ConsumerState<TimeTable> {
+class _TimeTableState extends ConsumerState<WeekViewManager> {
   late LinkedScrollControllerGroup _horizontalControllers;
   late LinkedScrollControllerGroup _verticalControllers;
 
