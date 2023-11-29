@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:timetable_app/models/course.dart';
 
+/// A user's course.
+/// Contains user specific information about a course.
 class UserCourse {
   const UserCourse({
     required this.id,
