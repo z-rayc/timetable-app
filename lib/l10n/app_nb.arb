@@ -57,6 +57,8 @@
   "color": "Farge",
   "selectColor": "Velg farge",
   "selectAliasError": "Vennligst velg et alias",
+  "errorFetchingChats": "Feil ved henting av samtaler. Prøv igjen senere.",
+  "noChatsYet": "Ingen samtaler enda. Opprett en!",
   "newChat": "Ny samtale",
   "editChat": "Rediger samtale",
   "deleteChat": "Slett samtale",

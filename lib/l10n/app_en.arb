@@ -60,6 +60,8 @@
   "color": "Color",
   "selectColor": "Select color",
   "selectAliasError": "Please select an alias",
+  "errorFetchingChats": "Error fetching chats. Please try again later.",
+  "noChatsYet": "No chats yet! Create one!",
   "newChat": "New Chat",
   "editChat": "Edit Chat",
   "deleteChat": "Delete Chat",
