@@ -1,3 +1,4 @@
+/// Model for chat message
 class ChatMessage {
   final String id;
   final String chatRoomId;
@@ -15,6 +16,7 @@ class ChatMessage {
     required this.message,
   });
 
+  /// Convert from json to ChatMessage
   static ChatMessage fromJson(dynamic json) {
     return ChatMessage(
       id: json['id'].toString(),
