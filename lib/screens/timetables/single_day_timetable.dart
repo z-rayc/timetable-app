@@ -31,7 +31,7 @@ class SingleDayTimetable extends ConsumerWidget {
 
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content:
-                              Text(AppLocalizations.of(context)!.refresh)));
+                              Text(AppLocalizations.of(context)!.refreshed)));
                     },
                     icon: const Icon(Icons.refresh),
                     label: Text(AppLocalizations.of(context)!.refresh))

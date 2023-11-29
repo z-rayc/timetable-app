@@ -37,6 +37,7 @@
   "confirm": "Confirm",
   "noEventsTodayOrNoCoursesAdded": "No events today or no courses added",
   "refresh": "Refresh",
+  "refreshed": "Refreshed",
   "today": "Today",
   "chats": "Chats",
   "unreadMessages": "Unread Messages",
