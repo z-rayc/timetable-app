@@ -8,6 +8,7 @@ import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:timetable_app/widgets/texts/label.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Part of settings screen. Displays a form to edit the user's nickname.
 class UsernameEdit extends ConsumerStatefulWidget {
   const UsernameEdit({super.key});
 
