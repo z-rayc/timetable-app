@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timetable_app/main.dart';
 import 'package:timetable_app/models/chat_message.dart';
 import 'package:timetable_app/models/chat_room.dart';
 import 'package:timetable_app/providers/chat_room_provider.dart';
 import 'package:timetable_app/widgets/chat/chat_bubble.dart';
 
+/// Widget displaying all messages in a chat room.
+/// Messages are displayed in form of [ChatBubble]s.
+/// On init and on dispose updates the last read time in the chat room.
 class ChatMessages extends ConsumerStatefulWidget {
   const ChatMessages({super.key, required this.chatRoom});
   final ChatRoom chatRoom;
