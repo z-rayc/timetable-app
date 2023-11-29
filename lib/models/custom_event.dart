@@ -22,8 +22,8 @@ class CustomEvent extends Event {
       id: json['id'].toString(),
       name: json['name'],
       description: json['description'],
-      startTime: DateTime.parse(json['start_time']),
-      endTime: DateTime.parse(json['end_time']),
+      startTime: DateTime.parse(json['start_time']).toLocal(),
+      endTime: DateTime.parse(json['end_time']).toLocal(),
       creatorId: (json['creator']),
       location: Location(
         roomName: json['room'],
