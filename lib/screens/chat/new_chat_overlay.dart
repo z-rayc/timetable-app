@@ -12,6 +12,9 @@ import 'package:timetable_app/widgets/primary_elevated_button_loading_child.dart
 import 'package:timetable_app/widgets/shadowed_text_form_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Overlay widget used to create or edit a chat room.
+/// Provides a form for the chat room name and a list of emails of members.
+/// If the chat room is being edited, the list of emails is pre-filled with the current members.
 class NewChatOverlay extends ConsumerStatefulWidget {
   const NewChatOverlay({super.key, this.chatRoom})
       : isNewMode = chatRoom == null;
@@ -369,6 +372,7 @@ class _NewChatOverlayState extends ConsumerState<NewChatOverlay> {
   }
 }
 
+/// Shows an error dialog with the given message.
 showErrorDialog(BuildContext ctx, String message) {
   showDialog(
     context: ctx,
@@ -386,13 +390,4 @@ showErrorDialog(BuildContext ctx, String message) {
       );
     },
   );
-}
-
-class ChatRoomCreationException implements Exception {
-  final String message;
-  ChatRoomCreationException(this.message);
-  @override
-  String toString() {
-    return message;
-  }
 }

@@ -9,6 +9,15 @@ import 'package:timetable_app/widgets/chat/chat_messages.dart';
 import 'package:timetable_app/widgets/chat/new_chat_message.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Chat screen. Displays a chat room with all messages, and a simple field to send new messages.
+///
+/// Actions available in the app bar depend on the user's role in the chat room;
+///
+/// Owner - can edit the chat room
+/// 
+/// Member - can leave the chat room
+/// 
+/// Course chat rooms cannot be edited or left.
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key, required this.chatRoom});
   final ChatRoom chatRoom;
