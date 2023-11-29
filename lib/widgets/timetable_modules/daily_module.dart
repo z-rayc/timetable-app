@@ -3,6 +3,7 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/models/event.dart';
 import 'package:timetable_app/widgets/event_card.dart';
 
+/// A module that displays the events for a single day
 class DailyModule extends StatelessWidget {
   const DailyModule({
     super.key,
@@ -53,6 +54,19 @@ class DailyModule extends StatelessWidget {
       return overlapping;
     }
 
+    /// Decides which overlapping event to move to the right.
+    ///
+    /// This method takes a list of overlapping events and determines which event(s) should be moved to the right to resolve the overlap.
+    /// It first checks if any of the events are overlapping two or more events. If so, it removes those events from the list.
+    /// Then, it checks if any of the remaining events are overlapping one event. If so, it adds them to a separate list.
+    /// Finally, it combines the events that are overlapping one event with the events that are overlapping two or more events.
+    /// It also removes the overlapping events from the `sortedEvents` list.
+    ///
+    /// Parameters:
+    /// - `overlappingEvents`: A list of events that are overlapping.
+    ///
+    /// Returns:
+    /// A list of events that should be moved to the right to resolve the overlap.
     List<Event> decideWhichOverlappingEventToMoveToTheRight(
         List<Event> overlappingEvents) {
       //Check if any of the events are overlapping two or more events
@@ -108,6 +122,13 @@ class DailyModule extends StatelessWidget {
       return doubleOverlappingEvents;
     }
 
+    /// Builds a list of event widgets based on the provided parameters.
+    ///
+    /// The [topOffset] and [leftOffset] specify the positioning of the event widgets.
+    /// The [events] list contains the events to be displayed.
+    /// The [overlappingEvents] list contains the events that overlap with each other.
+    ///
+    /// Returns a list of [Widget] objects representing the event widgets.
     List<Widget> buildEventWidgets(double topOffset, double leftOffset,
         List<Event> events, List<Event> overlappingEvents) {
       List<Widget> eventWidgets = [];
@@ -137,18 +158,27 @@ class DailyModule extends StatelessWidget {
       return eventWidgets;
     }
 
+    /// Generates a list of event widgets based on the provided data.
+    ///
+    /// This method first determines which overlapping events should be moved to the right
+    /// to avoid overlapping on the timetable. Then, it builds event widgets for the sorted
+    /// events and adds them to the list. If there are any overlapping events, it also builds
+    /// event widgets for those and adds them to the list.
+    ///
+    /// Returns the list of event widgets.
     List<Widget> generateEventWidgets() {
       var overlapping =
           decideWhichOverlappingEventToMoveToTheRight(overlappingEvents);
       var eventWidgets = buildEventWidgets(25, 0, sortedEvents, overlapping);
       if (overlapping.isNotEmpty) {
         eventWidgets.addAll(buildEventWidgets(
-            25,
-            135 /* TimeTableTheme.timeTableColumnWidth *
-                (overlappingEvents.isEmpty ? 0 : 2 / 3) */
-            ,
-            overlapping,
-            overlapping));
+          25,
+          135 /* TimeTableTheme.timeTableColumnWidth *
+              (overlappingEvents.isEmpty ? 0 : 2 / 3) */
+          ,
+          overlapping,
+          overlapping,
+        ));
       }
 
       return eventWidgets;
