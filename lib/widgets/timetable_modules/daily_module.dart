@@ -11,6 +11,7 @@ class DailyModule extends StatelessWidget {
     required this.hours,
     required this.showEmptyText,
     required this.eventColours,
+    required this.earliestTime,
   });
 
   final List<String> days;
@@ -18,6 +19,7 @@ class DailyModule extends StatelessWidget {
   final List<String> hours;
   final bool showEmptyText;
   final Map<Event, Color> eventColours;
+  final DateTime earliestTime;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +111,7 @@ class DailyModule extends StatelessWidget {
     List<Widget> buildEventWidgets(double topOffset, double leftOffset,
         List<Event> events, List<Event> overlappingEvents) {
       List<Widget> eventWidgets = [];
-      var calendarEarliest = 7.0;
+      var calendarEarliest = earliestTime.hour;
       for (var event in events) {
         eventWidgets.add(
           Positioned(
