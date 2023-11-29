@@ -7,6 +7,9 @@ import 'package:timetable_app/app_themes.dart';
 import 'package:timetable_app/widgets/login_screen/single_sign_on_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Login screen widget.
+///
+/// DIsplays single sign on buttons for Google and Feide, and a button to sign in with email.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -23,6 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  /// sign in with google, taken from:
+  /// [supabase documentation](https://supabase.com/docs/guides/auth/social-login/auth-google?platform=flutter)
+  /// and addjusted for our needs.
   void _googleSignIn() async {
     _setLoading(true);
 
@@ -33,10 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
     /// iOS Client ID that you registered with Google Cloud.
     const iosClientId =
         '683060048034-v6ctb2aap3nn0kkfk4dmr7bumpl2ok70.apps.googleusercontent.com';
-
     // Google sign in on Android will work without providing the Android
     // Client ID registered on Google Cloud.
-
     final GoogleSignIn googleSignIn = GoogleSignIn(
       clientId: iosClientId,
       serverClientId: webClientId,
@@ -162,6 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
+/// Exception thrown when user aborts a google sign in.
 class UserAbortSigninException implements Exception {
   const UserAbortSigninException();
 }
