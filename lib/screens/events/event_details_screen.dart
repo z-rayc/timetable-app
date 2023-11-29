@@ -7,6 +7,10 @@ import 'package:timetable_app/widgets/texts/title.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Show the details of an event.
+/// The event can be a course event or a custom event.
+/// The event's details are displayed in a list.
+/// The event's link can be opened in a browser.
 class EventDetailsScreen extends StatelessWidget {
   const EventDetailsScreen({super.key, required this.event});
   final Event event;
