@@ -17,6 +17,8 @@ class CreateEventScreen extends ConsumerStatefulWidget {
   }
 }
 
+/// Create a custom event.
+/// Has a form with text fields and date pickers.
 class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
